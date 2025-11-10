@@ -1,0 +1,336 @@
+/* 회원가입 페이지 전용 스타일 */
+
+/* ========================================
+   1. 컨테이너 및 레이아웃
+   ======================================== */
+
+.signup-container {
+    background: #373e6c;
+    min-height: 100vh;
+    padding: 0;
+    position: relative;
+    overflow-y: auto;
+}
+
+/* 뒤로가기 버튼 */
+.back-button {
+    position: absolute;
+    top: 60px;
+    left: 24px;
+    z-index: 20;
+}
+
+.back-button a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+
+.back-button a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ========================================
+   2. 회원가입 콘텐츠 영역
+   ======================================== */
+
+.signup-content {
+    padding: 120px 45px 60px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 1;
+}
+
+/* ========================================
+   3. 헤더
+   ======================================== */
+
+.signup-header {
+    margin-bottom: 40px;
+}
+
+.signup-title {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: #ffffff;
+    letter-spacing: 0;
+    line-height: 34px;
+    margin-bottom: 8px;
+}
+
+.signup-subtitle {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.8);
+    letter-spacing: 0;
+    line-height: 17px;
+    margin: 0;
+}
+
+/* ========================================
+   4. 폼 스타일
+   ======================================== */
+
+.signup-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.input-group {
+    width: 100%;
+}
+
+.input-label {
+    display: block;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: #f1f1f1;
+    letter-spacing: 0;
+    margin-bottom: 8px;
+}
+
+.signup-form .form-input {
+    width: 100%;
+    height: 56px;
+    padding: 0 20px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.1);
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #ffffff;
+    letter-spacing: 0;
+    transition: all 0.2s ease;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.signup-form .form-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.signup-form .form-input:focus {
+    border-color: #297eff;
+    background-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 0 2px rgba(41, 126, 255, 0.1);
+}
+
+.signup-form .form-input.error {
+    border-color: #ff5758;
+}
+
+/* ========================================
+   5. 약관 동의
+   ======================================== */
+
+.terms-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    margin-top: 10px;
+}
+
+.terms-divider {
+    width: 100%;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.1);
+    margin: 8px 0;
+}
+
+/* 체크박스 재정의 (회원가입용) */
+.terms-section .checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.terms-section .checkbox-wrapper:first-child .checkbox-label {
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.terms-section .checkbox-custom {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 4px;
+    background-color: transparent;
+    display: inline-block;
+    position: relative;
+    transition: all 0.15s ease;
+    flex-shrink: 0;
+}
+
+.terms-section .checkbox-wrapper input[type="checkbox"]:checked+.checkbox-custom {
+    background-color: #297eff;
+    border-color: #297eff;
+}
+
+.terms-section .checkbox-wrapper input[type="checkbox"]:checked+.checkbox-custom::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.terms-section .checkbox-label {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: 0;
+    line-height: 14px;
+}
+
+/* ========================================
+   6. 회원가입 버튼
+   ======================================== */
+
+.btn-signup {
+    width: 100%;
+    height: 56px;
+    border: none;
+    border-radius: 12px;
+    background-color: #297eff;
+    color: #ffffff;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 20px;
+}
+
+.btn-signup:hover {
+    background-color: #1e6adf;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(41, 126, 255, 0.4);
+}
+
+.btn-signup:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(41, 126, 255, 0.3);
+}
+
+.btn-signup:disabled {
+    background-color: rgba(41, 126, 255, 0.5);
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ========================================
+   7. 로그인 링크
+   ======================================== */
+
+.login-link-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.login-text {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: 0;
+}
+
+.login-link {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: #297eff;
+    text-decoration: none;
+    letter-spacing: 0;
+    border-bottom: 1px solid #297eff;
+    padding-bottom: 1px;
+    transition: opacity 0.15s ease;
+}
+
+.login-link:hover {
+    opacity: 0.8;
+}
+
+/* ========================================
+   8. 반응형 디자인
+   ======================================== */
+
+@media (max-width: 390px) {
+    .signup-content {
+        padding: 100px 30px 50px;
+    }
+
+    .back-button {
+        top: 55px;
+        left: 20px;
+    }
+
+    .signup-title {
+        font-size: 24px;
+        line-height: 30px;
+    }
+
+    .signup-subtitle {
+        font-size: 13px;
+    }
+
+    .signup-form .form-input {
+        height: 52px;
+        font-size: 11px;
+    }
+
+    .btn-signup {
+        height: 52px;
+        font-size: 13px;
+    }
+
+    .terms-section {
+        padding: 16px;
+    }
+}
+
+@media (min-width: 441px) {
+    .signup-content {
+        max-width: 440px;
+        margin: 0 auto;
+    }
+}
+
+@media (min-height: 900px) {
+    .signup-content {
+        padding-top: 140px;
+    }
+
+    .signup-header {
+        margin-bottom: 50px;
+    }
+
+    .signup-form {
+        gap: 24px;
+    }
+}

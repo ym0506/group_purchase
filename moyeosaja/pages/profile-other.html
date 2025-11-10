@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로필 - MOYEO</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/profile-other.css">
+</head>
+
+<body>
+    <div class="container profile-container">
+        <!-- 상태 표시줄 -->
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+        </div>
+
+        <!-- 페이지 타이틀 -->
+        <h1 class="profile-title">마이</h1>
+
+        <!-- 회원가입/로그인 링크 -->
+        <div class="auth-links">
+            <a href="./signup-step1.html" class="auth-link">회원가입</a>
+            <a href="./login.html" class="auth-link">로그인</a>
+        </div>
+
+        <!-- 프로필 정보 -->
+        <div class="profile-info">
+            <div class="profile-avatar-large"></div>
+            <h2 class="profile-name">최지인</h2>
+            <div class="profile-rating">
+                <div class="rating-stars">
+                    <span class="star filled">★</span>
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                </div>
+                <span class="rating-score">1.0</span>
+            </div>
+        </div>
+
+        <!-- 활동 탭 -->
+        <div class="activity-section">
+            <h3 class="section-title">활동 내역</h3>
+            <div class="activity-tabs">
+                <button class="activity-tab active">판매 물품 20</button>
+                <button class="activity-tab">리뷰 18</button>
+            </div>
+        </div>
+
+        <!-- 활동 내역 목록 -->
+        <div class="activity-list">
+            <div class="activity-item">
+                <div class="activity-thumbnail"></div>
+                <div class="activity-content">
+                    <div class="activity-title">맛있는 햇반</div>
+                    <div class="activity-description">같이 사주세요 제발</div>
+                </div>
+                <div class="activity-count">4/4</div>
+            </div>
+
+            <div class="activity-item">
+                <div class="activity-thumbnail"></div>
+                <div class="activity-content">
+                    <div class="activity-title">맛있는 김치</div>
+                    <div class="activity-description">같이 사주세요 제발</div>
+                </div>
+                <div class="activity-count">4/4</div>
+            </div>
+
+            <div class="activity-item">
+                <div class="activity-thumbnail"></div>
+                <div class="activity-content">
+                    <div class="activity-title">맛있는 물</div>
+                    <div class="activity-description">같이 사주세요 제발</div>
+                </div>
+                <div class="activity-count">4/4</div>
+            </div>
+
+            <div class="activity-item">
+                <div class="activity-thumbnail"></div>
+                <div class="activity-content">
+                    <div class="activity-title">넷플릭스</div>
+                    <div class="activity-description">같이 사주세요 제발</div>
+                </div>
+                <div class="activity-count">4/4</div>
+            </div>
+
+            <div class="activity-item">
+                <div class="activity-thumbnail"></div>
+                <div class="activity-content">
+                    <div class="activity-title">티빙</div>
+                    <div class="activity-description">같이 사주세요 제발</div>
+                </div>
+                <div class="activity-count">4/4</div>
+            </div>
+        </div>
+
+        <!-- 계정 섹션 -->
+        <div class="account-section">
+            <h3 class="section-title">계정</h3>
+            <div class="account-actions">
+                <button class="account-btn">로그아웃</button>
+                <div class="account-divider"></div>
+                <button class="account-btn danger">탈퇴하기</button>
+            </div>
+        </div>
+
+        <!-- 하단 네비게이션 -->
+        <nav class="bottom-nav">
+            <div class="nav-item" data-page="calendar">
+                <div class="nav-icon"></div>
+                <div class="nav-label">캘린더</div>
+            </div>
+            <div class="nav-item" data-page="create">
+                <div class="nav-icon"></div>
+                <div class="nav-label">공구 글 작성하기</div>
+            </div>
+            <div class="nav-item" data-page="home-main">
+                <div class="nav-icon"></div>
+                <div class="nav-label">홈</div>
+            </div>
+            <div class="nav-item" data-page="favorites">
+                <div class="nav-icon"></div>
+                <div class="nav-label">관심있어요</div>
+            </div>
+            <div class="nav-item active" data-page="mypage">
+                <div class="nav-icon"></div>
+                <div class="nav-label">마이</div>
+            </div>
+        </nav>
+    </div>
+
+    <script src="../js/utils.js"></script>
+    <script src="../js/components.js"></script>
+    <script src="../js/profile-other.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마이페이지 - MOYEO</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/mypage.css">
+</head>
+
+<body>
+    <div class="container mypage-container">
+        <!-- 상태 표시줄 -->
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+        </div>
+
+        <!-- 마이페이지 콘텐츠 -->
+        <div class="mypage-content">
+            <!-- 타이틀 -->
+            <h1 class="mypage-title">마이</h1>
+
+            <!-- 프로필 섹션 -->
+            <div class="profile-section">
+                <div class="profile-avatar"></div>
+                <span class="profile-name">안경만듀님</span>
+            </div>
+
+            <!-- 매칭 성공 섹션 -->
+            <div class="matching-success-section">
+                <div class="section-header">
+                    <div>
+                        <h2 class="section-title">매칭 성공</h2>
+                        <p class="section-subtitle">공구 만남을 준비해주세요</p>
+                    </div>
+                    <a href="#" class="view-all-link">전체보기</a>
+                </div>
+
+                <!-- 매칭 성공 아이템 목록 -->
+                <div class="success-items">
+                    <!-- 아이템 1 -->
+                    <div class="success-item">
+                        <div class="item-info">
+                            <span class="item-name">소금빵</span>
+                            <div class="participants">
+                                <span class="participant-count">4/4</span>
+                                <div class="participant-avatars">
+                                    <div class="participant-avatar"></div>
+                                    <div class="participant-avatar"></div>
+                                    <div class="participant-avatar"></div>
+                                    <div class="participant-avatar"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="divider"></div>
+
+                    <!-- 아이템 2 -->
+                    <div class="success-item">
+                        <div class="item-info">
+                            <span class="item-name">넷플릭스</span>
+                            <div class="participants">
+                                <span class="participant-count">4/4</span>
+                                <div class="participant-avatars">
+                                    <div class="participant-avatar"></div>
+                                    <div class="participant-avatar"></div>
+                                    <div class="participant-avatar"></div>
+                                    <div class="participant-avatar"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="divider"></div>
+
+                    <!-- 아이템 3 -->
+                    <div class="success-item">
+                        <div class="item-info">
+                            <span class="item-name">쌀</span>
+                            <div class="participants">
+                                <span class="participant-count">5/5</span>
+                                <div class="participant-avatars">
+                                    <div class="participant-avatar"></div>
+                                    <div class="participant-avatar"></div>
+                                    <div class="participant-avatar"></div>
+                                    <div class="participant-avatar"></div>
+                                    <div class="participant-avatar"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 더보기 표시 -->
+                <div class="more-indicator">
+                    <span class="dot"></span>
+                    <span class="dot active"></span>
+                </div>
+            </div>
+
+            <!-- 내 활동 섹션 -->
+            <h2 class="activity-title">내 활동</h2>
+
+            <!-- 아이콘 메뉴 -->
+            <div class="icon-menu">
+                <a href="#" class="icon-menu-item">
+                    <div class="icon-wrapper icon-my-posts">
+                        <div class="icon-my-posts-graphic"></div>
+                    </div>
+                    <span>내 공구글</span>
+                </a>
+                <a href="#" class="icon-menu-item">
+                    <div class="icon-wrapper icon-calendar">
+                        <div class="icon-calendar-graphic"></div>
+                    </div>
+                    <span>캘린더</span>
+                </a>
+                <a href="#" class="icon-menu-item">
+                    <div class="icon-wrapper icon-waiting">
+                        <div class="icon-waiting-graphic"></div>
+                    </div>
+                    <span>매칭 대기 내역</span>
+                </a>
+            </div>
+
+            <!-- 링크 메뉴 -->
+            <div class="link-menu">
+                <div class="link-divider"></div>
+                <a href="#" class="link-menu-item">관심있어요</a>
+                <a href="#" class="link-menu-item">내 리뷰</a>
+                <div class="link-divider"></div>
+                <a href="#" class="link-menu-item">거래 내역</a>
+                <div class="link-divider"></div>
+                <a href="#" class="link-menu-item">취소 내역</a>
+                <div class="link-divider"></div>
+                <a href="#" class="link-menu-item">내 동네 설정</a>
+                <div class="link-divider"></div>
+            </div>
+        </div>
+
+        <!-- 하단 네비게이션 -->
+        <nav class="bottom-nav">
+            <div class="nav-item" data-page="home">
+                <div class="nav-icon"></div>
+                <div class="nav-label">홈</div>
+            </div>
+            <div class="nav-item" data-page="notifications">
+                <div class="nav-icon">
+                    <div class="notification-dot"></div>
+                </div>
+                <div class="nav-label">알림</div>
+            </div>
+            <div class="nav-item active" data-page="mypage">
+                <div class="nav-icon"></div>
+                <div class="nav-label">마이</div>
+            </div>
+        </nav>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script type="module" src="../js/app.js"></script>
+    <script src="../js/mypage.js"></script>
+</body>
+
+</html>

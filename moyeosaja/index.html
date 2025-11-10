@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOYEO - 공동구매 플랫폼</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f1f1f1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 440px;
+            width: 90%;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            font-size: 48px;
+            color: #297eff;
+            margin-bottom: 16px;
+        }
+
+        p {
+            font-size: 18px;
+            color: #272727;
+            margin-bottom: 40px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #297eff;
+            color: #ffffff;
+            padding: 16px 40px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(41, 126, 255, 0.3);
+        }
+
+        .btn:hover {
+            background-color: #1d6de6;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(41, 126, 255, 0.4);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        .btn-secondary {
+            background-color: #ffffff;
+            color: #297eff;
+            border: 2px solid #297eff;
+        }
+
+        .btn-secondary:hover {
+            background-color: #f1f1f1;
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #297eff 0%, #ff5758 100%);
+            border-radius: 30px;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: white;
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="logo">M</div>
+        <h1>MOYEO</h1>
+        <p>공동구매로 더 스마트하게</p>
+        <div class="btn-group">
+            <a href="pages/signup-step1.html" class="btn">회원가입</a>
+            <a href="pages/login.html" class="btn btn-secondary">로그인</a>
+        </div>
+        <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 10px;">
+            <a href="pages/home.html" style="color: #297eff; text-decoration: none; font-size: 14px;">홈 페이지 →</a>
+            <a href="pages/notifications.html" style="color: #297eff; text-decoration: none; font-size: 14px;">알림 페이지
+                →</a>
+            <a href="pages/mypage.html" style="color: #297eff; text-decoration: none; font-size: 14px;">마이페이지 →</a>
+            <a href="pages/category-delivery.html" style="color: #297eff; text-decoration: none; font-size: 14px;">공동배달
+                카테고리 →</a>
+            <a href="pages/category-bulk.html" style="color: #297eff; text-decoration: none; font-size: 14px;">묶음구매
+                카테고리 →</a>
+            <a href="pages/category-flash.html" style="color: #297eff; text-decoration: none; font-size: 14px;">번개공구
+                카테고리 →</a>
+            <a href="pages/category-regular.html" style="color: #297eff; text-decoration: none; font-size: 14px;">정기공구
+                카테고리 →</a>
+            <a href="pages/search.html" style="color: #297eff; text-decoration: none; font-size: 14px;">검색 페이지 →</a>
+            <a href="pages/favorites.html" style="color: #297eff; text-decoration: none; font-size: 14px;">관심있어요 →</a>
+            <a href="pages/calendar.html" style="color: #297eff; text-decoration: none; font-size: 14px;">캘린더 →</a>
+            <a href="pages/profile-other.html" style="color: #297eff; text-decoration: none; font-size: 14px;">다른사람 프로필
+                →</a>
+            <a href="pages/mypage-logged-out.html" style="color: #297eff; text-decoration: none; font-size: 14px;">마이페이지
+                (로그인 X) →</a>
+            <a href="pages/create-post-step1.html" style="color: #297eff; text-decoration: none; font-size: 14px;">공구글
+                작성하기 →</a>
+            <a href="pages/matching.html" style="color: #297eff; text-decoration: none; font-size: 14px;">공구친구 매칭하기
+                →</a>
+            <a href="pages/matching-success.html" style="color: #297eff; text-decoration: none; font-size: 14px;">매칭성공
+                내역 →</a>
+            <a href="pages/matching-waiting.html" style="color: #297eff; text-decoration: none; font-size: 14px;">매칭 대기
+                중 내역 →</a>
+            <a href="pages/matching-closed.html" style="color: #297eff; text-decoration: none; font-size: 14px;">공구 종료
+                내역 →</a>
+            <a href="pages/review-write.html" style="color: #297eff; text-decoration: none; font-size: 14px;">리뷰 작성하기
+                →</a>
+            <a href="pages/review-list.html" style="color: #297eff; text-decoration: none; font-size: 14px;">내 리뷰 목록
+                →</a>
+            <a href="pages/create-post-complete.html"
+                style="color: #297eff; text-decoration: none; font-size: 14px;">공구글 작성 완료 →</a>
+        </div>
+    </div>
+</body>
+
+</html>

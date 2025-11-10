@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입 - MOYEO</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/signup-steps.css">
+</head>
+
+<body>
+    <div class="container signup-step-container">
+        <!-- 상태 표시줄 -->
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+        </div>
+
+        <!-- 회원가입 콘텐츠 -->
+        <div class="signup-step-content">
+            <!-- 타이틀 -->
+            <h1 class="signup-step-title">회원가입</h1>
+
+            <!-- 이메일 입력 -->
+            <div class="step-section">
+                <h2 class="step-subtitle">이메일 입력</h2>
+                <div class="input-group">
+                    <label class="input-label">이메일</label>
+                    <div class="input-with-dropdown">
+                        <input type="text" class="form-input" placeholder="이메일을 입력해주세요" id="email" required>
+                        <select class="email-dropdown">
+                            <option value="@naver.com">@ naver.com</option>
+                            <option value="@gmail.com">@ gmail.com</option>
+                            <option value="@daum.net">@ daum.net</option>
+                            <option value="@kakao.com">@ kakao.com</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 비밀번호 입력 -->
+            <div class="step-section">
+                <h2 class="step-subtitle">비밀번호 입력</h2>
+                <div class="input-group">
+                    <label class="input-label">비밀번호</label>
+                    <input type="password" class="form-input" placeholder="비밀번호를 입력해주세요" id="password" required>
+                </div>
+            </div>
+
+            <!-- 비밀번호 확인 -->
+            <div class="step-section">
+                <div class="input-group">
+                    <label class="input-label">비밀번호 확인</label>
+                    <input type="password" class="form-input" placeholder="비밀번호를 다시 입력해주세요" id="passwordConfirm"
+                        required>
+                </div>
+                <!-- 비밀번호 일치 표시 -->
+                <div class="password-match-indicator"></div>
+            </div>
+
+            <!-- 다음 버튼 -->
+            <button type="button" class="btn-next" id="nextBtn">
+                다음
+            </button>
+        </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/signup-steps.js"></script>
+</body>
+
+</html>

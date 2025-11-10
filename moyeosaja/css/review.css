@@ -1,0 +1,307 @@
+/* 리뷰 페이지 스타일 */
+
+.review-container {
+    background-color: #f1f1f1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 40px;
+}
+
+/* 페이지 타이틀 */
+.page-title {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: #272727;
+    text-align: center;
+    margin: 16px 0 20px;
+    letter-spacing: 0;
+    line-height: 20.29px;
+}
+
+/* 상품 이미지 섹션 */
+.product-image-section {
+    padding: 0 24px;
+    margin-bottom: 40px;
+}
+
+.product-image-large {
+    width: 100%;
+    max-width: 347px;
+    height: 347px;
+    margin: 0 auto;
+    border-radius: 22px;
+    background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 120px;
+}
+
+/* 상품 타입별 배경 */
+.product-image-large[data-product="bread"]::before {
+    content: "🥖";
+    position: absolute;
+    z-index: 1;
+}
+
+.product-image-large[data-product="chicken"]::before {
+    content: "🍗";
+    position: absolute;
+    z-index: 1;
+}
+
+.product-image-large[data-product="tissue"]::before {
+    content: "🧻";
+    position: absolute;
+    z-index: 1;
+    background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+}
+
+.product-image-large[data-product="rice"]::before {
+    content: "🌾";
+    position: absolute;
+    z-index: 1;
+}
+
+/* 그라데이션 오버레이 */
+.product-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 24px;
+    background: linear-gradient(180deg, rgba(39, 39, 39, 0) 0%, rgba(39, 39, 39, 0.9) 100%);
+    z-index: 2;
+}
+
+.product-author {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.author-avatar-small {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+    position: relative;
+    flex-shrink: 0;
+}
+
+.author-avatar-small::after {
+    content: "👤";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 8px;
+}
+
+.author-name {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #ffffff;
+    letter-spacing: -0.36px;
+    line-height: 14.32px;
+}
+
+.product-name {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 4px;
+    letter-spacing: -0.45px;
+    line-height: 17.9px;
+}
+
+.product-description {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: #ffffff;
+    letter-spacing: -0.36px;
+    line-height: 14.32px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 종료된 공구 배지 */
+.closed-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background-color: #000000;
+    color: #ffffff;
+    padding: 6px 12px;
+    border-radius: 22px;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 14.32px;
+    z-index: 3;
+}
+
+/* 리뷰 폼 */
+.review-form {
+    padding: 0 24px;
+}
+
+/* 환영 메시지 */
+.review-welcome {
+    margin-bottom: 24px;
+}
+
+.welcome-text {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: #ffffff;
+    margin-bottom: 4px;
+    letter-spacing: 0;
+    line-height: 17.9px;
+}
+
+.welcome-question {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: #ffffff;
+    letter-spacing: 0;
+    line-height: 17.9px;
+}
+
+/* 별점 섹션 */
+.rating-section {
+    margin-bottom: 32px;
+}
+
+.stars {
+    display: flex;
+    gap: 0;
+    justify-content: flex-start;
+}
+
+.star {
+    font-size: 40px;
+    color: #fcfcfc;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.star.active,
+.star:hover {
+    transform: scale(1.1);
+}
+
+.star.filled {
+    color: #ffd700;
+}
+
+/* 리뷰 입력 섹션 */
+.review-input-section {
+    margin-bottom: 32px;
+}
+
+.review-label {
+    display: block;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: #272727;
+    margin-bottom: 12px;
+    letter-spacing: 0;
+    line-height: 17.9px;
+}
+
+.review-textarea {
+    width: 100%;
+    border: 1px solid #b1b1b1;
+    border-radius: 10px;
+    padding: 14px;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #272727;
+    letter-spacing: 0;
+    line-height: 14.32px;
+    resize: none;
+    background-color: #ffffff;
+    transition: border-color 0.2s ease;
+}
+
+.review-textarea:focus {
+    outline: none;
+    border-color: #297eff;
+}
+
+.review-textarea::placeholder {
+    color: #b1b1b1;
+}
+
+/* 작성하기 버튼 */
+.btn-submit-review {
+    width: 100%;
+    max-width: 367px;
+    height: 58px;
+    background-color: #297eff;
+    color: #ffffff;
+    border: none;
+    border-radius: 15px;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0;
+    line-height: 14.32px;
+    margin: 0 auto;
+    display: block;
+}
+
+.btn-submit-review:hover {
+    background-color: #1d6de6;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(41, 126, 255, 0.4);
+}
+
+.btn-submit-review:active {
+    transform: translateY(0);
+}
+
+.btn-submit-review:disabled {
+    background-color: #b1b1b1;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 390px) {
+    .product-image-section {
+        padding: 0 16px;
+    }
+
+    .review-form {
+        padding: 0 16px;
+    }
+
+    .product-image-large {
+        height: 300px;
+        font-size: 100px;
+    }
+
+    .star {
+        font-size: 36px;
+    }
+}

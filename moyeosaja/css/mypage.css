@@ -1,0 +1,426 @@
+/* 마이페이지 전용 스타일 */
+
+.mypage-container {
+    background: #f1f1f1;
+    min-height: 100vh;
+    padding: 0;
+}
+
+/* 상태 표시줄 */
+.mypage-container .status-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 0;
+    height: 36px;
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 125px;
+    width: auto;
+    background-color: #dadada;
+    border: 0.25px solid rgba(0, 0, 0, 0.25);
+    border-radius: 48px;
+    z-index: 10;
+}
+
+.mypage-container .status-time {
+    font-size: 13px;
+    font-weight: 600;
+    color: #000000;
+    letter-spacing: 0;
+}
+
+.mypage-content {
+    padding: 80px 0 100px;
+}
+
+.mypage-title {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: #272727;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* 프로필 섹션 */
+.profile-section {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 24px;
+    margin-bottom: 30px;
+}
+
+.profile-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: 1px solid #764ba2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    position: relative;
+}
+
+.profile-avatar::after {
+    content: "👤";
+    position: absolute;
+    font-size: 16px;
+}
+
+.profile-name {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #272727;
+}
+
+/* 매칭 성공 섹션 */
+.matching-success-section {
+    background-color: #fcfcfc;
+    padding: 27px 24px;
+    margin-bottom: 30px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 30px;
+}
+
+.section-title {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #272727;
+    letter-spacing: -0.45px;
+    margin-bottom: 6px;
+}
+
+.section-subtitle {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #272727;
+    letter-spacing: -0.36px;
+    margin: 0;
+}
+
+.view-all-link {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: #272727;
+    text-decoration: none;
+}
+
+/* 매칭 성공 아이템 */
+.success-items {
+    margin-bottom: 25px;
+}
+
+.success-item {
+    padding: 18px 0;
+}
+
+.item-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.item-name {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: #272727;
+}
+
+.participants {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.participant-count {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: #272727;
+}
+
+.participant-avatars {
+    display: flex;
+    gap: 2px;
+}
+
+.participant-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #646464;
+    border: 1px solid #959595;
+}
+
+.divider {
+    height: 1px;
+    background-color: #272727;
+    width: 100%;
+}
+
+/* 더보기 표시 */
+.more-indicator {
+    display: flex;
+    justify-content: center;
+    gap: 3px;
+}
+
+.dot {
+    width: 7px;
+    height: 3px;
+    background-color: #272727;
+    border-radius: 2px;
+}
+
+.dot.active {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+}
+
+/* 내 활동 섹션 */
+.activity-title {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #545454;
+    letter-spacing: -0.45px;
+    padding: 0 24px;
+    margin-bottom: 28px;
+}
+
+/* 아이콘 메뉴 */
+.icon-menu {
+    display: flex;
+    justify-content: space-around;
+    padding: 0 24px;
+    margin-bottom: 40px;
+}
+
+.icon-menu-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #272727;
+}
+
+.icon-menu-item span {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: -0.36px;
+}
+
+.icon-wrapper {
+    width: 42px;
+    height: 42px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 내 공구글 아이콘 */
+.icon-my-posts {
+    background: linear-gradient(135deg, #ffa4a5 0%, #ff5758 100%);
+    border-radius: 50%;
+}
+
+.icon-my-posts-graphic::before,
+.icon-my-posts-graphic::after {
+    content: '';
+    position: absolute;
+    background-color: #bfd8ff;
+    border-radius: 50%;
+}
+
+.icon-my-posts-graphic::before {
+    width: 3px;
+    height: 3px;
+    top: 50%;
+    left: 35%;
+}
+
+.icon-my-posts-graphic::after {
+    width: 3px;
+    height: 3px;
+    top: 50%;
+    left: 55%;
+}
+
+/* 캘린더 아이콘 */
+.icon-calendar {
+    background-color: #297eff;
+    border-radius: 8px;
+}
+
+.icon-calendar-graphic {
+    width: 33.69px;
+    height: 31.89px;
+    background-color: #297eff;
+    border-radius: 3px;
+    position: relative;
+}
+
+.icon-calendar-graphic::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 9.63px;
+    background-color: #fda6ac;
+    border-radius: 3px 3px 0 0;
+}
+
+.icon-calendar-graphic::after {
+    content: '';
+    position: absolute;
+    top: 2.4px;
+    left: 3px;
+    width: 2.41px;
+    height: 2.41px;
+    background-color: #f1f1f1;
+    border-radius: 50%;
+    box-shadow: 8.42px 0 0 #f1f1f1, 16.85px 0 0 #f1f1f1, 25.27px 0 0 #f1f1f1;
+}
+
+/* 매칭 대기 내역 아이콘 */
+.icon-waiting {
+    position: relative;
+}
+
+.icon-waiting-graphic::before {
+    content: '';
+    position: absolute;
+    width: 28.1px;
+    height: 27.38px;
+    background-color: #272727;
+    bottom: 0;
+    right: 2px;
+}
+
+.icon-waiting-graphic::after {
+    content: '';
+    position: absolute;
+    width: 31.94px;
+    height: 30.67px;
+    background-color: #297eff;
+    top: 0;
+    left: 0;
+}
+
+/* 링크 메뉴 */
+.link-menu {
+    padding: 0 24px;
+}
+
+.link-divider {
+    height: 1px;
+    background-color: #272727;
+    margin: 18px 0;
+}
+
+.link-menu-item {
+    display: block;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #272727;
+    text-decoration: none;
+    padding: 0;
+    margin: 18px 0;
+}
+
+.link-menu-item:hover {
+    color: #297eff;
+}
+
+/* 하단 네비게이션 */
+.mypage-container .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 440px;
+    height: 92px;
+    background-color: #272727;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 15px 0 25px;
+    z-index: 1000;
+}
+
+.mypage-container .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.mypage-container .nav-item:hover {
+    opacity: 0.7;
+}
+
+.mypage-container .nav-item.active .nav-icon {
+    background-color: #297eff;
+}
+
+.mypage-container .nav-icon {
+    width: 55px;
+    height: 55px;
+    background-color: #ff1a1a;
+    border-radius: 4px;
+    position: relative;
+}
+
+.mypage-container .nav-label {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 7.68px;
+    color: #fcfcfc;
+    font-weight: 500;
+    letter-spacing: 0;
+    line-height: 9.16px;
+}
+
+.mypage-container .nav-item.active .nav-label {
+    color: #297eff;
+}
+
+.mypage-container .notification-dot {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 4px;
+    height: 4px;
+    background-color: #ff5758;
+    border-radius: 50%;
+}
+
+@media (max-width: 440px) {
+    .mypage-container .bottom-nav {
+        width: 100%;
+    }
+}

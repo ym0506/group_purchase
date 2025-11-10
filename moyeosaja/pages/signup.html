@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입 - MOYEO</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/login.css">
+    <link rel="stylesheet" href="../css/signup.css">
+</head>
+
+<body>
+    <div class="container signup-container">
+        <!-- 상태 표시줄 -->
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+        </div>
+
+        <!-- 뒤로가기 버튼 -->
+        <div class="back-button">
+            <a href="./login.html">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M15 18L9 12L15 6" stroke="#ffffff" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+            </a>
+        </div>
+
+        <!-- 회원가입 콘텐츠 -->
+        <div class="signup-content">
+            <!-- 타이틀 -->
+            <div class="signup-header">
+                <h1 class="signup-title">회원가입</h1>
+                <p class="signup-subtitle">모여사자와 함께 시작하세요</p>
+            </div>
+
+            <!-- 회원가입 폼 -->
+            <form class="signup-form">
+                <!-- 이메일 입력 -->
+                <div class="input-group">
+                    <label class="input-label">이메일</label>
+                    <input type="email" class="form-input" placeholder="이메일을 입력하세요" required>
+                </div>
+
+                <!-- 비밀번호 입력 -->
+                <div class="input-group">
+                    <label class="input-label">비밀번호</label>
+                    <input type="password" class="form-input" placeholder="비밀번호를 입력하세요 (6자 이상)" required>
+                </div>
+
+                <!-- 비밀번호 확인 -->
+                <div class="input-group">
+                    <label class="input-label">비밀번호 확인</label>
+                    <input type="password" class="form-input" placeholder="비밀번호를 다시 입력하세요" required>
+                </div>
+
+                <!-- 닉네임 입력 -->
+                <div class="input-group">
+                    <label class="input-label">닉네임</label>
+                    <input type="text" class="form-input" placeholder="사용할 닉네임을 입력하세요" required>
+                </div>
+
+                <!-- 전화번호 입력 -->
+                <div class="input-group">
+                    <label class="input-label">전화번호</label>
+                    <input type="tel" class="form-input" placeholder="010-1234-5678" required>
+                </div>
+
+                <!-- 약관 동의 -->
+                <div class="terms-section">
+                    <label class="checkbox-wrapper">
+                        <input type="checkbox" id="allAgree">
+                        <span class="checkbox-custom"></span>
+                        <span class="checkbox-label">전체 동의</span>
+                    </label>
+
+                    <div class="terms-divider"></div>
+
+                    <label class="checkbox-wrapper">
+                        <input type="checkbox" class="term-checkbox" required>
+                        <span class="checkbox-custom"></span>
+                        <span class="checkbox-label">(필수) 서비스 이용약관 동의</span>
+                    </label>
+
+                    <label class="checkbox-wrapper">
+                        <input type="checkbox" class="term-checkbox" required>
+                        <span class="checkbox-custom"></span>
+                        <span class="checkbox-label">(필수) 개인정보 처리방침 동의</span>
+                    </label>
+
+                    <label class="checkbox-wrapper">
+                        <input type="checkbox" class="term-checkbox">
+                        <span class="checkbox-custom"></span>
+                        <span class="checkbox-label">(선택) 마케팅 정보 수신 동의</span>
+                    </label>
+                </div>
+
+                <!-- 회원가입 버튼 -->
+                <button type="submit" class="btn-signup">
+                    회원가입
+                </button>
+
+                <!-- 로그인 링크 -->
+                <div class="login-link-wrapper">
+                    <span class="login-text">이미 계정이 있으신가요?</span>
+                    <a href="./login.html" class="login-link">로그인</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/utils.js"></script>
+    <script src="../js/signup.js"></script>
+</body>
+
+</html>

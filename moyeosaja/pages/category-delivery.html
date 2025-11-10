@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공동배달 - MOYEO</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/category.css">
+</head>
+
+<body>
+    <div class="container category-container">
+        <!-- 상태 표시줄 -->
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+        </div>
+
+        <!-- 카테고리 페이지 콘텐츠 -->
+        <div class="category-content">
+            <!-- 뒤로가기 + 타이틀 -->
+            <div class="category-header">
+                <button class="btn-back" onclick="history.back()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M15 18L9 12L15 6" stroke="#272727" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </button>
+                <h1 class="category-title">공동배달</h1>
+            </div>
+
+            <!-- 카테고리 설명 -->
+            <div class="category-banner">
+                <div class="banner-icon">🛍️</div>
+                <div class="banner-text">
+                    <h2>한 번에 시키고, 비용은 가볍게</h2>
+                    <p>배달비를 나눠서 더 저렴하게!</p>
+                </div>
+            </div>
+
+            <!-- 필터 옵션 -->
+            <div class="filter-section">
+                <div class="filter-tabs">
+                    <button class="filter-tab active">전체</button>
+                    <button class="filter-tab">모집중</button>
+                    <button class="filter-tab">곧 마감</button>
+                    <button class="filter-tab">완료</button>
+                </div>
+                <div class="filter-sort">
+                    <select class="sort-select">
+                        <option>최신순</option>
+                        <option>마감임박순</option>
+                        <option>거리순</option>
+                        <option>인기순</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 공구 리스트 -->
+            <section class="section items-list">
+                <div class="item" data-item-id="1" data-product="chicken">
+                    <div class="item-avatar"></div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <div class="item-title">뿌링클 + 치즈볼</div>
+                            <div class="badge badge-new">NEW</div>
+                        </div>
+                        <div class="item-description">치킨이 땡기는 밤이에용</div>
+                        <div class="item-meta">
+                            <span class="item-location">📍 한서대 정문</span>
+                            <span class="item-time">⏰ 2시간 전</span>
+                        </div>
+                        <div class="item-actions">
+                            <div class="item-progress">3/4</div>
+                            <button class="match-button">매칭하기</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item" data-item-id="2" data-product="chicken">
+                    <div class="item-avatar"></div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <div class="item-title">맥도날드 세트</div>
+                            <div class="badge badge-urgent">마감임박</div>
+                        </div>
+                        <div class="item-description">버거킹보다 맥도날드지</div>
+                        <div class="item-meta">
+                            <span class="item-location">📍 학생회관</span>
+                            <span class="item-time">⏰ 30분 전</span>
+                        </div>
+                        <div class="item-actions">
+                            <div class="item-progress">2/3</div>
+                            <button class="match-button">매칭하기</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item" data-item-id="3" data-product="bread">
+                    <div class="item-avatar"></div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <div class="item-title">피자 라지 사이즈</div>
+                        </div>
+                        <div class="item-description">도미노 피자 같이 시킬 분!</div>
+                        <div class="item-meta">
+                            <span class="item-location">📍 기숙사</span>
+                            <span class="item-time">⏰ 1시간 전</span>
+                        </div>
+                        <div class="item-actions">
+                            <div class="item-progress">1/4</div>
+                            <button class="match-button">매칭하기</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item" data-item-id="4" data-product="bread">
+                    <div class="item-avatar"></div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <div class="item-title">중국집 짜장면</div>
+                        </div>
+                        <div class="item-description">배고파요 같이 먹어요</div>
+                        <div class="item-meta">
+                            <span class="item-location">📍 도서관</span>
+                            <span class="item-time">⏰ 3시간 전</span>
+                        </div>
+                        <div class="item-actions">
+                            <div class="item-progress">2/4</div>
+                            <button class="match-button">매칭하기</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item" data-item-id="5" data-product="streaming">
+                    <div class="item-avatar"></div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <div class="item-title">카페 음료</div>
+                            <div class="badge badge-new">NEW</div>
+                        </div>
+                        <div class="item-description">스타벅스 배달비 같이 나눠요</div>
+                        <div class="item-meta">
+                            <span class="item-location">📍 중앙광장</span>
+                            <span class="item-time">⏰ 10분 전</span>
+                        </div>
+                        <div class="item-actions">
+                            <div class="item-progress">2/5</div>
+                            <button class="match-button">매칭하기</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- 하단 네비게이션 -->
+        <nav class="bottom-nav">
+            <div class="nav-item" data-page="home">
+                <div class="nav-icon"></div>
+                <div class="nav-label">홈</div>
+            </div>
+            <div class="nav-item" data-page="notifications">
+                <div class="nav-icon">
+                    <div class="notification-dot"></div>
+                </div>
+                <div class="nav-label">알림</div>
+            </div>
+            <div class="nav-item" data-page="mypage">
+                <div class="nav-icon"></div>
+                <div class="nav-label">마이</div>
+            </div>
+        </nav>
+    </div>
+
+    <script type="module" src="../js/app.js"></script>
+    <script src="../js/category.js"></script>
+</body>
+
+</html>

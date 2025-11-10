@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>리뷰 작성하기 - MOYEO</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/review.css">
+</head>
+
+<body>
+    <div class="container review-container">
+        <!-- 상태 표시줄 -->
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+        </div>
+
+        <!-- 타이틀 -->
+        <h1 class="page-title">리뷰 작성하기</h1>
+
+        <!-- 상품 이미지 영역 -->
+        <div class="product-image-section">
+            <div class="product-image-large" data-product="bread">
+                <div class="closed-badge">종료된 공구</div>
+                <div class="product-overlay">
+                    <div class="product-author">
+                        <div class="author-avatar-small"></div>
+                        <span class="author-name">최지인</span>
+                    </div>
+                    <h3 class="product-name">소금빵</h3>
+                    <p class="product-description">소금빵 실수로 너무 많이 사버렸는데 같이 나눠먹어요...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 리뷰 작성 폼 -->
+        <div class="review-form">
+            <!-- 환영 메시지 -->
+            <div class="review-welcome">
+                <p class="welcome-text">윤영님, 😎</p>
+                <p class="welcome-question">최지인님과 공구가 어떠셨나요?</p>
+            </div>
+
+            <!-- 별점 -->
+            <div class="rating-section">
+                <div class="stars" id="ratingStars">
+                    <span class="star" data-rating="1">★</span>
+                    <span class="star" data-rating="2">★</span>
+                    <span class="star" data-rating="3">★</span>
+                    <span class="star" data-rating="4">★</span>
+                    <span class="star" data-rating="5">★</span>
+                </div>
+            </div>
+
+            <!-- 한 줄 후기 -->
+            <div class="review-input-section">
+                <label class="review-label">한 줄 후기를 들려주세요!</label>
+                <textarea class="review-textarea" id="reviewText" placeholder="진짜 뭐죠..." rows="4"></textarea>
+            </div>
+
+            <!-- 작성하기 버튼 -->
+            <button type="button" class="btn-submit-review" id="submitReview">
+                작성하기
+            </button>
+        </div>
+    </div>
+
+    <script src="../js/utils.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/review.js"></script>
+</body>
+
+</html>

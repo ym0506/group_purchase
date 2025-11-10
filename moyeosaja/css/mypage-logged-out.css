@@ -1,0 +1,307 @@
+/* 마이페이지 로그인 X 스타일 */
+
+.mypage-logged-out-container {
+    background-color: #f1f1f1;
+    min-height: 100vh;
+    padding-bottom: 92px;
+}
+
+/* 페이지 타이틀 */
+.mypage-title {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: #272727;
+    text-align: center;
+    padding: 60px 0 16px;
+    margin: 0;
+    letter-spacing: 0;
+    line-height: 20.29px;
+}
+
+/* 회원가입/로그인 링크 */
+.auth-links {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 0 24px 16px;
+}
+
+.auth-link {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 10px;
+    font-weight: 400;
+    color: #000000;
+    text-decoration: none;
+    letter-spacing: 0;
+    line-height: 11.93px;
+    transition: opacity 0.2s ease;
+}
+
+.auth-link:hover {
+    opacity: 0.7;
+}
+
+/* 로그인 안내 */
+.login-prompt {
+    background-color: #fcfcfc;
+    padding: 24px;
+    text-align: center;
+    position: relative;
+}
+
+.login-icon {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+}
+
+.login-avatar {
+    width: 124px;
+    height: 124px;
+    border-radius: 50%;
+    background-color: #f1f1f1;
+    margin: 0 auto 16px;
+}
+
+.login-title {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #272727;
+    margin: 0 0 8px;
+    letter-spacing: 0;
+    line-height: 21.48px;
+}
+
+.login-subtitle {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    color: #272727;
+    margin: 0;
+    letter-spacing: 0;
+    line-height: 11.93px;
+}
+
+/* 빠른 링크 */
+.quick-links {
+    background-color: #f1f1f1;
+    border-radius: 15px;
+    padding: 24px;
+    margin: 24px;
+    display: flex;
+    justify-content: space-around;
+    gap: 16px;
+}
+
+.quick-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.quick-link:hover {
+    opacity: 0.7;
+}
+
+.quick-link-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #71aaff 0%, #297eff 100%);
+    position: relative;
+}
+
+.quick-link-icon.icon-posts::after {
+    content: '📝';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+}
+
+.quick-link-icon.icon-reviews::after {
+    content: '⭐';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+}
+
+.quick-link-icon.icon-calendar::after {
+    content: '📅';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+}
+
+.quick-link-label {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #272727;
+    text-align: center;
+    letter-spacing: -0.36px;
+    line-height: 14.32px;
+}
+
+/* 공구 내역 섹션 */
+.history-section {
+    background-color: #fcfcfc;
+    padding: 20px 24px;
+}
+
+.section-title {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #272727;
+    margin: 0 0 16px;
+    letter-spacing: 0;
+    line-height: 17.9px;
+}
+
+.history-stats {
+    background-color: #f1f1f1;
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-label {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #272727;
+    margin-bottom: 8px;
+    letter-spacing: -0.36px;
+    line-height: 14.32px;
+}
+
+.stat-value {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #272727;
+    letter-spacing: -0.36px;
+    line-height: 14.32px;
+}
+
+.stat-value.highlight {
+    color: #297eff;
+}
+
+/* 다가오는 공구 섹션 */
+.upcoming-section {
+    background-color: #fcfcfc;
+    padding: 20px 24px;
+    margin-top: 16px;
+}
+
+.section-subtitle {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #272727;
+    margin: 8px 0 16px;
+    letter-spacing: -0.36px;
+    line-height: 14.32px;
+}
+
+.empty-state {
+    padding: 40px 0;
+    text-align: center;
+}
+
+.empty-text {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #9e9e9e;
+    margin: 0;
+    letter-spacing: 0;
+    line-height: 16.7px;
+}
+
+/* 계정 섹션 */
+.account-section {
+    background-color: #fcfcfc;
+    padding: 20px 24px;
+    margin-top: 16px;
+}
+
+.account-actions {
+    margin-top: 16px;
+}
+
+.account-btn {
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: #000000;
+    padding: 16px 0;
+    cursor: pointer;
+    text-align: left;
+    letter-spacing: 0;
+    line-height: 17.9px;
+    transition: opacity 0.2s ease;
+}
+
+.account-btn:hover {
+    opacity: 0.7;
+}
+
+.account-btn.danger {
+    color: #ff4a4a;
+}
+
+.account-divider {
+    height: 1px;
+    background-color: #272727;
+    margin: 0;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 390px) {
+    .auth-links {
+        padding: 0 16px 12px;
+    }
+
+    .login-prompt {
+        padding: 20px 16px;
+    }
+
+    .quick-links {
+        margin: 16px;
+        padding: 20px 16px;
+    }
+
+    .history-section {
+        padding: 16px;
+    }
+
+    .upcoming-section {
+        padding: 16px;
+    }
+
+    .account-section {
+        padding: 16px;
+    }
+}

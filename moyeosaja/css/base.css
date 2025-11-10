@@ -1,0 +1,120 @@
+/* Base styles - 기본 스타일 */
+@import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: #f1f1f1;
+    color: #272727;
+    line-height: 1.5;
+}
+
+.container {
+    max-width: 440px;
+    margin: 0 auto;
+    background-color: #f1f1f1;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Common button styles */
+.btn {
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn-primary {
+    background-color: #272727;
+    color: #e7e7e7;
+    font-size: 8.8px;
+    font-weight: 600;
+    padding: 10px 20px;
+}
+
+.btn-primary:hover {
+    background-color: #1a1a1a;
+}
+
+/* Text styles */
+.text-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: #272727;
+    letter-spacing: 0;
+}
+
+.text-description {
+    font-size: 10px;
+    font-weight: 500;
+    color: #272727;
+    line-height: 1.2;
+    letter-spacing: 0;
+}
+
+.text-small {
+    font-size: 12px;
+    font-weight: 400;
+    color: #272727;
+    letter-spacing: 0;
+}
+
+.text-muted {
+    color: #545454;
+}
+
+/* Badge styles */
+.badge {
+    font-size: 8px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 2px;
+    letter-spacing: 0;
+}
+
+.badge-new {
+    background-color: #ff5758;
+    color: #ffffff;
+}
+
+.badge-urgent {
+    background-color: #297eff;
+    color: #ffffff;
+}
+
+/* Responsive */
+@media (max-width: 440px) {
+    .container {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 390px) {
+    body {
+        font-size: 14px;
+    }
+
+    .container {
+        max-width: 100%;
+    }
+
+    .text-title {
+        font-size: 14px;
+    }
+
+    .text-description {
+        font-size: 9px;
+    }
+}

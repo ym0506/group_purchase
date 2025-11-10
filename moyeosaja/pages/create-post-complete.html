@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공구글 작성 완료 - MOYEO</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/create-post.css">
+</head>
+
+<body>
+    <div class="container create-post-container">
+        <!-- 상태 표시줄 -->
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+        </div>
+
+        <!-- 완료 콘텐츠 -->
+        <div class="complete-content">
+            <!-- 성공 아이콘 -->
+            <div class="success-icon">
+                <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+                    <circle cx="60" cy="60" r="58" stroke="#4CAF50" stroke-width="4" fill="#e8f5e9" />
+                    <path d="M35 60L50 75L85 40" stroke="#4CAF50" stroke-width="6" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+            </div>
+
+            <!-- 완료 메시지 -->
+            <h1 class="complete-title">공구글 작성 완료! 🎉</h1>
+            <p class="complete-message">공구친구를 기다리고 있어요!</p>
+
+            <!-- 작성한 공구 요약 -->
+            <div class="summary-card">
+                <div class="summary-row">
+                    <span class="summary-label">공구 명</span>
+                    <span class="summary-value" id="summaryTitle">소금빵</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">모집 인원</span>
+                    <span class="summary-value" id="summaryPeople">4명</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">만남 장소</span>
+                    <span class="summary-value" id="summaryLocation">한서대학교 학생회관 앞</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">마감일</span>
+                    <span class="summary-value" id="summaryDeadline">2024-10-30 18:00</span>
+                </div>
+            </div>
+
+            <!-- 액션 버튼 -->
+            <div class="complete-actions">
+                <a href="./home.html" class="btn-primary">홈으로 가기</a>
+                <a href="./mypage.html" class="btn-secondary">내 공구글 보기</a>
+            </div>
+        </div>
+
+        <!-- 하단 네비게이션 -->
+        <nav class="bottom-nav">
+            <div class="nav-item" data-page="home">
+                <div class="nav-icon"></div>
+                <div class="nav-label">홈</div>
+            </div>
+            <div class="nav-item" data-page="notifications">
+                <div class="nav-icon">
+                    <div class="notification-dot"></div>
+                </div>
+                <div class="nav-label">알림</div>
+            </div>
+            <div class="nav-item" data-page="mypage">
+                <div class="nav-icon"></div>
+                <div class="nav-label">마이</div>
+            </div>
+        </nav>
+    </div>
+
+    <script type="module" src="../js/app.js"></script>
+    <script src="../js/create-post-complete.js"></script>
+</body>
+
+</html>

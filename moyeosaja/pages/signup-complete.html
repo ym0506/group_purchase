@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입 완료 - MOYEO</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/signup-steps.css">
+</head>
+
+<body>
+    <div class="container signup-step-container">
+        <!-- 상태 표시줄 -->
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+        </div>
+
+        <!-- 회원가입 완료 콘텐츠 -->
+        <div class="signup-step-content signup-complete-content">
+            <!-- 타이틀 -->
+            <h1 class="signup-step-title">회원가입</h1>
+
+            <!-- 완료 메시지 -->
+            <div class="complete-message">
+                <div class="complete-icon">
+                    <svg width="82" height="82" viewBox="0 0 82 82" fill="none">
+                        <circle cx="41" cy="41" r="41" fill="url(#gradient)" />
+                        <path d="M25 41L36 52L57 31" stroke="white" stroke-width="4" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <defs>
+                            <linearGradient id="gradient" x1="41" y1="0" x2="41" y2="82">
+                                <stop offset="0%" stop-color="#ffa4a5" />
+                                <stop offset="100%" stop-color="#ff5758" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <h2 class="complete-title">회원가입이 완료됐어요!</h2>
+                <p class="complete-description">지금 바로 주변의 공동구매를 확인해보세요.</p>
+            </div>
+
+            <!-- 확인 버튼 -->
+            <button type="button" class="btn-next btn-primary" onclick="window.location.href='./home.html'">
+                확인
+            </button>
+        </div>
+    </div>
+
+    <script src="../js/utils.js"></script>
+    <script>
+        // 상태바 시간 업데이트
+        function updateTime() {
+            const timeElement = document.querySelector('.status-time');
+            if (timeElement) {
+                const now = new Date();
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                timeElement.textContent = `${hours}:${minutes}`;
+            }
+        }
+        updateTime();
+        setInterval(updateTime, 60000);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,800 @@
+/* 공구친구 매칭하기 페이지 - 기본 구조 */
+
+.matching-container {
+    background: #f1f1f1;
+    min-height: 100vh;
+    padding: 0;
+}
+
+.matching-content {
+    padding: 80px 24px 100px;
+}
+
+.matching-title {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: #272727;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* 진행률 */
+.matching-progress {
+    margin-bottom: 20px;
+}
+
+.progress-text {
+    font-size: 12px;
+    font-weight: 600;
+    color: #000000;
+    margin-bottom: 8px;
+}
+
+.progress-bar {
+    width: 181px;
+    height: 4px;
+    background-color: #c4c4c4;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: #ff5758;
+}
+
+.progress-count {
+    font-size: 12px;
+    font-weight: 600;
+    color: #272727;
+}
+
+.count-current {
+    letter-spacing: -0.36px;
+}
+
+.count-total {
+    font-size: 10px;
+    letter-spacing: -0.3px;
+}
+
+/* 참여자 프로필 */
+.participants {
+    display: flex;
+    gap: 7px;
+    margin-bottom: 30px;
+    justify-content: center;
+}
+
+.participant-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 2px solid #297eff;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.participant-avatar:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(41, 126, 255, 0.3);
+}
+
+/* 참여자별 그라디언트 */
+.participant-avatar.filled:nth-child(1) {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-color: #764ba2;
+}
+
+.participant-avatar.filled:nth-child(2) {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    border-color: #f5576c;
+}
+
+.participant-avatar.filled:nth-child(3) {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    border-color: #00f2fe;
+}
+
+.participant-avatar.filled::after {
+    content: "👤";
+    position: absolute;
+    font-size: 28px;
+}
+
+.participant-avatar.empty {
+    background: linear-gradient(135deg, #e0e0e0 0%, #bdbdbd 100%);
+    border: 2px dashed #959595;
+    color: #757575;
+    font-weight: 800;
+    font-size: 24px;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 0.6;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+}
+
+/* 상품 이미지 */
+.product-image-container {
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+.product-image {
+    width: 100%;
+    max-width: 347px;
+    height: 347px;
+    border-radius: 22px;
+    background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 120px;
+}
+
+.product-image::before {
+    content: "🥖";
+    position: absolute;
+    z-index: 1;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.product-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 24px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.5) 50%, transparent 100%);
+    color: #ffffff;
+    z-index: 2;
+}
+
+.product-author {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.author-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: 2px solid #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+.author-avatar::after {
+    content: "👤";
+}
+
+.author-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #ffffff;
+    letter-spacing: -0.2px;
+}
+
+.product-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 8px;
+    letter-spacing: -0.3px;
+}
+
+.product-description {
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.5;
+    letter-spacing: -0.2px;
+}
+
+.deadline-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #ff5758;
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    z-index: 3;
+    box-shadow: 0 4px 12px rgba(255, 87, 88, 0.4);
+    animation: badge-pulse 2s ease-in-out infinite;
+}
+
+@keyframes badge-pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.view-detail-link {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 600;
+    text-decoration: underline;
+    z-index: 3;
+    transition: opacity 0.2s ease;
+}
+
+.view-detail-link:hover {
+    opacity: 0.8;
+}
+
+/* 공구 정보 */
+.purchase-info {
+    margin-bottom: 30px;
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #666666;
+    letter-spacing: -0.2px;
+}
+
+.info-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: #272727;
+    letter-spacing: -0.3px;
+}
+
+/* 지도 */
+.map-container {
+    margin-bottom: 30px;
+}
+
+.map-placeholder {
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #4caf50;
+    font-size: 48px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    position: relative;
+    overflow: hidden;
+}
+
+.map-placeholder::before {
+    content: "📍";
+    position: absolute;
+    font-size: 64px;
+    opacity: 0.8;
+}
+
+/* 가격 정보 */
+.price-info {
+    margin-bottom: 100px;
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #e0e0e0, transparent);
+    margin: 20px 0;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 18px 0;
+}
+
+.price-label {
+    font-size: 15px;
+    font-weight: 500;
+    color: #666666;
+    letter-spacing: -0.2px;
+}
+
+.price-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: #272727;
+    text-align: right;
+    letter-spacing: -0.3px;
+}
+
+.price-row.highlight {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    padding: 16px;
+    border-radius: 12px;
+    margin: 12px -8px;
+}
+
+.price-row.highlight .price-label {
+    color: #1976d2;
+    font-weight: 600;
+}
+
+.price-row.highlight .amount {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1565c0;
+}
+
+.per-person {
+    font-size: 13px;
+    color: #1976d2;
+    margin-right: 8px;
+    font-weight: 500;
+}
+
+/* 비슷한 공구 */
+.similar-section {
+    margin-bottom: 100px;
+}
+
+.similar-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #272727;
+    margin-bottom: 20px;
+    letter-spacing: -0.3px;
+}
+
+.similar-items {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    scrollbar-width: none;
+}
+
+.similar-items::-webkit-scrollbar {
+    display: none;
+}
+
+.similar-item {
+    flex-shrink: 0;
+    width: 181px;
+    height: 181px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 64px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+.similar-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.similar-item:nth-child(1) {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%);
+}
+
+.similar-item:nth-child(1)::after {
+    content: "🍗";
+}
+
+.similar-item:nth-child(2) {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.similar-item:nth-child(2)::after {
+    content: "🧻";
+}
+
+.similar-item:nth-child(3) {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+}
+
+.similar-item:nth-child(3)::after {
+    content: "🍚";
+}
+
+.similar-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 하단 버튼 */
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    position: fixed;
+    bottom: 120px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 392px;
+    width: calc(100% - 48px);
+    z-index: 999;
+}
+
+.btn-chat {
+    flex: 1;
+    height: 52px;
+    border: 2px solid #272727;
+    border-radius: 16px;
+    background-color: #ffffff;
+    color: #272727;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-chat:hover {
+    background-color: #272727;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(39, 39, 39, 0.2);
+}
+
+.btn-chat::before {
+    content: "💬";
+    font-size: 20px;
+}
+
+.btn-match {
+    flex: 1.5;
+    height: 52px;
+    border: none;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #297eff 0%, #1565c0 100%);
+    color: #ffffff;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 16px rgba(41, 126, 255, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-match:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(41, 126, 255, 0.4);
+}
+
+.btn-match::after {
+    content: "⚡";
+    font-size: 20px;
+}
+
+.btn-match:active {
+    transform: translateY(0);
+}
+
+/* 하단 네비게이션 */
+.matching-container .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 440px;
+    height: 92px;
+    background-color: #272727;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 15px 0 25px;
+    z-index: 1000;
+}
+
+.matching-container .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.matching-container .nav-item:hover {
+    opacity: 0.7;
+}
+
+.matching-container .nav-item.active .nav-icon {
+    background-color: #297eff;
+}
+
+.matching-container .nav-icon {
+    width: 55px;
+    height: 55px;
+    background-color: #ff1a1a;
+    border-radius: 4px;
+    position: relative;
+}
+
+.matching-container .nav-label {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 7.68px;
+    color: #fcfcfc;
+    font-weight: 500;
+    letter-spacing: 0;
+    line-height: 9.16px;
+}
+
+.matching-container .nav-item.active .nav-label {
+    color: #297eff;
+}
+
+.matching-container .notification-dot {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 4px;
+    height: 4px;
+    background-color: #ff5758;
+    border-radius: 50%;
+}
+
+/* 매칭 완료 모달 */
+.matching-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.matching-modal.show {
+    opacity: 1;
+}
+
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+}
+
+.modal-content {
+    position: relative;
+    background-color: #ffffff;
+    border-radius: 24px;
+    padding: 40px 32px;
+    max-width: 340px;
+    width: calc(100% - 48px);
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.matching-modal.show .modal-content {
+    transform: scale(1);
+}
+
+.modal-icon {
+    font-size: 72px;
+    margin-bottom: 20px;
+    animation: bounce 1s ease infinite;
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.modal-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #272727;
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
+}
+
+.modal-message {
+    font-size: 15px;
+    font-weight: 400;
+    color: #666666;
+    line-height: 1.6;
+    margin-bottom: 28px;
+}
+
+.modal-info {
+    background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 28px;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 12px 0;
+}
+
+.info-icon {
+    font-size: 24px;
+}
+
+.info-text {
+    font-size: 14px;
+    color: #666666;
+    text-align: left;
+}
+
+.info-text strong {
+    color: #297eff;
+    font-weight: 700;
+}
+
+.modal-btn-primary {
+    width: 100%;
+    height: 52px;
+    border: none;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #297eff 0%, #1565c0 100%);
+    color: #ffffff;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-bottom: 12px;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 16px rgba(41, 126, 255, 0.3);
+}
+
+.modal-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(41, 126, 255, 0.4);
+}
+
+.modal-btn-secondary {
+    width: 100%;
+    height: 48px;
+    border: 2px solid #e0e0e0;
+    border-radius: 16px;
+    background-color: #ffffff;
+    color: #666666;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.modal-btn-secondary:hover {
+    background-color: #f5f5f5;
+    border-color: #272727;
+    color: #272727;
+}
+
+/* 컨페티 애니메이션 */
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    top: -10px;
+    z-index: 10000;
+    animation: confetti-fall 3s linear forwards;
+}
+
+@keyframes confetti-fall {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+/* 반응형 */
+@media (max-width: 440px) {
+    .matching-container {
+        width: 100%;
+    }
+
+    .matching-container .bottom-nav {
+        width: 100%;
+    }
+
+    .action-buttons {
+        width: calc(100% - 32px);
+    }
+
+    .modal-content {
+        padding: 32px 24px;
+    }
+}

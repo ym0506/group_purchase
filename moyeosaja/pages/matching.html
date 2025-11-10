@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공구친구 매칭하기 - MOYEO</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/matching.css">
+</head>
+
+<body>
+    <div class="container matching-container">
+        <!-- 상태 표시줄 -->
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+        </div>
+
+        <!-- 매칭 페이지 콘텐츠 -->
+        <div class="matching-content">
+            <!-- 타이틀 -->
+            <h1 class="matching-title">공구친구 매칭하기</h1>
+
+            <!-- 진행률 -->
+            <div class="matching-progress">
+                <p class="progress-text">거의 다 왔어요!</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 75%;"></div>
+                </div>
+                <p class="progress-count"><span class="count-current">3</span><span class="count-total">/4</span></p>
+            </div>
+
+            <!-- 참여자 프로필 -->
+            <div class="participants">
+                <div class="participant-avatar filled" data-user="1"></div>
+                <div class="participant-avatar filled" data-user="2"></div>
+                <div class="participant-avatar filled" data-user="3"></div>
+                <div class="participant-avatar empty">?</div>
+            </div>
+
+            <!-- 상품 이미지 -->
+            <div class="product-image-container">
+                <div class="product-image" data-product="bread">
+                    <div class="product-overlay">
+                        <div class="product-author">
+                            <div class="author-avatar"></div>
+                            <span class="author-name">안경만듀</span>
+                        </div>
+                        <h3 class="product-name">소금빵</h3>
+                        <p class="product-description">소금빵 실수로 너무 많이 사버렸는데 같이 나눠먹어요...</p>
+                    </div>
+                    <div class="deadline-badge">마감 D-1</div>
+                    <a href="#" class="view-detail-link">공구 정보 보기</a>
+                </div>
+            </div>
+
+            <!-- 공구 정보 -->
+            <div class="purchase-info">
+                <div class="info-row">
+                    <span class="info-label">공구 명</span>
+                    <span class="info-value">소금빵</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">수량</span>
+                    <span class="info-value">5</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">날짜</span>
+                    <span class="info-value">10월 19일</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">시간</span>
+                    <span class="info-value">오후 7시</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">수령장소</span>
+                    <span class="info-value">한서대학교 학생회관 앞</span>
+                </div>
+            </div>
+
+            <!-- 지도 -->
+            <div class="map-container">
+                <div class="map-placeholder">
+                    <span>지도</span>
+                </div>
+            </div>
+
+            <!-- 가격 정보 -->
+            <div class="price-info">
+                <div class="divider"></div>
+                <div class="price-row">
+                    <span class="price-label">총 금액</span>
+                    <span class="price-value">75,000원</span>
+                </div>
+                <div class="price-row highlight">
+                    <span class="price-label">N/1 금액</span>
+                    <span class="price-value">
+                        <span class="per-person">1인당</span>
+                        <span class="amount">15,000원</span>
+                    </span>
+                </div>
+                <div class="divider"></div>
+            </div>
+
+            <!-- 비슷한 공구 추천 -->
+            <div class="similar-section">
+                <h2 class="similar-title">비슷한 공구를 찾아봤어요! 🔍</h2>
+                <div class="similar-items">
+                    <div class="similar-item" data-product="chicken"></div>
+                    <div class="similar-item" data-product="tissue"></div>
+                    <div class="similar-item" data-product="rice"></div>
+                </div>
+            </div>
+
+            <!-- 하단 버튼 -->
+            <div class="action-buttons">
+                <button class="btn-chat">대화방 참여하기</button>
+                <button class="btn-match">매칭하기</button>
+            </div>
+        </div>
+
+        <!-- 하단 네비게이션 -->
+        <nav class="bottom-nav">
+            <div class="nav-item" data-page="home">
+                <div class="nav-icon"></div>
+                <div class="nav-label">홈</div>
+            </div>
+            <div class="nav-item" data-page="notifications">
+                <div class="nav-icon">
+                    <div class="notification-dot"></div>
+                </div>
+                <div class="nav-label">알림</div>
+            </div>
+            <div class="nav-item" data-page="mypage">
+                <div class="nav-icon"></div>
+                <div class="nav-label">마이</div>
+            </div>
+        </nav>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script type="module" src="../js/app.js"></script>
+    <script src="../js/matching.js"></script>
+</body>
+
+</html>

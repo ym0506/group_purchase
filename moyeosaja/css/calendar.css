@@ -1,0 +1,280 @@
+/* 캘린더 페이지 스타일 */
+
+.calendar-container {
+    background-color: #f1f1f1;
+    min-height: 100vh;
+    padding-bottom: 92px;
+}
+
+/* 페이지 타이틀 */
+.calendar-title {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: #272727;
+    text-align: center;
+    padding: 60px 0 20px;
+    margin: 0;
+    letter-spacing: 0;
+    line-height: 20.29px;
+}
+
+/* 캘린더 위젯 */
+.calendar-widget {
+    background-color: #fcfcfc;
+    border: 1px solid #e7e7e7;
+    border-radius: 30px;
+    margin: 0 24px 20px;
+    padding: 24px;
+}
+
+.calendar-header {
+    margin-bottom: 16px;
+}
+
+.calendar-month-label {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    color: #000000;
+    letter-spacing: 0;
+    line-height: 11.93px;
+    margin-bottom: 4px;
+}
+
+.calendar-month {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #272727;
+    margin: 0;
+    letter-spacing: 0;
+    line-height: 33.41px;
+}
+
+/* 캘린더 그리드 */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+}
+
+.calendar-weekday {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: #272727;
+    text-align: center;
+    padding: 8px 0;
+    letter-spacing: 0;
+    line-height: 14.32px;
+}
+
+.calendar-weekday:first-child {
+    color: #297eff;
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    color: #000000;
+    border: 1px solid #f1f1f1;
+    border-radius: 10px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0;
+    line-height: 11.93px;
+}
+
+.calendar-day:hover:not(:empty) {
+    background-color: #f8f8f8;
+}
+
+.calendar-day.active {
+    background-color: #297eff;
+    border-color: #297eff;
+    color: #fcfcfc;
+}
+
+.calendar-day.has-event::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 3px;
+    height: 3px;
+    background-color: #297eff;
+    border-radius: 50%;
+}
+
+.calendar-day.active.has-event::after {
+    background-color: #fcfcfc;
+}
+
+/* Today 섹션 */
+.today-section {
+    padding: 16px 24px;
+}
+
+.today-title {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: #000000;
+    margin: 0 0 8px;
+    letter-spacing: 0;
+    line-height: 14.32px;
+}
+
+.today-date {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.date-text {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: #297eff;
+    letter-spacing: 0;
+    line-height: 14.32px;
+}
+
+.date-divider {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: #297eff;
+    letter-spacing: 0;
+    line-height: 14.32px;
+}
+
+.day-text {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    color: #297eff;
+    letter-spacing: 0;
+    line-height: 11.93px;
+}
+
+/* 일정 목록 */
+.schedule-list {
+    padding: 0 24px;
+}
+
+.schedule-item {
+    background-color: #fcfcfc;
+    border: 1px solid #e7e7e7;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 16px;
+}
+
+.schedule-content {
+    margin-bottom: 12px;
+}
+
+.schedule-title {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #000000;
+    margin-bottom: 12px;
+    letter-spacing: -0.12px;
+    line-height: 14.32px;
+    position: relative;
+    padding-left: 10px;
+}
+
+.schedule-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 5px;
+    height: 5px;
+    background-color: #297eff;
+    border-radius: 50%;
+}
+
+.schedule-detail {
+    display: flex;
+    gap: 11px;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 10px;
+    margin-bottom: 8px;
+    letter-spacing: -0.1px;
+    line-height: 11.93px;
+}
+
+.detail-label {
+    font-weight: 400;
+    color: #000000;
+    min-width: 45px;
+}
+
+.detail-value {
+    font-weight: 500;
+    color: #000000;
+}
+
+/* 참여자 정보 */
+.schedule-participants {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.participant-count {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 8px;
+    font-weight: 400;
+    color: #000000;
+    letter-spacing: 0;
+    line-height: 9.55px;
+}
+
+.participant-avatars {
+    display: flex;
+    gap: 0;
+    margin-left: 8px;
+}
+
+.participant-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1px solid #959595;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    margin-left: -6px;
+}
+
+.participant-avatar:first-child {
+    margin-left: 0;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 390px) {
+    .calendar-widget {
+        margin: 0 16px 16px;
+        padding: 16px;
+    }
+
+    .today-section {
+        padding: 12px 16px;
+    }
+
+    .schedule-list {
+        padding: 0 16px;
+    }
+}

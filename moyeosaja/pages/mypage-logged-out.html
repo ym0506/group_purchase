@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마이페이지 - MOYEO</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/mypage-logged-out.css">
+</head>
+
+<body>
+    <div class="container mypage-logged-out-container">
+        <!-- 상태 표시줄 -->
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+        </div>
+
+        <!-- 페이지 타이틀 -->
+        <h1 class="mypage-title">마이</h1>
+
+        <!-- 회원가입/로그인 링크 -->
+        <div class="auth-links">
+            <a href="./signup-step1.html" class="auth-link">회원가입</a>
+            <a href="./login.html" class="auth-link">로그인</a>
+        </div>
+
+        <!-- 로그인 안내 -->
+        <div class="login-prompt">
+            <div class="login-icon">
+                <svg width="33" height="33" viewBox="0 0 33 33" fill="none">
+                    <circle cx="16.5" cy="16.5" r="16.5" fill="#272727" />
+                    <line x1="9.87134" y1="16.8341" x2="22.5999" y2="16.8341" stroke="white" stroke-width="2" />
+                    <line x1="16.2338" y1="10.4717" x2="16.2338" y2="23.2003" stroke="white" stroke-width="2" />
+                </svg>
+            </div>
+            <div class="login-avatar"></div>
+            <h2 class="login-title">로그인이 필요해요</h2>
+            <p class="login-subtitle">원활한 서비스 이용을 위해 로그인을 해주세요.</p>
+        </div>
+
+        <!-- 빠른 링크 -->
+        <div class="quick-links">
+            <div class="quick-link">
+                <div class="quick-link-icon icon-posts"></div>
+                <div class="quick-link-label">내 공구글</div>
+            </div>
+            <div class="quick-link">
+                <div class="quick-link-icon icon-reviews"></div>
+                <div class="quick-link-label">내 리뷰</div>
+            </div>
+            <div class="quick-link">
+                <div class="quick-link-icon icon-calendar"></div>
+                <div class="quick-link-label">캘린더</div>
+            </div>
+        </div>
+
+        <!-- 공구 내역 섹션 -->
+        <div class="history-section">
+            <h3 class="section-title">공구 내역</h3>
+            <div class="history-stats">
+                <div class="stat-item">
+                    <div class="stat-label">전체</div>
+                    <div class="stat-value">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">매칭 대기 중</div>
+                    <div class="stat-value">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">매칭 성공</div>
+                    <div class="stat-value highlight">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">종료</div>
+                    <div class="stat-value">0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 다가오는 공구 섹션 -->
+        <div class="upcoming-section">
+            <h3 class="section-title">다가오는 공구</h3>
+            <p class="section-subtitle">공구 만남을 준비해주세요</p>
+            <div class="empty-state">
+                <p class="empty-text">다가오는 공구가 없습니다</p>
+            </div>
+        </div>
+
+        <!-- 계정 섹션 -->
+        <div class="account-section">
+            <h3 class="section-title">계정</h3>
+            <div class="account-actions">
+                <button class="account-btn">로그아웃</button>
+                <div class="account-divider"></div>
+                <button class="account-btn danger">탈퇴하기</button>
+            </div>
+        </div>
+
+        <!-- 하단 네비게이션 -->
+        <nav class="bottom-nav">
+            <div class="nav-item" data-page="calendar">
+                <div class="nav-icon"></div>
+                <div class="nav-label">캘린더</div>
+            </div>
+            <div class="nav-item" data-page="create">
+                <div class="nav-icon"></div>
+                <div class="nav-label">공구 글 작성하기</div>
+            </div>
+            <div class="nav-item" data-page="home-main">
+                <div class="nav-icon"></div>
+                <div class="nav-label">홈</div>
+            </div>
+            <div class="nav-item" data-page="favorites">
+                <div class="nav-icon"></div>
+                <div class="nav-label">관심있어요</div>
+            </div>
+            <div class="nav-item active" data-page="mypage">
+                <div class="nav-icon"></div>
+                <div class="nav-label">마이</div>
+            </div>
+        </nav>
+    </div>
+
+    <script src="../js/utils.js"></script>
+    <script src="../js/components.js"></script>
+    <script src="../js/mypage-logged-out.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공동구매 홈</title>
+
+    <!-- CSS 모듈들 -->
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="status-bar">
+                <div class="status-indicator"></div>
+            </div>
+
+            <!-- 회원가입/로그인 링크 -->
+            <div class="auth-links">
+                <a href="./signup-step1.html" class="auth-link">회원가입</a>
+                <a href="./login.html" class="auth-link">로그인</a>
+            </div>
+
+            <div class="greeting">윤영님, 안녕하세요!</div>
+
+            <div class="upcoming-event">
+                <span class="upcoming-text">소금빵 공구 만남까지</span>
+                <div class="d-day-badge">D-1</div>
+            </div>
+        </header>
+
+        <main class="page-content">
+            <!-- Category Cards -->
+            <section class="category-grid">
+                <div class="category-card large" data-category="delivery">
+                    <div>
+                        <div class="category-title">공동배달</div>
+                        <div class="category-description">한 번에 시키고, 비용은 가볍게</div>
+                    </div>
+                </div>
+
+                <div class="category-card medium-red" data-category="bundle">
+                    <div>
+                        <div class="category-title">묶음구매</div>
+                        <div class="category-description">한 박스는 벅찰 때, 같이 쪼개요</div>
+                    </div>
+                </div>
+
+                <div class="category-card medium-blue" data-category="flash">
+                    <div>
+                        <div class="category-title">번개공구</div>
+                        <div class="category-description">급하다, 급해! 빠르게 공구하기</div>
+                    </div>
+                </div>
+
+                <div class="category-card small-blue" data-category="regular">
+                    <div>
+                        <div class="category-title">정기공구</div>
+                        <div class="category-description">자주 사는 건, 같이 정기적으로</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Search Section -->
+            <section class="section">
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="원하는 공구 상품을 검색해보세요!">
+                </div>
+            </section>
+
+            <!-- Recommendations -->
+            <section class="section">
+                <div class="section-title">
+                    <span class="recommendation-text">윤영님을 위한 추천 공구</span>
+                    <a href="#" class="view-all">전체보기</a>
+                </div>
+            </section>
+
+            <!-- Items List -->
+            <section class="section items-list">
+                <div class="item" data-item-id="1" data-product="chicken">
+                    <div class="item-avatar"></div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <div class="item-title">뿌링클 + 치즈볼</div>
+                            <div class="badge badge-new">NEW</div>
+                        </div>
+                        <div class="item-description">치킨이 땡기는 밤이에용</div>
+                    </div>
+                    <div class="item-count">3/4</div>
+                </div>
+
+                <div class="item" data-item-id="2" data-product="bread">
+                    <div class="item-avatar"></div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <div class="item-title">소금빵</div>
+                            <div class="badge badge-new">NEW</div>
+                        </div>
+                        <div class="item-description">소금빵 실수로 너무 많이 사버렸는데 같이 나눠...</div>
+                    </div>
+                    <div class="item-count">3/4</div>
+                </div>
+
+                <div class="item" data-item-id="3" data-product="tissue">
+                    <div class="item-avatar"></div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <div class="item-title">두루마리 휴지</div>
+                        </div>
+                        <div class="item-description">휴지 대용량으로 샀는데 아 너무 많아요 연락주...</div>
+                    </div>
+                    <div class="item-count">3/4</div>
+                </div>
+
+                <div class="item" data-item-id="4" data-product="rice">
+                    <div class="item-avatar"></div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <div class="item-title">쌀</div>
+                        </div>
+                        <div class="item-description">아 이러다가 이거 평생 먹을듯 같이 해치워주세...</div>
+                    </div>
+                    <div class="item-count">3/4</div>
+                </div>
+
+                <div class="item" data-item-id="5" data-product="streaming">
+                    <div class="item-avatar"></div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <div class="item-title">티빙 정기공구</div>
+                            <div class="badge badge-urgent">마감임박</div>
+                        </div>
+                        <div class="item-description">제가 유퀴즈 지나가는 행인으로 나오는데 보고...</div>
+                    </div>
+                    <div class="item-count">3/4</div>
+                </div>
+            </section>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <div class="page-indicator active" data-page="0"></div>
+                <div class="page-indicator" data-page="1"></div>
+                <div class="page-indicator" data-page="2"></div>
+                <div class="page-indicator" data-page="3"></div>
+            </div>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <div class="nav-item" data-page="calendar">
+                <div class="nav-icon"></div>
+                <div class="nav-label">캘린더</div>
+            </div>
+            <div class="nav-item" data-page="create">
+                <div class="nav-icon"></div>
+                <div class="nav-label">공구 글 작성하기</div>
+            </div>
+            <div class="nav-item active" data-page="home-main">
+                <div class="nav-icon"></div>
+                <div class="nav-label">홈</div>
+            </div>
+            <div class="nav-item" data-page="favorites">
+                <div class="nav-icon"></div>
+                <div class="nav-label">관심있어요</div>
+            </div>
+            <div class="nav-item" data-page="mypage">
+                <div class="nav-icon"></div>
+                <div class="nav-label">마이</div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Location Permission Modal -->
+    <div class="modal-overlay" id="locationModal">
+        <div class="modal-content location-modal">
+            <div class="location-icon">
+                <svg width="181" height="38" viewBox="0 0 181 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <ellipse cx="90.5" cy="26" rx="48" ry="14" fill="#297EFF" opacity="0.3" />
+                    <ellipse cx="13.5" cy="34" rx="27" ry="8" fill="#297EFF" opacity="0.3" />
+                    <ellipse cx="139.5" cy="20" rx="41.5" ry="14" fill="#297EFF" opacity="0.3" />
+                    <circle cx="27" cy="27" r="27" fill="url(#locationGradient)" />
+                    <defs>
+                        <linearGradient id="locationGradient" x1="27" y1="0" x2="27" y2="54"
+                            gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#FFA4A5" />
+                            <stop offset="1" stop-color="#FF5758" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+            <h2 class="modal-title">위치 접근 권한이 필요합니다</h2>
+            <p class="modal-subtitle">내 근처에서 열리는 공구를 알려드릴게요!</p>
+            <button class="btn-modal-primary" id="allowLocationBtn">허용하기</button>
+            <button class="btn-modal-secondary" id="laterBtn">다음에</button>
+        </div>
+    </div>
+
+    <!-- JavaScript 모듈들 -->
+    <script src="../js/api.js"></script>
+    <script type="module" src="../js/app.js"></script>
+</body>
+
+</html>

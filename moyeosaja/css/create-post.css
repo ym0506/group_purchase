@@ -1,0 +1,813 @@
+/* 공구글 작성하기 페이지 - 기본 구조 */
+
+.create-post-container {
+    background: #f1f1f1;
+    min-height: 100vh;
+    padding: 0;
+}
+
+.create-post-content {
+    padding: 80px 24px 100px;
+}
+
+.create-post-title {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: #272727;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* 단계 표시 */
+.step-indicators {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+.step-indicator {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #272727;
+    color: #f1f1f1;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 8px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: 0;
+    line-height: 9.546875px;
+    transition: background-color 0.2s ease;
+}
+
+.step-indicator.active {
+    background-color: #297eff;
+}
+
+/* 이미지 업로드 */
+.image-upload-section {
+    margin-bottom: 30px;
+}
+
+.image-upload-box {
+    width: 100%;
+    max-width: 347px;
+    height: 347px;
+    border-radius: 22px;
+    background-color: #fcfcfc;
+    border: 1px solid #c4c4c4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.image-upload-box:hover {
+    background-color: #f8f8f8;
+}
+
+.upload-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background-color: #272727;
+    color: #ffffff;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.upload-text {
+    font-size: 12px;
+    font-weight: 500;
+    color: #272727;
+}
+
+/* 작성 폼 */
+.create-form {
+    max-width: 100%;
+}
+
+.form-title {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 17px;
+    font-weight: 500;
+    color: #272727;
+    margin-bottom: 25px;
+    letter-spacing: -0.51px;
+}
+
+.form-subtitle {
+    font-size: 17px;
+    font-weight: 500;
+    color: #272727;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* 폼 행 */
+.form-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.form-label {
+    font-size: 15px;
+    font-weight: 500;
+    color: #303030;
+    min-width: 60px;
+}
+
+.form-input {
+    flex: 1;
+    padding: 10px 15px;
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #303030;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.add-btn {
+    width: 18.2px;
+    height: 18.2px;
+    border-radius: 50%;
+    background-color: #272727;
+    color: #ffffff;
+    border: none;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+/* 내용 입력 */
+.form-group {
+    margin-bottom: 25px;
+}
+
+.content-header {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 8px;
+}
+
+.ai-summary-btn {
+    background: none;
+    border: none;
+    color: #5c5c5c;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    letter-spacing: -0.24px;
+    line-height: 17.64px;
+}
+
+/* 토글 스위치 */
+.toggle-switch {
+    position: relative;
+    width: 32px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.toggle-track {
+    width: 100%;
+    height: 100%;
+    background-color: #272727;
+    border-radius: 9px;
+    transition: background-color 0.2s ease;
+}
+
+.toggle-thumb {
+    position: absolute;
+    right: 3px;
+    top: 3px;
+    width: 12px;
+    height: 12px;
+    background-color: #fcfcfc;
+    border-radius: 50%;
+    transition: right 0.2s ease;
+}
+
+.toggle-switch.active .toggle-thumb {
+    right: 17px;
+}
+
+.toggle-switch.active .toggle-track {
+    background-color: #297eff;
+}
+
+.form-textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 15px;
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #303030;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    resize: vertical;
+}
+
+/* 인원 선택 */
+.people-selector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.people-input {
+    width: 31px;
+    height: 21px;
+    padding: 2px 5px;
+    border: 1px solid #d9d9d9;
+    border-radius: 5.5px;
+    background-color: #d9d9d9;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 600;
+    color: #272727;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.people-text {
+    font-size: 15px;
+    font-weight: 500;
+    color: #303030;
+}
+
+/* 가격 정보 */
+.price-section {
+    margin: 30px 0;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+}
+
+.price-label {
+    font-size: 15px;
+    font-weight: 500;
+    color: #303030;
+}
+
+.price-input {
+    padding: 8px 12px;
+    border: 1px solid #d9d9d9;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #303030;
+    text-align: right;
+    width: 120px;
+}
+
+.price-value {
+    font-size: 15px;
+    font-weight: 500;
+    color: #303030;
+}
+
+/* 다음 버튼 */
+.btn-next {
+    width: 100%;
+    max-width: 366.5px;
+    height: 58px;
+    border: none;
+    border-radius: 15px;
+    background-color: #272727;
+    color: #ffffff;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 30px;
+    transition: opacity 0.2s ease;
+}
+
+.btn-next:hover {
+    opacity: 0.9;
+}
+
+.btn-next.active {
+    background-color: #297eff;
+}
+
+.btn-submit {
+    width: 100%;
+    max-width: 366.5px;
+    height: 58px;
+    border: none;
+    border-radius: 15px;
+    background-color: #297eff;
+    color: #ffffff;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 30px;
+    transition: opacity 0.2s ease;
+}
+
+.btn-submit:hover {
+    opacity: 0.9;
+}
+
+/* 상품 미리보기 카드 */
+.product-preview-card {
+    background-color: #e0e0e0;
+    border-radius: 22px;
+    overflow: hidden;
+    margin-bottom: 30px;
+    position: relative;
+    height: 347px;
+}
+
+.preview-image {
+    width: 100%;
+    height: 302px;
+    position: relative;
+    overflow: hidden;
+}
+
+.preview-image::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom,
+            rgba(0, 0, 0, 0) 0%,
+            rgba(0, 0, 0, 0.7) 100%);
+    pointer-events: none;
+}
+
+.preview-info {
+    position: absolute;
+    bottom: 20px;
+    left: 25px;
+    right: 25px;
+    color: #ffffff;
+}
+
+.preview-author {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.author-avatar {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff6b9d 0%, #c471ed 100%);
+}
+
+.author-name {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: -0.36px;
+}
+
+.preview-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 5px 0;
+    letter-spacing: -0.45px;
+}
+
+.preview-description {
+    font-size: 12px;
+    font-weight: 400;
+    margin: 0;
+    letter-spacing: -0.36px;
+}
+
+/* Step 2 스타일 */
+.step-section {
+    margin-top: 20px;
+}
+
+/* 날짜/시간/장소 표시 (텍스트) */
+.form-row-display {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #e7e7e7;
+}
+
+.form-row-display:last-of-type {
+    border-bottom: none;
+}
+
+.form-row-display .form-label {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: #303030;
+    letter-spacing: 0;
+    line-height: 17.9px;
+}
+
+.form-value {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: #303030;
+    letter-spacing: 0;
+    line-height: 17.9px;
+}
+
+.section-title {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 17px;
+    font-weight: 500;
+    color: #272727;
+    text-align: center;
+    margin-bottom: 16px;
+    letter-spacing: -0.51px;
+}
+
+.section-subtitle {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: #9e9e9e;
+    text-align: center;
+    margin-bottom: 20px;
+    letter-spacing: 0;
+}
+
+.map-placeholder {
+    width: 100%;
+    height: 109px;
+    background-color: #d9d9d9;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000000;
+    font-size: 11px;
+}
+
+/* Step 3 스타일 */
+.category-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.btn-category {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    height: 29px;
+    border: 1px solid #272727;
+    border-radius: 31px;
+    background-color: #ffffff;
+    color: #272727;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0;
+    line-height: 13.127px;
+}
+
+.btn-category.active {
+    background-color: #272727;
+    color: #ffffff;
+    border-color: #272727;
+}
+
+.btn-category:hover:not(.active) {
+    background-color: #f8f8f8;
+}
+
+.category-icon {
+    font-size: 13px;
+}
+
+.tag-section {
+    margin-top: 30px;
+}
+
+.tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.tag-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    height: 33.23px;
+    background-color: #bdd6fd;
+    border-radius: 12px;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: #272727;
+    letter-spacing: -0.33px;
+    line-height: 13.127px;
+}
+
+.tag-remove {
+    background: none;
+    border: none;
+    color: #272727;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 0;
+    width: 13px;
+    height: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s ease;
+}
+
+.tag-remove:hover {
+    opacity: 0.7;
+}
+
+/* 태그 추가 원형 버튼 */
+.btn-add-tag-circle {
+    width: 33.23px;
+    height: 33.23px;
+    border-radius: 50%;
+    background-color: #272727;
+    color: #fcfcfc;
+    border: none;
+    font-size: 18px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+.btn-add-tag-circle:hover {
+    background-color: #1e1e1e;
+    transform: scale(1.05);
+}
+
+.btn-add-tag-circle:active {
+    transform: scale(0.95);
+}
+
+.btn-add-tag {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #272727;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* 하단 네비게이션 */
+.create-post-container .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 440px;
+    height: 92px;
+    background-color: #272727;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 15px 0 25px;
+    z-index: 1000;
+}
+
+.create-post-container .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.create-post-container .nav-item:hover {
+    opacity: 0.7;
+}
+
+.create-post-container .nav-item.active .nav-icon {
+    background-color: #297eff;
+}
+
+.create-post-container .nav-icon {
+    width: 55px;
+    height: 55px;
+    background-color: #ff1a1a;
+    border-radius: 4px;
+    position: relative;
+}
+
+.create-post-container .nav-label {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 7.68px;
+    color: #fcfcfc;
+    font-weight: 500;
+    letter-spacing: 0;
+    line-height: 9.16px;
+}
+
+.create-post-container .nav-item.active .nav-label {
+    color: #297eff;
+}
+
+.create-post-container .notification-dot {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 4px;
+    height: 4px;
+    background-color: #ff5758;
+    border-radius: 50%;
+}
+
+/* 반응형 */
+@media (max-width: 440px) {
+    .create-post-container {
+        width: 100%;
+    }
+
+    .create-post-container .bottom-nav {
+        width: 100%;
+    }
+}
+
+/* 작성 완료 페이지 */
+.complete-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 24px;
+    text-align: center;
+}
+
+.success-icon {
+    margin-bottom: 30px;
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.complete-title {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #272727;
+    margin-bottom: 12px;
+}
+
+.complete-message {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: #666;
+    margin-bottom: 40px;
+}
+
+/* 요약 카드 */
+.summary-card {
+    width: 100%;
+    max-width: 400px;
+    background: #fcfcfc;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 32px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.summary-row:last-child {
+    border-bottom: none;
+}
+
+.summary-label {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #666;
+}
+
+.summary-value {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #272727;
+}
+
+/* 완료 페이지 액션 버튼 */
+.complete-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.btn-primary,
+.btn-secondary {
+    padding: 16px 32px;
+    border-radius: 12px;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background-color: #272727;
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background-color: #1a1a1a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-secondary {
+    background-color: #f5f5f5;
+    color: #272727;
+    border: 1px solid #ddd;
+}
+
+.btn-secondary:hover {
+    background-color: #e8e8e8;
+}

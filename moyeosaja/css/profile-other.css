@@ -1,0 +1,269 @@
+/* 다른사람 프로필 페이지 스타일 */
+
+.profile-container {
+    background-color: #f1f1f1;
+    min-height: 100vh;
+    padding-bottom: 92px;
+}
+
+/* 페이지 타이틀 */
+.profile-title {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: #272727;
+    text-align: center;
+    padding: 60px 0 16px;
+    margin: 0;
+    letter-spacing: 0;
+    line-height: 20.29px;
+}
+
+/* 회원가입/로그인 링크 */
+.auth-links {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 0 24px 16px;
+}
+
+.auth-link {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 10px;
+    font-weight: 400;
+    color: #000000;
+    text-decoration: none;
+    letter-spacing: 0;
+    line-height: 11.93px;
+    transition: opacity 0.2s ease;
+}
+
+.auth-link:hover {
+    opacity: 0.7;
+}
+
+/* 프로필 정보 */
+.profile-info {
+    background-color: #fcfcfc;
+    padding: 24px;
+    text-align: center;
+}
+
+.profile-avatar-large {
+    width: 124px;
+    height: 124px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    margin: 0 auto 16px;
+}
+
+.profile-name {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #272727;
+    margin: 0 0 8px;
+    letter-spacing: 0;
+    line-height: 21.48px;
+}
+
+.profile-rating {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.rating-stars {
+    display: flex;
+    gap: 2px;
+}
+
+.rating-stars .star {
+    font-size: 11px;
+    color: #272727;
+}
+
+.rating-stars .star.filled {
+    color: #272727;
+}
+
+.rating-score {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #545454;
+    letter-spacing: -0.36px;
+    line-height: 14.32px;
+}
+
+/* 활동 섹션 */
+.activity-section {
+    background-color: #fcfcfc;
+    padding: 20px 24px 0;
+}
+
+.section-title {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #272727;
+    margin: 0 0 16px;
+    letter-spacing: 0;
+    line-height: 17.9px;
+}
+
+.activity-tabs {
+    display: flex;
+    gap: 32px;
+    border-bottom: 1px solid #f1f1f1;
+    margin-bottom: 20px;
+}
+
+.activity-tab {
+    background: none;
+    border: none;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: #272727;
+    padding: 8px 0;
+    cursor: pointer;
+    position: relative;
+    letter-spacing: -0.3px;
+    line-height: 17.9px;
+    transition: color 0.2s ease;
+}
+
+.activity-tab.active {
+    color: #297eff;
+}
+
+.activity-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: #297eff;
+}
+
+/* 활동 내역 목록 */
+.activity-list {
+    background-color: #fcfcfc;
+    padding: 0 24px 24px;
+}
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 0;
+}
+
+.activity-thumbnail {
+    width: 84px;
+    height: 84px;
+    border-radius: 10px;
+    background-color: #f1f1f1;
+    flex-shrink: 0;
+}
+
+.activity-content {
+    flex: 1;
+}
+
+.activity-title {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: #000000;
+    margin-bottom: 6px;
+    letter-spacing: -0.3px;
+    line-height: 17.9px;
+}
+
+.activity-description {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #000000;
+    letter-spacing: -0.24px;
+    line-height: 14.32px;
+}
+
+.activity-count {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: #000000;
+    flex-shrink: 0;
+    letter-spacing: 0;
+    line-height: 14.32px;
+}
+
+/* 계정 섹션 */
+.account-section {
+    background-color: #fcfcfc;
+    padding: 20px 24px;
+    margin-top: 16px;
+}
+
+.account-actions {
+    margin-top: 16px;
+}
+
+.account-btn {
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: #000000;
+    padding: 16px 0;
+    cursor: pointer;
+    text-align: left;
+    letter-spacing: 0;
+    line-height: 17.9px;
+    transition: opacity 0.2s ease;
+}
+
+.account-btn:hover {
+    opacity: 0.7;
+}
+
+.account-btn.danger {
+    color: #ff4a4a;
+}
+
+.account-divider {
+    height: 1px;
+    background-color: #272727;
+    margin: 0;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 390px) {
+    .auth-links {
+        padding: 0 16px 12px;
+    }
+
+    .profile-info {
+        padding: 20px 16px;
+    }
+
+    .activity-section {
+        padding: 16px 16px 0;
+    }
+
+    .activity-list {
+        padding: 0 16px 16px;
+    }
+
+    .account-section {
+        padding: 16px;
+    }
+}

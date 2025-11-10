@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인 - MOYEO</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/login.css">
+</head>
+
+<body>
+    <div class="container login-container">
+        <!-- 상태 표시줄 -->
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+            <div class="status-icons">
+                <div class="status-signal"></div>
+                <div class="status-wifi"></div>
+                <div class="status-battery"></div>
+            </div>
+        </div>
+
+        <!-- 로그인 콘텐츠 -->
+        <div class="login-content">
+            <!-- 상단 일러스트 영역 -->
+            <div class="login-illustration">
+                <div class="illustration-shapes">
+                    <!-- 장바구니 일러스트 -->
+                    <div class="cart-icon"></div>
+                    <div class="shapes-background"></div>
+                </div>
+            </div>
+
+            <!-- 브랜딩 텍스트 -->
+            <div class="login-branding">
+                <h1 class="brand-title">함께 사는 똑똑한 선택</h1>
+                <p class="brand-subtitle">모이면 싸지고<br>생활은 가벼워진다</p>
+            </div>
+
+            <!-- 로그인 폼 -->
+            <form class="login-form">
+                <!-- 이메일 입력 -->
+                <div class="input-group">
+                    <input type="email" class="form-input active" placeholder="이메일" value="likelionhsu@naver.com"
+                        required>
+                </div>
+
+                <!-- 비밀번호 입력 -->
+                <div class="input-group">
+                    <input type="password" class="form-input" placeholder="비밀번호" required>
+                </div>
+
+                <!-- 자동 로그인 & 아이디/비밀번호 찾기 -->
+                <div class="login-options">
+                    <label class="checkbox-wrapper">
+                        <input type="checkbox" id="autoLogin">
+                        <span class="checkbox-custom"></span>
+                        <span class="checkbox-label">자동 로그인</span>
+                    </label>
+
+                    <a href="#" class="find-account">아이디/비밀번호 찾기</a>
+                </div>
+
+                <!-- 로그인 버튼 -->
+                <button type="submit" class="btn-login">
+                    로그인
+                </button>
+
+                <!-- 회원가입 링크 -->
+                <a href="./signup-step1.html" class="signup-link">
+                    모여사자가 처음이신가요?
+                </a>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/login.js"></script>
+</body>
+
+</html>

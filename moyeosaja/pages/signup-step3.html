@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입 - MOYEO</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/signup-steps.css">
+</head>
+
+<body>
+    <div class="container signup-step-container">
+        <!-- 상태 표시줄 -->
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+        </div>
+
+        <!-- 회원가입 콘텐츠 -->
+        <div class="signup-step-content">
+            <!-- 타이틀 -->
+            <h1 class="signup-step-title">회원가입</h1>
+
+            <!-- 휴대폰 번호 입력 -->
+            <div class="step-section">
+                <h2 class="step-subtitle">휴대폰 번호 입력</h2>
+                <div class="input-group">
+                    <label class="input-label">휴대폰 번호</label>
+                    <div class="input-with-button">
+                        <input type="tel" class="form-input" placeholder="이메일을 입력해주세요" id="phone" required>
+                        <button type="button" class="btn-inline" id="sendCodeBtn">인증번호 받기</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 인증번호 입력 -->
+            <div class="step-section">
+                <h2 class="step-subtitle">인증번호 입력</h2>
+                <div class="input-group">
+                    <label class="input-label">인증번호</label>
+                    <div class="input-with-button">
+                        <input type="text" class="form-input with-timer" placeholder="인증번호를 입력해주세요" id="verifyCode"
+                            required disabled>
+                        <span class="timer" id="timer">5:00</span>
+                        <button type="button" class="btn-inline" id="verifyBtn" disabled>확인</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 회원가입 버튼 -->
+            <button type="button" class="btn-next btn-primary" id="signupBtn" disabled>
+                회원가입
+            </button>
+        </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/signup-steps.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입 - MOYEO</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/signup-steps.css">
+</head>
+
+<body>
+    <div class="container signup-step-container">
+        <!-- 상태 표시줄 -->
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+        </div>
+
+        <!-- 회원가입 콘텐츠 -->
+        <div class="signup-step-content">
+            <!-- 타이틀 -->
+            <h1 class="signup-step-title">회원가입</h1>
+
+            <!-- 단계 제목 -->
+            <h2 class="step-subtitle">닉네임 입력</h2>
+
+            <!-- 입력 필드 -->
+            <div class="input-group">
+                <label class="input-label">닉네임</label>
+                <input type="text" class="form-input" placeholder="닉네임을 입력해주세요" id="nickname" required>
+            </div>
+
+            <!-- 다음 버튼 -->
+            <button type="button" class="btn-next" id="nextBtn">
+                다음
+            </button>
+        </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/signup-steps.js"></script>
+</body>
+
+</html>
