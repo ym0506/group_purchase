@@ -162,11 +162,16 @@ export class NavigationComponent {
             '홈': './home.html',
             '알림': './notifications.html',
             '마이': './mypage.html',
+            '캘린더': './calendar.html',
+            '공구 글 작성하기': './create-post-step1.html',
+            '관심있어요': './favorites.html',
             'home': './home.html',
             'home-main': './home.html',
             'notifications': './notifications.html',
             'mypage': './mypage.html',
-            'create': './create-post-step1.html'
+            'create': './create-post-step1.html',
+            'calendar': './calendar.html',
+            'favorites': './favorites.html'
         };
 
         const route = routes[page] || routes[dataPage];

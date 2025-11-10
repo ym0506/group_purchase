@@ -1,0 +1,133 @@
+/* 내 공구글 페이지 스타일 */
+
+.my-posts-container {
+    background-color: #f1f1f1;
+    min-height: 100vh;
+    padding-bottom: 120px;
+}
+
+/* 페이지 헤더 */
+.my-posts-header {
+    background-color: #f1f1f1;
+    padding: 20px 24px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.my-posts-header .page-title {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: #272727;
+    letter-spacing: 0;
+    line-height: 20.29px;
+    margin: 0;
+}
+
+.my-posts-header .sort-option {
+    display: flex;
+    align-items: center;
+}
+
+.my-posts-header .sort-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: #9e9e9e;
+    letter-spacing: 0;
+    line-height: 14.52px;
+}
+
+/* 공구글 리스트 */
+.my-posts-list {
+    background-color: #fcfcfc;
+    padding: 0 24px;
+}
+
+.my-post-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 0;
+    gap: 16px;
+}
+
+.post-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.post-title {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #1e1e1e;
+    letter-spacing: 0;
+    line-height: 14.32px;
+    margin: 0;
+}
+
+.post-description {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    color: #303030;
+    letter-spacing: 0;
+    line-height: 11.93px;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.post-count {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: #000000;
+    letter-spacing: 0;
+    line-height: 14.32px;
+    flex-shrink: 0;
+}
+
+.my-posts-list .divider {
+    height: 1px;
+    background-color: #000000;
+    margin: 0;
+}
+
+.my-posts-list .divider:last-child {
+    display: none;
+}
+
+/* Empty State */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 24px;
+    gap: 17px;
+}
+
+.empty-icon {
+    width: 88px;
+    height: 103px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.empty-message {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #272727;
+    letter-spacing: 0;
+    line-height: 14.52px;
+    text-align: center;
+    margin: 0;
+}

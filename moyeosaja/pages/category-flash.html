@@ -15,171 +15,131 @@
     <div class="container category-container">
         <!-- 상태 표시줄 -->
         <div class="status-bar">
-            <div class="status-time">9:41</div>
+            <div class="status-indicator"></div>
         </div>
 
         <!-- 카테고리 페이지 콘텐츠 -->
         <div class="category-content">
-            <!-- 뒤로가기 + 타이틀 -->
-            <div class="category-header">
-                <button class="btn-back" onclick="history.back()">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M15 18L9 12L15 6" stroke="#272727" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" />
+            <!-- 타이틀 -->
+            <div class="category-page-header">
+                <h1 class="page-title">공구 찾기</h1>
+                <button class="btn-search">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="11" cy="11" r="7" stroke="#272727" stroke-width="2" />
+                        <path d="M20 20L16 16" stroke="#272727" stroke-width="2" stroke-linecap="round" />
                     </svg>
                 </button>
-                <h1 class="category-title">공구 찾기</h1>
             </div>
 
-            <!-- 필터 탭 -->
+            <!-- 카테고리 필터 탭 -->
             <div class="category-filter-tabs">
-                <button class="category-filter-tab" data-category="all">전체</button>
-                <button class="category-filter-tab" data-category="delivery">공동배달</button>
-                <button class="category-filter-tab" data-category="bulk">묶음구매</button>
-                <button class="category-filter-tab active" data-category="flash">번개공구</button>
-                <button class="category-filter-tab" data-category="regular">정기공구</button>
+                <button class="category-filter-tab">전체</button>
+                <button class="category-filter-tab">공동배달</button>
+                <button class="category-filter-tab">묶음구매</button>
+                <button class="category-filter-tab active">번개공구</button>
+                <button class="category-filter-tab">정기공구</button>
             </div>
 
             <!-- 정렬 옵션 -->
-            <div class="filter-sort">
-                <select class="sort-select">
-                    <option>최신순</option>
-                    <option>마감임박순</option>
-                    <option>거리순</option>
-                    <option>인기순</option>
-                </select>
+            <div class="sort-section">
+                <span class="sort-label">최신순</span>
             </div>
 
             <!-- 공구 리스트 -->
-            <section class="section items-list">
-                <div class="item" data-item-id="1" data-product="chicken">
-                    <div class="item-avatar"></div>
-                    <div class="item-content">
-                        <div class="item-title">뿌링클 + 치즈볼</div>
-                        <div class="item-description">치킨이 땡기는 밤이에용</div>
+            <section class="category-items-list">
+                <div class="category-item">
+                    <div class="category-item-content">
+                        <div class="category-item-title">뿌링클 + 치즈볼</div>
+                        <div class="category-item-description">치킨이 땡기는 밤이에용</div>
                     </div>
-                    <div class="item-count">1/2</div>
+                    <div class="category-item-count">1/2</div>
                 </div>
 
-                <div class="item" data-item-id="2" data-product="bread">
-                    <div class="item-avatar"></div>
-                    <div class="item-content">
-                        <div class="item-title">소금빵</div>
-                        <div class="item-description">소금빵 실수로 너무 많이 사버렸는데 같이 나눠먹어욤</div>
+                <div class="category-item">
+                    <div class="category-item-content">
+                        <div class="category-item-title">소금빵</div>
+                        <div class="category-item-description">소금빵 실수로 너무 많이 사버렸는데 같이 나눠먹어욤</div>
                     </div>
-                    <div class="item-count">3/4</div>
+                    <div class="category-item-count">3/4</div>
                 </div>
 
-                <div class="item" data-item-id="3" data-product="tissue">
-                    <div class="item-avatar"></div>
-                    <div class="item-content">
-                        <div class="item-title">두루마리 휴지</div>
-                        <div class="item-description">휴지 필요한데 같이 구매하실분</div>
+                <div class="category-item">
+                    <div class="category-item-content">
+                        <div class="category-item-title">두루마리 휴지</div>
+                        <div class="category-item-description">휴지 필요한데 같이 구매하실분</div>
                     </div>
-                    <div class="item-count">2/5</div>
+                    <div class="category-item-count">2/5</div>
                 </div>
 
-                <div class="item" data-item-id="4" data-product="rice">
-                    <div class="item-avatar"></div>
-                    <div class="item-content">
-                        <div class="item-title">쌀</div>
-                        <div class="item-description">아 이러다가 이거 평생 먹을듯 같이 해치워주세요 살려주세요</div>
+                <div class="category-item">
+                    <div class="category-item-content">
+                        <div class="category-item-title">쌀</div>
+                        <div class="category-item-description">아 이러다가 이거 평생 먹을듯 같이 해치워주세요 살려주세요</div>
                     </div>
-                    <div class="item-count">2/5</div>
+                    <div class="category-item-count">2/5</div>
                 </div>
 
-                <div class="item" data-item-id="5" data-product="apple">
-                    <div class="item-avatar"></div>
-                    <div class="item-content">
-                        <div class="item-title">배</div>
-                        <div class="item-description">배가 너무 많아요 같이 나눠드실뿐~</div>
+                <div class="category-item">
+                    <div class="category-item-content">
+                        <div class="category-item-title">배</div>
+                        <div class="category-item-description">배가 너무 많아요 같이 나눠드실뿐~</div>
                     </div>
-                    <div class="item-count">2/4</div>
+                    <div class="category-item-count">2/4</div>
                 </div>
 
-                <div class="item" data-item-id="6" data-product="food">
-                    <div class="item-avatar"></div>
-                    <div class="item-content">
-                        <div class="item-title">먹통부대찌개</div>
-                        <div class="item-description">갑자기 넘 땡기는데 빠르게 나눠 드실분을 구합니다..</div>
+                <div class="category-item">
+                    <div class="category-item-content">
+                        <div class="category-item-title">먹통부대찌개</div>
+                        <div class="category-item-description">갑자기 넘 땡기는데 빠르게 나눠 드실분을 구합니다..</div>
                     </div>
-                    <div class="item-count">2/4</div>
+                    <div class="category-item-count">2/4</div>
                 </div>
 
-                <div class="item" data-item-id="7" data-product="apple">
-                    <div class="item-avatar"></div>
-                    <div class="item-content">
-                        <div class="item-title">꿀맛보장 사과</div>
-                        <div class="item-description">저희어머니가 직접 농사하신 사과를 같이 나눠드실분을 구합니다 꿀맛보장</div>
+                <div class="category-item">
+                    <div class="category-item-content">
+                        <div class="category-item-title">꿀맛보장 사과</div>
+                        <div class="category-item-description">저희어머니가 직접 농사하신 사과를 같이 나눠드실분을 구합니다 꿀맛보장</div>
                     </div>
-                    <div class="item-count">3/4</div>
+                    <div class="category-item-count">3/4</div>
                 </div>
 
-                <div class="item" data-item-id="8" data-product="tissue">
-                    <div class="item-avatar"></div>
-                    <div class="item-content">
-                        <div class="item-title">물티슈 100매</div>
-                        <div class="item-description">아 물티슈 이렇게 많을 줄 몰랐어요</div>
+                <div class="category-item">
+                    <div class="category-item-content">
+                        <div class="category-item-title">물티슈 100매</div>
+                        <div class="category-item-description">아 물티슈 이렇게 많을 줄 몰랐어요</div>
                     </div>
-                    <div class="item-count">2/5</div>
+                    <div class="category-item-count">2/5</div>
                 </div>
 
-                <div class="item" data-item-id="9" data-product="rice">
-                    <div class="item-avatar"></div>
-                    <div class="item-content">
-                        <div class="item-title">쌀</div>
-                        <div class="item-description">아 이러다가 이거 평생 먹을듯 같이 해치워주세...</div>
+                <div class="category-item">
+                    <div class="category-item-content">
+                        <div class="category-item-title">쌀</div>
+                        <div class="category-item-description">아 이러다가 이거 평생 먹을듯 같이 해치워주세...</div>
                     </div>
-                    <div class="item-count">3/4</div>
+                    <div class="category-item-count">3/4</div>
                 </div>
 
-                <div class="item" data-item-id="10" data-product="me">
-                    <div class="item-avatar"></div>
-                    <div class="item-content">
-                        <div class="item-title">나</div>
-                        <div class="item-description">여친구해요</div>
+                <div class="category-item">
+                    <div class="category-item-content">
+                        <div class="category-item-title">나</div>
+                        <div class="category-item-description">여친구해요</div>
                     </div>
-                    <div class="item-count">0/4</div>
+                    <div class="category-item-count">0/4</div>
                 </div>
 
-                <div class="item" data-item-id="11" data-product="rice">
-                    <div class="item-avatar"></div>
-                    <div class="item-content">
-                        <div class="item-title">쌀</div>
-                        <div class="item-description">아 이러다가 이거 평생 먹을듯 같이 해치워주세...</div>
+                <div class="category-item">
+                    <div class="category-item-content">
+                        <div class="category-item-title">쌀</div>
+                        <div class="category-item-description">아 이러다가 이거 평생 먹을듯 같이 해치워주세...</div>
                     </div>
-                    <div class="item-count">3/4</div>
+                    <div class="category-item-count">3/4</div>
                 </div>
             </section>
         </div>
-
-        <!-- 하단 네비게이션 -->
-        <nav class="bottom-nav">
-            <div class="nav-item" data-page="calendar">
-                <div class="nav-icon"></div>
-                <div class="nav-label">캘린더</div>
-            </div>
-            <div class="nav-item" data-page="create">
-                <div class="nav-icon"></div>
-                <div class="nav-label">공구 글 작성하기</div>
-            </div>
-            <div class="nav-item active" data-page="home-main">
-                <div class="nav-icon"></div>
-                <div class="nav-label">홈</div>
-            </div>
-            <div class="nav-item" data-page="favorites">
-                <div class="nav-icon"></div>
-                <div class="nav-label">관심있어요</div>
-            </div>
-            <div class="nav-item" data-page="mypage">
-                <div class="nav-icon"></div>
-                <div class="nav-label">마이</div>
-            </div>
-        </nav>
     </div>
 
-    <script src="../js/utils.js"></script>
-    <script src="../js/components.js"></script>
+    <script src="../js/nav.js"></script>
+    <script type="module" src="../js/app.js"></script>
     <script src="../js/category.js"></script>
 </body>
 

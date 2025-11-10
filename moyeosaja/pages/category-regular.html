@@ -15,171 +15,131 @@
     <div class="container category-container">
         <!-- 상태 표시줄 -->
         <div class="status-bar">
-            <div class="status-time">9:41</div>
+            <div class="status-indicator"></div>
         </div>
 
         <!-- 카테고리 페이지 콘텐츠 -->
         <div class="category-content">
-            <!-- 뒤로가기 + 타이틀 -->
-            <div class="category-header">
-                <button class="btn-back" onclick="history.back()">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M15 18L9 12L15 6" stroke="#272727" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" />
+            <!-- 타이틀 -->
+            <div class="category-page-header">
+                <h1 class="page-title">공구 찾기</h1>
+                <button class="btn-search">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="11" cy="11" r="7" stroke="#272727" stroke-width="2" />
+                        <path d="M20 20L16 16" stroke="#272727" stroke-width="2" stroke-linecap="round" />
                     </svg>
                 </button>
-                <h1 class="category-title">공구 찾기</h1>
             </div>
 
-            <!-- 필터 탭 -->
+            <!-- 카테고리 필터 탭 -->
             <div class="category-filter-tabs">
-                <button class="category-filter-tab" data-category="all">전체</button>
-                <button class="category-filter-tab" data-category="delivery">공동배달</button>
-                <button class="category-filter-tab" data-category="bulk">묶음구매</button>
-                <button class="category-filter-tab" data-category="flash">번개공구</button>
-                <button class="category-filter-tab active" data-category="regular">정기공구</button>
+                <button class="category-filter-tab">전체</button>
+                <button class="category-filter-tab">공동배달</button>
+                <button class="category-filter-tab">묶음구매</button>
+                <button class="category-filter-tab">번개공구</button>
+                <button class="category-filter-tab active">정기공구</button>
             </div>
 
             <!-- 정렬 옵션 -->
-            <div class="filter-sort">
-                <select class="sort-select">
-                    <option>최신순</option>
-                    <option>마감임박순</option>
-                    <option>거리순</option>
-                    <option>인기순</option>
-                </select>
+            <div class="sort-section">
+                <span class="sort-label">최신순</span>
             </div>
 
             <!-- 공구 리스트 -->
-            <section class="section items-list">
-                <div class="item" data-item-id="1" data-product="streaming">
-                    <div class="item-avatar"></div>
-                    <div class="item-content">
-                        <div class="item-title">디즈니플러스</div>
-                        <div class="item-description">보고싶은 드라마가 생겻어요</div>
+            <section class="category-items-list">
+                <div class="category-item">
+                    <div class="category-item-content">
+                        <div class="category-item-title">디즈니플러스</div>
+                        <div class="category-item-description">보고싶은 드라마가 생겻어요</div>
                     </div>
-                    <div class="item-count">1/2</div>
+                    <div class="category-item-count">1/2</div>
                 </div>
 
-                <div class="item" data-item-id="2" data-product="streaming">
-                    <div class="item-avatar"></div>
-                    <div class="item-content">
-                        <div class="item-title">넷플릭스</div>
-                        <div class="item-description">은중과상연재밋다는데...</div>
+                <div class="category-item">
+                    <div class="category-item-content">
+                        <div class="category-item-title">넷플릭스</div>
+                        <div class="category-item-description">은중과상연재밋다는데...</div>
                     </div>
-                    <div class="item-count">3/4</div>
+                    <div class="category-item-count">3/4</div>
                 </div>
 
-                <div class="item" data-item-id="3" data-product="tving">
-                    <div class="item-avatar"></div>
-                    <div class="item-content">
-                        <div class="item-title">티빙</div>
-                        <div class="item-description">티빙에 재밌는게 많더라구용!</div>
+                <div class="category-item">
+                    <div class="category-item-content">
+                        <div class="category-item-title">티빙</div>
+                        <div class="category-item-description">티빙에 재밌는게 많더라구용!</div>
                     </div>
-                    <div class="item-count">2/5</div>
+                    <div class="category-item-count">2/5</div>
                 </div>
 
-                <div class="item" data-item-id="4" data-product="software">
-                    <div class="item-avatar"></div>
-                    <div class="item-content">
-                        <div class="item-title">어도비 일러스트레이션</div>
-                        <div class="item-description">어도비 너무 비싸요 과제해야되는데</div>
+                <div class="category-item">
+                    <div class="category-item-content">
+                        <div class="category-item-title">어도비 일러스트레이션</div>
+                        <div class="category-item-description">어도비 너무 비싸요 과제해야되는데</div>
                     </div>
-                    <div class="item-count">2/5</div>
+                    <div class="category-item-count">2/5</div>
                 </div>
 
-                <div class="item" data-item-id="5" data-product="ai">
-                    <div class="item-avatar"></div>
-                    <div class="item-content">
-                        <div class="item-title">제미나이 프로</div>
-                        <div class="item-description">제가 한번 써보겟습니다!</div>
+                <div class="category-item">
+                    <div class="category-item-content">
+                        <div class="category-item-title">제미나이 프로</div>
+                        <div class="category-item-description">제가 한번 써보겟습니다!</div>
                     </div>
-                    <div class="item-count">2/4</div>
+                    <div class="category-item-count">2/4</div>
                 </div>
 
-                <div class="item" data-item-id="6" data-product="streaming">
-                    <div class="item-avatar"></div>
-                    <div class="item-content">
-                        <div class="item-title">넷플릭스</div>
-                        <div class="item-description">아엄마가 넷플릭스 끊엇어요 같이 나눠봐요...</div>
+                <div class="category-item">
+                    <div class="category-item-content">
+                        <div class="category-item-title">넷플릭스</div>
+                        <div class="category-item-description">아엄마가 넷플릭스 끊엇어요 같이 나눠봐요...</div>
                     </div>
-                    <div class="item-count">2/4</div>
+                    <div class="category-item-count">2/4</div>
                 </div>
 
-                <div class="item" data-item-id="7" data-product="ai">
-                    <div class="item-avatar"></div>
-                    <div class="item-content">
-                        <div class="item-title">ChatGPT</div>
-                        <div class="item-description">요즘 이거 안쓰면 바보라며요</div>
+                <div class="category-item">
+                    <div class="category-item-content">
+                        <div class="category-item-title">ChatGPT</div>
+                        <div class="category-item-description">요즘 이거 안쓰면 바보라며요</div>
                     </div>
-                    <div class="item-count">3/4</div>
+                    <div class="category-item-count">3/4</div>
                 </div>
 
-                <div class="item" data-item-id="8" data-product="software">
-                    <div class="item-avatar"></div>
-                    <div class="item-content">
-                        <div class="item-title">어도비 포토샵</div>
-                        <div class="item-description">포토샵 자격증 따려고요</div>
+                <div class="category-item">
+                    <div class="category-item-content">
+                        <div class="category-item-title">어도비 포토샵</div>
+                        <div class="category-item-description">포토샵 자격증 따려고요</div>
                     </div>
-                    <div class="item-count">2/5</div>
+                    <div class="category-item-count">2/5</div>
                 </div>
 
-                <div class="item" data-item-id="9" data-product="software">
-                    <div class="item-avatar"></div>
-                    <div class="item-content">
-                        <div class="item-title">피그마</div>
-                        <div class="item-description">피그마 좋나요? 같이 해요</div>
+                <div class="category-item">
+                    <div class="category-item-content">
+                        <div class="category-item-title">피그마</div>
+                        <div class="category-item-description">피그마 좋나요? 같이 해요</div>
                     </div>
-                    <div class="item-count">3/4</div>
+                    <div class="category-item-count">3/4</div>
                 </div>
 
-                <div class="item" data-item-id="10" data-product="ai">
-                    <div class="item-avatar"></div>
-                    <div class="item-content">
-                        <div class="item-title">미드저니</div>
-                        <div class="item-description">저도 미드저니 쓰는 여자..^^</div>
+                <div class="category-item">
+                    <div class="category-item-content">
+                        <div class="category-item-title">미드저니</div>
+                        <div class="category-item-description">저도 미드저니 쓰는 여자..^^</div>
                     </div>
-                    <div class="item-count">3/4</div>
+                    <div class="category-item-count">3/4</div>
                 </div>
 
-                <div class="item" data-item-id="11" data-product="rice">
-                    <div class="item-avatar"></div>
-                    <div class="item-content">
-                        <div class="item-title">쌀</div>
-                        <div class="item-description">아 이러다가 이거 평생 먹을듯 같이 해치워주세...</div>
+                <div class="category-item">
+                    <div class="category-item-content">
+                        <div class="category-item-title">쌀</div>
+                        <div class="category-item-description">아 이러다가 이거 평생 먹을듯 같이 해치워주세...</div>
                     </div>
-                    <div class="item-count">3/4</div>
+                    <div class="category-item-count">3/4</div>
                 </div>
             </section>
         </div>
-
-        <!-- 하단 네비게이션 -->
-        <nav class="bottom-nav">
-            <div class="nav-item" data-page="calendar">
-                <div class="nav-icon"></div>
-                <div class="nav-label">캘린더</div>
-            </div>
-            <div class="nav-item" data-page="create">
-                <div class="nav-icon"></div>
-                <div class="nav-label">공구 글 작성하기</div>
-            </div>
-            <div class="nav-item active" data-page="home-main">
-                <div class="nav-icon"></div>
-                <div class="nav-label">홈</div>
-            </div>
-            <div class="nav-item" data-page="favorites">
-                <div class="nav-icon"></div>
-                <div class="nav-label">관심있어요</div>
-            </div>
-            <div class="nav-item" data-page="mypage">
-                <div class="nav-icon"></div>
-                <div class="nav-label">마이</div>
-            </div>
-        </nav>
     </div>
 
-    <script src="../js/utils.js"></script>
-    <script src="../js/components.js"></script>
+    <script src="../js/nav.js"></script>
+    <script type="module" src="../js/app.js"></script>
     <script src="../js/category.js"></script>
 </body>
 

@@ -4,6 +4,7 @@
     "description": "피그마 디자인을 웹으로 구현한 공동구매 플랫폼",
     "main": "pages/home.html",
     "scripts": {
+        "start": "live-server --port=3000 --open=/pages/home.html",
         "dev": "live-server --port=3000 --open=/pages/home.html",
         "build": "npm run build:css && npm run build:js",
         "build:css": "echo 'CSS bundling...'",

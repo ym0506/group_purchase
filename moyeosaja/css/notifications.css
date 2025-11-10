@@ -193,17 +193,6 @@
     opacity: 0.7;
 }
 
-.nav-item.active .nav-icon {
-    background-color: #297eff;
-}
-
-.nav-icon {
-    width: 55px;
-    height: 55px;
-    background-color: #ff1a1a;
-    border-radius: 4px;
-    position: relative;
-}
 
 .nav-label {
     font-family: 'Pretendard', sans-serif;
