@@ -114,7 +114,7 @@ function initStep1() {
 
 function initStep2() {
     const emailInput = document.getElementById('email');
-    const emailDropdown = document.querySelector('.email-dropdown');
+    const emailDropdown = document.getElementById('emailDomain');
     const passwordInput = document.getElementById('password');
     const passwordConfirmInput = document.getElementById('passwordConfirm');
     const nextBtn = document.getElementById('nextBtn');

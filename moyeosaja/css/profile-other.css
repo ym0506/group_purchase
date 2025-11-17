@@ -1,51 +1,74 @@
-/* 다른사람 프로필 페이지 스타일 */
+/* 다른 사람 프로필 페이지 스타일 */
+
+/* ========================================
+   1. 컨테이너 및 레이아웃
+   ======================================== */
 
 .profile-container {
-    background-color: #f1f1f1;
+    background: #f1f1f1;
     min-height: 100vh;
+    padding: 0;
+    position: relative;
     padding-bottom: 92px;
 }
 
-/* 페이지 타이틀 */
+.profile-content {
+    max-width: 440px;
+    margin: 0 auto;
+    padding: 80px 0 40px;
+}
+
+/* ========================================
+   2. 타이틀
+   ======================================== */
+
 .profile-title {
-    font-family: 'Pretendard', sans-serif;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 17px;
     font-weight: 600;
     color: #272727;
-    text-align: center;
-    padding: 60px 0 16px;
-    margin: 0;
     letter-spacing: 0;
     line-height: 20.29px;
+    text-align: center;
+    margin-bottom: 30px;
 }
 
-/* 회원가입/로그인 링크 */
+/* ========================================
+   3. 로그인/회원가입 링크
+   ======================================== */
+
 .auth-links {
+    position: absolute;
+    top: 50px;
+    right: 24px;
     display: flex;
-    justify-content: flex-end;
     gap: 12px;
-    padding: 0 24px 16px;
 }
 
 .auth-link {
-    font-family: 'Pretendard', sans-serif;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 10px;
     font-weight: 400;
     color: #000000;
     text-decoration: none;
     letter-spacing: 0;
     line-height: 11.93px;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.15s ease;
 }
 
 .auth-link:hover {
     opacity: 0.7;
 }
 
-/* 프로필 정보 */
-.profile-info {
+/* ========================================
+   4. 프로필 섹션
+   ======================================== */
+
+.profile-section {
     background-color: #fcfcfc;
-    padding: 24px;
+    border-radius: 0;
+    padding: 30px 24px;
+    margin-bottom: 12px;
     text-align: center;
 }
 
@@ -53,18 +76,19 @@
     width: 124px;
     height: 124px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-    margin: 0 auto 16px;
+    background-color: #f1f1f1;
+    margin: 0 auto 12px;
 }
 
 .profile-name {
-    font-family: 'Pretendard', sans-serif;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 18px;
     font-weight: 600;
     color: #272727;
-    margin: 0 0 8px;
     letter-spacing: 0;
     line-height: 21.48px;
+    display: block;
+    margin-bottom: 4px;
 }
 
 .profile-rating {
@@ -76,20 +100,16 @@
 
 .rating-stars {
     display: flex;
-    gap: 2px;
+    gap: 0;
 }
 
-.rating-stars .star {
-    font-size: 11px;
-    color: #272727;
-}
-
-.rating-stars .star.filled {
-    color: #272727;
+.star {
+    width: 10.91px;
+    height: 10.91px;
 }
 
 .rating-score {
-    font-family: 'Pretendard', sans-serif;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 12px;
     font-weight: 500;
     color: #545454;
@@ -97,72 +117,89 @@
     line-height: 14.32px;
 }
 
-/* 활동 섹션 */
-.activity-section {
+/* ========================================
+   5. 탭 섹션
+   ======================================== */
+
+.tabs-section {
     background-color: #fcfcfc;
-    padding: 20px 24px 0;
-}
-
-.section-title {
-    font-family: 'Pretendard', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
-    color: #272727;
-    margin: 0 0 16px;
-    letter-spacing: 0;
-    line-height: 17.9px;
-}
-
-.activity-tabs {
+    padding: 20px 24px;
+    margin-bottom: 12px;
     display: flex;
-    gap: 32px;
-    border-bottom: 1px solid #f1f1f1;
-    margin-bottom: 20px;
+    justify-content: center;
+    gap: 80px;
 }
 
-.activity-tab {
+.tab-button {
     background: none;
     border: none;
-    font-family: 'Pretendard', sans-serif;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.tab-button:hover {
+    opacity: 0.7;
+}
+
+.tab-label {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 15px;
     font-weight: 500;
     color: #272727;
-    padding: 8px 0;
-    cursor: pointer;
-    position: relative;
     letter-spacing: -0.3px;
     line-height: 17.9px;
-    transition: color 0.2s ease;
+    text-align: center;
 }
 
-.activity-tab.active {
+.tab-button.active .tab-label {
     color: #297eff;
 }
 
-.activity-tab.active::after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background-color: #297eff;
-}
+/* ========================================
+   6. 활동 내역 섹션
+   ======================================== */
 
-/* 활동 내역 목록 */
-.activity-list {
+.activity-section {
     background-color: #fcfcfc;
-    padding: 0 24px 24px;
+    padding: 24px 24px 40px;
+    margin-bottom: 12px;
 }
 
-.activity-item {
+.section-title {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #272727;
+    letter-spacing: 0;
+    line-height: 17.9px;
+    margin-bottom: 20px;
+}
+
+.content-panel {
+    display: none;
+}
+
+.content-panel.active {
+    display: block;
+}
+
+/* ========================================
+   7. 판매 물품 목록
+   ======================================== */
+
+.product-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.product-item {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 16px 0;
 }
 
-.activity-thumbnail {
+.product-image {
     width: 84px;
     height: 84px;
     border-radius: 10px;
@@ -170,100 +207,238 @@
     flex-shrink: 0;
 }
 
-.activity-content {
+.product-info {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
-.activity-title {
-    font-family: 'Pretendard', sans-serif;
+.product-name {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 15px;
     font-weight: 500;
     color: #000000;
-    margin-bottom: 6px;
     letter-spacing: -0.3px;
     line-height: 17.9px;
 }
 
-.activity-description {
-    font-family: 'Pretendard', sans-serif;
+.product-description {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 12px;
     font-weight: 500;
     color: #000000;
     letter-spacing: -0.24px;
     line-height: 14.32px;
-}
-
-.activity-count {
-    font-family: 'Pretendard', sans-serif;
-    font-size: 12px;
-    font-weight: 400;
-    color: #000000;
-    flex-shrink: 0;
-    letter-spacing: 0;
-    line-height: 14.32px;
-}
-
-/* 계정 섹션 */
-.account-section {
-    background-color: #fcfcfc;
-    padding: 20px 24px;
-    margin-top: 16px;
-}
-
-.account-actions {
-    margin-top: 16px;
-}
-
-.account-btn {
-    display: block;
-    width: 100%;
-    background: none;
-    border: none;
-    font-family: 'Pretendard', sans-serif;
-    font-size: 15px;
-    font-weight: 500;
-    color: #000000;
-    padding: 16px 0;
-    cursor: pointer;
-    text-align: left;
-    letter-spacing: 0;
-    line-height: 17.9px;
-    transition: opacity 0.2s ease;
-}
-
-.account-btn:hover {
-    opacity: 0.7;
-}
-
-.account-btn.danger {
-    color: #ff4a4a;
-}
-
-.account-divider {
-    height: 1px;
-    background-color: #272727;
     margin: 0;
 }
 
-/* 반응형 디자인 */
-@media (max-width: 390px) {
-    .auth-links {
-        padding: 0 16px 12px;
+.product-status {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: #000000;
+    letter-spacing: 0;
+    line-height: 14.32px;
+    text-align: right;
+}
+
+/* ========================================
+   8. 리뷰 목록
+   ======================================== */
+
+.review-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.review-item {
+    padding: 16px 0;
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.reviewer-info {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.reviewer-name {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    color: #272727;
+    letter-spacing: 0;
+    line-height: 11.93px;
+}
+
+.review-divider {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 10px;
+    color: #272727;
+}
+
+.product-name-small {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    color: #272727;
+    letter-spacing: 0;
+    line-height: 11.93px;
+}
+
+.rating-stars-small {
+    display: flex;
+    gap: 0;
+}
+
+.star-small {
+    width: 10.91px;
+    height: 10.91px;
+}
+
+.review-content {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #272727;
+    letter-spacing: 0;
+    line-height: 14.32px;
+    margin: 0;
+}
+
+.review-divider {
+    width: 100%;
+    height: 1px;
+    background-color: #000000;
+}
+
+/* ========================================
+   9. 계정 섹션
+   ======================================== */
+
+.account-section {
+    background-color: #fcfcfc;
+    padding: 24px 24px;
+    margin-bottom: 12px;
+}
+
+.account-actions {
+    width: 100%;
+}
+
+.account-action {
+    width: 100%;
+    background: none;
+    border: none;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: #000000;
+    letter-spacing: 0;
+    line-height: 17.9px;
+    text-align: left;
+    padding: 18px 0;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.account-action:hover {
+    opacity: 0.7;
+}
+
+.account-action.danger {
+    color: #ff4a4a;
+}
+
+.divider {
+    width: 100%;
+    height: 1px;
+    background-color: #272727;
+}
+
+/* ========================================
+   10. 하단 네비게이션
+   ======================================== */
+
+.profile-container .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 440px;
+    height: 92px;
+    background-color: #272727;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 15px 0 25px;
+    z-index: 1000;
+}
+
+.profile-container .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.profile-container .nav-item:hover {
+    opacity: 0.7;
+}
+
+.profile-container .nav-icon {
+    width: 24px;
+    height: 24px;
+    color: #fcfcfc;
+}
+
+.profile-container .nav-icon svg {
+    width: 100%;
+    height: 100%;
+    fill: none;
+}
+
+.profile-container .nav-item.active .nav-icon {
+    color: #297eff;
+}
+
+.profile-container .nav-label {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 7.68px;
+    color: #fcfcfc;
+    font-weight: 500;
+    letter-spacing: 0;
+    line-height: 9.16px;
+}
+
+.profile-container .nav-item.active .nav-label {
+    color: #297eff;
+}
+
+/* ========================================
+   11. 반응형
+   ======================================== */
+
+@media (max-width: 440px) {
+    .profile-container {
+        width: 100%;
     }
 
-    .profile-info {
-        padding: 20px 16px;
+    .profile-content {
+        width: 100%;
     }
 
-    .activity-section {
-        padding: 16px 16px 0;
-    }
-
-    .activity-list {
-        padding: 0 16px 16px;
-    }
-
-    .account-section {
-        padding: 16px;
+    .profile-container .bottom-nav {
+        width: 100%;
     }
 }

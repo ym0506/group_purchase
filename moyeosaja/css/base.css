@@ -94,7 +94,29 @@ body {
     color: #ffffff;
 }
 
-/* Responsive */
+/* 페이지 전환 애니메이션 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.container {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* 로딩 상태 */
+.loading {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+/* 반응형 */
 @media (max-width: 440px) {
     .container {
         max-width: 100%;

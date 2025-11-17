@@ -12,143 +12,139 @@
 </head>
 
 <body>
-    <div class="container search-container">
-        <!-- 상태 표시줄 -->
-        <div class="status-bar">
-            <div class="status-time">9:41</div>
+    <div class="container">
+        <div class="search-page">
+            <!-- 검색 헤더 -->
+            <div class="search-header">
+                <button class="btn-back" onclick="history.back()"></button>
+                <div class="search-input-wrapper">
+                    <input type="text" class="search-input-main" placeholder="원하는 공구 상품을 검색해보세요!" id="searchInput">
+                    <button class="btn-search">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <circle cx="11" cy="11" r="7" stroke="#272727" stroke-width="2" />
+                            <path d="M20 20L17 17" stroke="#272727" stroke-width="2" stroke-linecap="round" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 검색 기록 -->
+            <div class="search-history" id="searchHistory">
+                <div class="search-history-header">
+                    <h3 class="search-history-title">검색 기록</h3>
+                </div>
+                <div class="search-history-divider"></div>
+                <ul class="search-history-list">
+                    <li class="search-history-item">
+                        <span class="search-history-text">소금빵</span>
+                        <button class="btn-delete-history">×</button>
+                    </li>
+                    <li class="search-history-item">
+                        <span class="search-history-text">휴지</span>
+                        <button class="btn-delete-history">×</button>
+                    </li>
+                    <li class="search-history-item">
+                        <span class="search-history-text">넷플릭스</span>
+                        <button class="btn-delete-history">×</button>
+                    </li>
+                    <li class="search-history-item">
+                        <span class="search-history-text">티빙</span>
+                        <button class="btn-delete-history">×</button>
+                    </li>
+                    <li class="search-history-item">
+                        <span class="search-history-text">디즈니플러스</span>
+                        <button class="btn-delete-history">×</button>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 검색 결과 영역 -->
+            <div class="search-results" id="searchResults" style="display: none;">
+                <h2 class="search-results-title">공구 찾기</h2>
+
+                <!-- 카테고리 필터 탭 -->
+                <div class="category-filter-tabs">
+                    <button class="category-filter-tab active" data-category="all">전체</button>
+                    <button class="category-filter-tab" data-category="delivery">공동배달</button>
+                    <button class="category-filter-tab" data-category="bulk">묶음구매</button>
+                    <button class="category-filter-tab" data-category="flash">번개공구</button>
+                    <button class="category-filter-tab" data-category="regular">정기공구</button>
+                </div>
+
+                <!-- 정렬 옵션 -->
+                <div class="filter-sort">
+                    <select class="sort-select">
+                        <option>최신순</option>
+                        <option>마감임박순</option>
+                        <option>거리순</option>
+                        <option>인기순</option>
+                    </select>
+                </div>
+
+                <!-- 검색 결과 목록 -->
+                <section class="section items-list">
+                    <!-- 검색 결과가 여기에 동적으로 추가됩니다 -->
+                </section>
+            </div>
+
+            <!-- 하단 네비게이션 -->
+            <nav class="bottom-nav">
+                <div class="nav-item" data-page="calendar">
+                    <div class="nav-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="4" y="5" width="16" height="16" rx="2" stroke="currentColor" stroke-width="2" />
+                            <path d="M4 9H20" stroke="currentColor" stroke-width="2" />
+                            <path d="M8 3V7" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                            <path d="M16 3V7" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <div class="nav-label">캘린더</div>
+                </div>
+                <div class="nav-item" data-page="create">
+                    <div class="nav-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17 3L20 6L10 16L7 17L8 14L18 4L17 3Z" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M15 5L19 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <div class="nav-label">공구 글 작성하기</div>
+                </div>
+                <div class="nav-item active" data-page="home-main">
+                    <div class="nav-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M3 12L5 10M5 10L12 3L19 10M5 10V20C5 20.5523 5.44772 21 6 21H9M19 10L21 12M19 10V20C19 20.5523 18.5523 21 18 21H15M9 21C9.55228 21 10 20.5523 10 20V16C10 15.4477 10.4477 15 11 15H13C13.5523 15 14 15.4477 14 16V20C14 20.5523 14.4477 21 15 21M9 21H15"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <div class="nav-label">홈</div>
+                </div>
+                <div class="nav-item" data-page="favorites">
+                    <div class="nav-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M12 21.35L10.55 20.03C5.4 15.36 2 12.28 2 8.5C2 5.42 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.09C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.42 22 8.5C22 12.28 18.6 15.36 13.45 20.04L12 21.35Z"
+                                stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <div class="nav-label">관심있어요</div>
+                </div>
+                <div class="nav-item" data-page="mypage">
+                    <div class="nav-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2" />
+                            <path d="M5 20C5 16.6863 7.68629 14 11 14H13C16.3137 14 19 16.6863 19 20"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <div class="nav-label">마이</div>
+                </div>
+            </nav>
         </div>
-
-        <!-- 검색 헤더 -->
-        <div class="search-header">
-            <button class="btn-back" onclick="history.back()"></button>
-            <div class="search-input-wrapper">
-                <input type="text" class="search-input-main" placeholder="원하는 공구 상품을 검색해보세요!" id="searchInput">
-                <button class="btn-search">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <circle cx="11" cy="11" r="7" stroke="#272727" stroke-width="2" />
-                        <path d="M20 20L17 17" stroke="#272727" stroke-width="2" stroke-linecap="round" />
-                    </svg>
-                </button>
-            </div>
-        </div>
-
-        <!-- 검색 기록 -->
-        <div class="search-history" id="searchHistory">
-            <div class="search-history-header">
-                <h3 class="search-history-title">검색 기록</h3>
-            </div>
-            <div class="search-history-divider"></div>
-            <ul class="search-history-list">
-                <li class="search-history-item">
-                    <span class="search-history-text">소금빵</span>
-                    <button class="btn-delete-history">×</button>
-                </li>
-                <li class="search-history-item">
-                    <span class="search-history-text">휴지</span>
-                    <button class="btn-delete-history">×</button>
-                </li>
-                <li class="search-history-item">
-                    <span class="search-history-text">넷플릭스</span>
-                    <button class="btn-delete-history">×</button>
-                </li>
-                <li class="search-history-item">
-                    <span class="search-history-text">티빙</span>
-                    <button class="btn-delete-history">×</button>
-                </li>
-                <li class="search-history-item">
-                    <span class="search-history-text">디즈니플러스</span>
-                    <button class="btn-delete-history">×</button>
-                </li>
-            </ul>
-        </div>
-
-        <!-- 검색 결과 영역 -->
-        <div class="search-results" id="searchResults" style="display: none;">
-            <h2 class="search-results-title">공구 찾기</h2>
-
-            <!-- 카테고리 필터 탭 -->
-            <div class="category-filter-tabs">
-                <button class="category-filter-tab active" data-category="all">전체</button>
-                <button class="category-filter-tab" data-category="delivery">공동배달</button>
-                <button class="category-filter-tab" data-category="bulk">묶음구매</button>
-                <button class="category-filter-tab" data-category="flash">번개공구</button>
-                <button class="category-filter-tab" data-category="regular">정기공구</button>
-            </div>
-
-            <!-- 정렬 옵션 -->
-            <div class="filter-sort">
-                <select class="sort-select">
-                    <option>최신순</option>
-                    <option>마감임박순</option>
-                    <option>거리순</option>
-                    <option>인기순</option>
-                </select>
-            </div>
-
-            <!-- 검색 결과 목록 -->
-            <section class="section items-list">
-                <!-- 검색 결과가 여기에 동적으로 추가됩니다 -->
-            </section>
-        </div>
-
-        <!-- 하단 네비게이션 -->
-        <nav class="bottom-nav">
-            <div class="nav-item" data-page="calendar">
-                <div class="nav-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="4" y="5" width="16" height="16" rx="2" stroke="currentColor" stroke-width="2" />
-                        <path d="M4 9H20" stroke="currentColor" stroke-width="2" />
-                        <path d="M8 3V7" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                        <path d="M16 3V7" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                    </svg>
-                </div>
-                <div class="nav-label">캘린더</div>
-            </div>
-            <div class="nav-item" data-page="create">
-                <div class="nav-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M17 3L20 6L10 16L7 17L8 14L18 4L17 3Z" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M15 5L19 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                    </svg>
-                </div>
-                <div class="nav-label">공구 글 작성하기</div>
-            </div>
-            <div class="nav-item active" data-page="home-main">
-                <div class="nav-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M3 12L5 10M5 10L12 3L19 10M5 10V20C5 20.5523 5.44772 21 6 21H9M19 10L21 12M19 10V20C19 20.5523 18.5523 21 18 21H15M9 21C9.55228 21 10 20.5523 10 20V16C10 15.4477 10.4477 15 11 15H13C13.5523 15 14 15.4477 14 16V20C14 20.5523 14.4477 21 15 21M9 21H15"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                </div>
-                <div class="nav-label">홈</div>
-            </div>
-            <div class="nav-item" data-page="favorites">
-                <div class="nav-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M12 21.35L10.55 20.03C5.4 15.36 2 12.28 2 8.5C2 5.42 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.09C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.42 22 8.5C22 12.28 18.6 15.36 13.45 20.04L12 21.35Z"
-                            stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
-                    </svg>
-                </div>
-                <div class="nav-label">관심있어요</div>
-            </div>
-            <div class="nav-item" data-page="mypage">
-                <div class="nav-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2" />
-                        <path d="M5 20C5 16.6863 7.68629 14 11 14H13C16.3137 14 19 16.6863 19 20" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" />
-                    </svg>
-                </div>
-                <div class="nav-label">마이</div>
-            </div>
-        </nav>
     </div>
 
-    <script src="../js/utils.js"></script>
-    <script src="../js/components.js"></script>
+    <script src="../js/nav.js"></script>
     <script src="../js/search.js"></script>
 </body>
 

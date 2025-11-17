@@ -23,37 +23,53 @@
             <!-- 타이틀 -->
             <h1 class="matching-title">공구친구 매칭하기</h1>
 
-            <!-- 진행률 -->
-            <div class="matching-progress">
-                <p class="progress-text">거의 다 왔어요!</p>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 75%;"></div>
-                </div>
-                <p class="progress-count"><span class="count-current">3</span><span class="count-total">/4</span></p>
-            </div>
-
-            <!-- 참여자 프로필 -->
-            <div class="participants">
-                <div class="participant-avatar filled" data-user="1"></div>
-                <div class="participant-avatar filled" data-user="2"></div>
-                <div class="participant-avatar filled" data-user="3"></div>
-                <div class="participant-avatar empty">?</div>
-            </div>
-
             <!-- 상품 이미지 -->
             <div class="product-image-container">
-                <div class="product-image" data-product="bread">
+                <div class="product-image">
+                    <div class="deadline-badge">마감 D-1</div>
                     <div class="product-overlay">
                         <div class="product-author">
                             <div class="author-avatar"></div>
-                            <span class="author-name">안경만듀</span>
+                            <span class="author-name">최지인</span>
                         </div>
                         <h3 class="product-name">소금빵</h3>
                         <p class="product-description">소금빵 실수로 너무 많이 사버렸는데 같이 나눠먹어요...</p>
                     </div>
-                    <div class="deadline-badge">마감 D-1</div>
-                    <a href="#" class="view-detail-link">공구 정보 보기</a>
                 </div>
+            </div>
+
+            <!-- 진행률과 아바타 영역 -->
+            <div class="progress-section">
+                <!-- 진행률 -->
+                <div class="matching-progress">
+                    <p class="progress-text">거의 다 왔어요!</p>
+                    <div class="progress-count"><span class="count-current">3</span><span class="count-total">/4</span>
+                    </div>
+                </div>
+
+                <!-- 프로그레스 바 -->
+                <div class="progress-bar-container">
+                    <div class="progress-bar-segment" style="width: 25%;"></div>
+                    <div class="progress-bar-segment" style="width: 24%;"></div>
+                    <div class="progress-bar-segment" style="width: 25%;"></div>
+                    <div class="progress-bar-empty" style="width: 26%;"></div>
+                </div>
+
+                <!-- 참여자 프로필 -->
+                <div class="participants">
+                    <div class="participant-avatar filled"></div>
+                    <div class="participant-avatar filled"></div>
+                    <div class="participant-avatar filled"></div>
+                    <div class="participant-avatar empty">
+                        <span class="empty-text">?</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 하단 버튼 -->
+            <div class="action-buttons">
+                <button class="btn-chat">대화방 참여하기</button>
+                <button class="btn-match">매칭하기</button>
             </div>
 
             <!-- 공구 정보 -->
@@ -94,7 +110,7 @@
                     <span class="price-label">총 금액</span>
                     <span class="price-value">75,000원</span>
                 </div>
-                <div class="price-row highlight">
+                <div class="price-row">
                     <span class="price-label">N/1 금액</span>
                     <span class="price-value">
                         <span class="per-person">1인당</span>
@@ -108,16 +124,10 @@
             <div class="similar-section">
                 <h2 class="similar-title">비슷한 공구를 찾아봤어요! 🔍</h2>
                 <div class="similar-items">
-                    <div class="similar-item" data-product="chicken"></div>
-                    <div class="similar-item" data-product="tissue"></div>
-                    <div class="similar-item" data-product="rice"></div>
+                    <div class="similar-item"></div>
+                    <div class="similar-item"></div>
+                    <div class="similar-item"></div>
                 </div>
-            </div>
-
-            <!-- 하단 버튼 -->
-            <div class="action-buttons">
-                <button class="btn-chat">대화방 참여하기</button>
-                <button class="btn-match">매칭하기</button>
             </div>
         </div>
 

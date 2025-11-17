@@ -22,6 +22,21 @@ document.addEventListener('DOMContentLoaded', () => {
     updateStatusTime();
     initializeSearch();
     initializeSearchHistory();
+
+    // 검색 입력창에 자동 포커스
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.focus();
+    }
+
+    // 세션 스토리지에서 검색어 불러오기
+    const savedQuery = sessionStorage.getItem('searchQuery');
+    if (savedQuery && searchInput) {
+        searchInput.value = savedQuery;
+        performSearch(savedQuery);
+        // 검색어 사용 후 제거
+        sessionStorage.removeItem('searchQuery');
+    }
 });
 
 /**
@@ -137,7 +152,7 @@ function renderSearchResults(items) {
         return;
     }
 
-    itemsList.innerHTML = items.map(item => `
+    itemsList.innerHTML = items.map((item, index) => `
         <div class="item" data-item-id="${item.id}" data-product="${item.product}">
             <div class="item-avatar"></div>
             <div class="item-content">
@@ -146,7 +161,6 @@ function renderSearchResults(items) {
             </div>
             <div class="item-count">${item.count}</div>
         </div>
-        <div class="item-divider"></div>
     `).join('');
 
     // 아이템 클릭 이벤트 추가

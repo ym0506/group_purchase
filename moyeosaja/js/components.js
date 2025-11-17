@@ -13,39 +13,30 @@ export class SearchComponent {
     init() {
         if (!this.input) return;
 
-        // 포커스 이벤트
-        Utils.on(this.input, 'focus', () => {
-            this.container.style.borderColor = '#297eff';
-        });
+        // 검색 페이지가 아닌 경우에만 포커스 시 이동
+        const isSearchPage = window.location.pathname.includes('search.html');
 
-        Utils.on(this.input, 'blur', () => {
-            this.container.style.borderColor = '#9e9e9e';
-        });
-
-        // 검색 실행
-        Utils.on(this.input, 'keypress', (e) => {
-            if (e.key === 'Enter') {
-                this.performSearch(this.input.value);
-            }
-        });
+        if (!isSearchPage) {
+            // 포커스 이벤트 - 검색 페이지로 이동 (홈 페이지에서만)
+            Utils.on(this.input, 'focus', () => {
+                window.location.href = './search.html';
+            });
+        } else {
+            // 검색 페이지에서는 검색 실행
+            Utils.on(this.input, 'keypress', (e) => {
+                if (e.key === 'Enter') {
+                    this.performSearch(this.input.value);
+                }
+            });
+        }
     }
 
     async performSearch(query) {
         if (!query.trim()) return;
 
-        Utils.addLoadingState('.items-list');
-
-        try {
-            // API 호출 시뮬레이션
-            const results = await Utils.simulate({
-                query,
-                results: []
-            });
-
-            alert(`"${query}" 검색 결과를 불러왔습니다!`);
-        } catch (error) {
-            console.error('Search error:', error);
-        }
+        // 검색어를 세션 스토리지에 저장하고 검색 페이지로 이동
+        sessionStorage.setItem('searchQuery', query);
+        window.location.href = './search.html';
     }
 }
 
@@ -69,7 +60,7 @@ export class CategoryComponent {
         // 카테고리별 라우팅 로직
         const routes = {
             '공동배달': './category-delivery.html',
-            '묶음구매': './category-bundle.html',
+            '묶음구매': './category-bulk.html',
             '번개공구': './category-flash.html',
             '정기공구': './category-regular.html'
         };

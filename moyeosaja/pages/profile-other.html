@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>프로필 - MOYEO</title>
+    <!-- Pretendard Font -->
+    <link rel="stylesheet" as="style" crossorigin
+        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
     <link rel="stylesheet" href="../css/base.css">
     <link rel="stylesheet" href="../css/layout.css">
     <link rel="stylesheet" href="../css/components.css">
@@ -18,96 +21,251 @@
             <div class="status-time">9:41</div>
         </div>
 
-        <!-- 페이지 타이틀 -->
-        <h1 class="profile-title">마이</h1>
+        <!-- 프로필 콘텐츠 -->
+        <div class="profile-content">
+            <!-- 타이틀 -->
+            <h1 class="profile-title">마이</h1>
 
-        <!-- 회원가입/로그인 링크 -->
-        <div class="auth-links">
-            <a href="./signup-step1.html" class="auth-link">회원가입</a>
-            <a href="./login.html" class="auth-link">로그인</a>
-        </div>
+            <!-- 로그인/회원가입 링크 (상단 우측) -->
+            <div class="auth-links">
+                <a href="./signup-step1.html" class="auth-link">회원가입</a>
+                <a href="./login.html" class="auth-link">로그인</a>
+            </div>
 
-        <!-- 프로필 정보 -->
-        <div class="profile-info">
-            <div class="profile-avatar-large"></div>
-            <h2 class="profile-name">최지인</h2>
-            <div class="profile-rating">
-                <div class="rating-stars">
-                    <span class="star filled">★</span>
-                    <span class="star">★</span>
-                    <span class="star">★</span>
-                    <span class="star">★</span>
-                    <span class="star">★</span>
+            <!-- 프로필 섹션 -->
+            <section class="profile-section">
+                <div class="profile-avatar-large"></div>
+                <h2 class="profile-name">최지인</h2>
+                <div class="profile-rating">
+                    <div class="rating-stars">
+                        <svg class="star" viewBox="0 0 11 11">
+                            <polygon
+                                points="5.5,0 6.8,3.7 10.9,4.3 8.2,6.9 8.9,10.9 5.5,9 2.1,10.9 2.8,6.9 0,4.3 4.2,3.7"
+                                fill="#272727" />
+                        </svg>
+                        <svg class="star" viewBox="0 0 11 11">
+                            <polygon
+                                points="5.5,0 6.8,3.7 10.9,4.3 8.2,6.9 8.9,10.9 5.5,9 2.1,10.9 2.8,6.9 0,4.3 4.2,3.7"
+                                fill="#272727" />
+                        </svg>
+                        <svg class="star" viewBox="0 0 11 11">
+                            <polygon
+                                points="5.5,0 6.8,3.7 10.9,4.3 8.2,6.9 8.9,10.9 5.5,9 2.1,10.9 2.8,6.9 0,4.3 4.2,3.7"
+                                fill="#272727" />
+                        </svg>
+                        <svg class="star" viewBox="0 0 11 11">
+                            <polygon
+                                points="5.5,0 6.8,3.7 10.9,4.3 8.2,6.9 8.9,10.9 5.5,9 2.1,10.9 2.8,6.9 0,4.3 4.2,3.7"
+                                fill="#272727" />
+                        </svg>
+                        <svg class="star" viewBox="0 0 11 11">
+                            <polygon
+                                points="5.5,0 6.8,3.7 10.9,4.3 8.2,6.9 8.9,10.9 5.5,9 2.1,10.9 2.8,6.9 0,4.3 4.2,3.7"
+                                fill="#272727" />
+                        </svg>
+                    </div>
+                    <span class="rating-score">1.0</span>
                 </div>
-                <span class="rating-score">1.0</span>
-            </div>
-        </div>
+            </section>
 
-        <!-- 활동 탭 -->
-        <div class="activity-section">
-            <h3 class="section-title">활동 내역</h3>
-            <div class="activity-tabs">
-                <button class="activity-tab active">판매 물품 20</button>
-                <button class="activity-tab">리뷰 18</button>
-            </div>
-        </div>
+            <!-- 탭 섹션 -->
+            <section class="tabs-section">
+                <button class="tab-button active" data-tab="products">
+                    <span class="tab-label">판매 물품 20</span>
+                </button>
+                <button class="tab-button" data-tab="reviews">
+                    <span class="tab-label">리뷰 18</span>
+                </button>
+            </section>
 
-        <!-- 활동 내역 목록 -->
-        <div class="activity-list">
-            <div class="activity-item">
-                <div class="activity-thumbnail"></div>
-                <div class="activity-content">
-                    <div class="activity-title">맛있는 햇반</div>
-                    <div class="activity-description">같이 사주세요 제발</div>
+            <!-- 활동 내역 섹션 -->
+            <section class="activity-section">
+                <h2 class="section-title">활동 내역</h2>
+
+                <!-- 판매 물품 목록 -->
+                <div class="content-panel active" data-content="products">
+                    <div class="product-list">
+                        <!-- 상품 아이템 -->
+                        <div class="product-item">
+                            <div class="product-image"></div>
+                            <div class="product-info">
+                                <h3 class="product-name">맛있는 햇반</h3>
+                                <p class="product-description">같이 사주세요 제발</p>
+                            </div>
+                            <span class="product-status">4/4</span>
+                        </div>
+
+                        <div class="product-item">
+                            <div class="product-image"></div>
+                            <div class="product-info">
+                                <h3 class="product-name">맛있는 김치</h3>
+                                <p class="product-description">같이 사주세요 제발</p>
+                            </div>
+                            <span class="product-status">4/4</span>
+                        </div>
+
+                        <div class="product-item">
+                            <div class="product-image"></div>
+                            <div class="product-info">
+                                <h3 class="product-name">맛있는 물</h3>
+                                <p class="product-description">같이 사주세요 제발</p>
+                            </div>
+                            <span class="product-status">4/4</span>
+                        </div>
+
+                        <div class="product-item">
+                            <div class="product-image"></div>
+                            <div class="product-info">
+                                <h3 class="product-name">넷플릭스</h3>
+                                <p class="product-description">같이 사주세요 제발</p>
+                            </div>
+                            <span class="product-status">4/4</span>
+                        </div>
+
+                        <div class="product-item">
+                            <div class="product-image"></div>
+                            <div class="product-info">
+                                <h3 class="product-name">티빙</h3>
+                                <p class="product-description">같이 사주세요 제발</p>
+                            </div>
+                            <span class="product-status">4/4</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="activity-count">4/4</div>
-            </div>
 
-            <div class="activity-item">
-                <div class="activity-thumbnail"></div>
-                <div class="activity-content">
-                    <div class="activity-title">맛있는 김치</div>
-                    <div class="activity-description">같이 사주세요 제발</div>
+                <!-- 리뷰 목록 -->
+                <div class="content-panel" data-content="reviews">
+                    <div class="review-list">
+                        <!-- 리뷰 아이템 -->
+                        <div class="review-item">
+                            <div class="review-header">
+                                <div class="reviewer-info">
+                                    <span class="reviewer-name">안경만두1</span>
+                                    <span class="review-divider">|</span>
+                                    <span class="product-name-small">맛있는 햇반</span>
+                                </div>
+                                <div class="rating-stars-small">
+                                    <svg class="star-small" viewBox="0 0 11 11">
+                                        <polygon
+                                            points="5.5,0 6.8,3.7 10.9,4.3 8.2,6.9 8.9,10.9 5.5,9 2.1,10.9 2.8,6.9 0,4.3 4.2,3.7"
+                                            fill="#272727" />
+                                    </svg>
+                                    <svg class="star-small" viewBox="0 0 11 11">
+                                        <polygon
+                                            points="5.5,0 6.8,3.7 10.9,4.3 8.2,6.9 8.9,10.9 5.5,9 2.1,10.9 2.8,6.9 0,4.3 4.2,3.7"
+                                            fill="#272727" />
+                                    </svg>
+                                    <svg class="star-small" viewBox="0 0 11 11">
+                                        <polygon
+                                            points="5.5,0 6.8,3.7 10.9,4.3 8.2,6.9 8.9,10.9 5.5,9 2.1,10.9 2.8,6.9 0,4.3 4.2,3.7"
+                                            fill="#272727" />
+                                    </svg>
+                                    <svg class="star-small" viewBox="0 0 11 11">
+                                        <polygon
+                                            points="5.5,0 6.8,3.7 10.9,4.3 8.2,6.9 8.9,10.9 5.5,9 2.1,10.9 2.8,6.9 0,4.3 4.2,3.7"
+                                            fill="#272727" />
+                                    </svg>
+                                    <svg class="star-small" viewBox="0 0 11 11">
+                                        <polygon
+                                            points="5.5,0 6.8,3.7 10.9,4.3 8.2,6.9 8.9,10.9 5.5,9 2.1,10.9 2.8,6.9 0,4.3 4.2,3.7"
+                                            fill="#272727" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <p class="review-content">음....</p>
+                        </div>
+                        <div class="review-divider"></div>
+
+                        <div class="review-item">
+                            <div class="review-header">
+                                <div class="reviewer-info">
+                                    <span class="reviewer-name">안경만두2</span>
+                                    <span class="review-divider">|</span>
+                                    <span class="product-name-small">맛있는 햇반</span>
+                                </div>
+                                <div class="rating-stars-small">
+                                    <svg class="star-small" viewBox="0 0 11 11">
+                                        <polygon
+                                            points="5.5,0 6.8,3.7 10.9,4.3 8.2,6.9 8.9,10.9 5.5,9 2.1,10.9 2.8,6.9 0,4.3 4.2,3.7"
+                                            fill="#272727" />
+                                    </svg>
+                                    <svg class="star-small" viewBox="0 0 11 11">
+                                        <polygon
+                                            points="5.5,0 6.8,3.7 10.9,4.3 8.2,6.9 8.9,10.9 5.5,9 2.1,10.9 2.8,6.9 0,4.3 4.2,3.7"
+                                            fill="#272727" />
+                                    </svg>
+                                    <svg class="star-small" viewBox="0 0 11 11">
+                                        <polygon
+                                            points="5.5,0 6.8,3.7 10.9,4.3 8.2,6.9 8.9,10.9 5.5,9 2.1,10.9 2.8,6.9 0,4.3 4.2,3.7"
+                                            fill="#272727" />
+                                    </svg>
+                                    <svg class="star-small" viewBox="0 0 11 11">
+                                        <polygon
+                                            points="5.5,0 6.8,3.7 10.9,4.3 8.2,6.9 8.9,10.9 5.5,9 2.1,10.9 2.8,6.9 0,4.3 4.2,3.7"
+                                            fill="#272727" />
+                                    </svg>
+                                    <svg class="star-small" viewBox="0 0 11 11">
+                                        <polygon
+                                            points="5.5,0 6.8,3.7 10.9,4.3 8.2,6.9 8.9,10.9 5.5,9 2.1,10.9 2.8,6.9 0,4.3 4.2,3.7"
+                                            fill="#272727" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <p class="review-content">별한개도 아깝네요..</p>
+                        </div>
+                        <div class="review-divider"></div>
+
+                        <div class="review-item">
+                            <div class="review-header">
+                                <div class="reviewer-info">
+                                    <span class="reviewer-name">안경만두3</span>
+                                    <span class="review-divider">|</span>
+                                    <span class="product-name-small">맛있는 물</span>
+                                </div>
+                                <div class="rating-stars-small">
+                                    <svg class="star-small" viewBox="0 0 11 11">
+                                        <polygon
+                                            points="5.5,0 6.8,3.7 10.9,4.3 8.2,6.9 8.9,10.9 5.5,9 2.1,10.9 2.8,6.9 0,4.3 4.2,3.7"
+                                            fill="#272727" />
+                                    </svg>
+                                    <svg class="star-small" viewBox="0 0 11 11">
+                                        <polygon
+                                            points="5.5,0 6.8,3.7 10.9,4.3 8.2,6.9 8.9,10.9 5.5,9 2.1,10.9 2.8,6.9 0,4.3 4.2,3.7"
+                                            fill="#272727" />
+                                    </svg>
+                                    <svg class="star-small" viewBox="0 0 11 11">
+                                        <polygon
+                                            points="5.5,0 6.8,3.7 10.9,4.3 8.2,6.9 8.9,10.9 5.5,9 2.1,10.9 2.8,6.9 0,4.3 4.2,3.7"
+                                            fill="#272727" />
+                                    </svg>
+                                    <svg class="star-small" viewBox="0 0 11 11">
+                                        <polygon
+                                            points="5.5,0 6.8,3.7 10.9,4.3 8.2,6.9 8.9,10.9 5.5,9 2.1,10.9 2.8,6.9 0,4.3 4.2,3.7"
+                                            fill="#272727" />
+                                    </svg>
+                                    <svg class="star-small" viewBox="0 0 11 11">
+                                        <polygon
+                                            points="5.5,0 6.8,3.7 10.9,4.3 8.2,6.9 8.9,10.9 5.5,9 2.1,10.9 2.8,6.9 0,4.3 4.2,3.7"
+                                            fill="#272727" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <p class="review-content">빠른 거래 감사합니다!</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="activity-count">4/4</div>
-            </div>
+            </section>
 
-            <div class="activity-item">
-                <div class="activity-thumbnail"></div>
-                <div class="activity-content">
-                    <div class="activity-title">맛있는 물</div>
-                    <div class="activity-description">같이 사주세요 제발</div>
+            <!-- 계정 섹션 -->
+            <section class="account-section">
+                <h2 class="section-title">계정</h2>
+
+                <div class="account-actions">
+                    <button class="account-action">로그아웃</button>
+                    <div class="divider"></div>
+                    <button class="account-action danger">탈퇴하기</button>
                 </div>
-                <div class="activity-count">4/4</div>
-            </div>
-
-            <div class="activity-item">
-                <div class="activity-thumbnail"></div>
-                <div class="activity-content">
-                    <div class="activity-title">넷플릭스</div>
-                    <div class="activity-description">같이 사주세요 제발</div>
-                </div>
-                <div class="activity-count">4/4</div>
-            </div>
-
-            <div class="activity-item">
-                <div class="activity-thumbnail"></div>
-                <div class="activity-content">
-                    <div class="activity-title">티빙</div>
-                    <div class="activity-description">같이 사주세요 제발</div>
-                </div>
-                <div class="activity-count">4/4</div>
-            </div>
-        </div>
-
-        <!-- 계정 섹션 -->
-        <div class="account-section">
-            <h3 class="section-title">계정</h3>
-            <div class="account-actions">
-                <button class="account-btn">로그아웃</button>
-                <div class="account-divider"></div>
-                <button class="account-btn danger">탈퇴하기</button>
-            </div>
+            </section>
         </div>
 
         <!-- 하단 네비게이션 -->
@@ -153,7 +311,7 @@
                 </div>
                 <div class="nav-label">관심있어요</div>
             </div>
-            <div class="nav-item active" data-page="mypage">
+            <div class="nav-item" data-page="mypage">
                 <div class="nav-icon">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2" />
@@ -166,8 +324,8 @@
         </nav>
     </div>
 
-    <script src="../js/utils.js"></script>
-    <script src="../js/components.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/nav.js"></script>
     <script src="../js/profile-other.js"></script>
 </body>
 
