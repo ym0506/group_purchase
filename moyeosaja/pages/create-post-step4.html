@@ -13,15 +13,11 @@
 
 <body>
     <div class="container create-post-container">
-        <!-- 상태 표시줄 -->
-        <div class="status-bar">
-            <div class="status-time">9:41</div>
-        </div>
-
         <!-- 공구글 작성 콘텐츠 -->
         <div class="create-post-content">
             <!-- 타이틀 -->
             <h1 class="create-post-title">공구글 작성하기</h1>
+            <p class="step-help-text">마지막 단계예요! 모집 종료와 안내 문구를 확인한 뒤 게시 버튼을 눌러주세요.</p>
 
             <!-- 단계 표시 -->
             <div class="step-indicators">
@@ -32,34 +28,67 @@
             </div>
 
             <!-- 상품 카드 미리보기 -->
-            <div class="product-preview-card">
-                <div class="preview-image">
-                    <img src="../assets/images/categories/공동배달.png" alt="소금빵"
-                        style="width: 100%; height: 100%; object-fit: cover;">
+            <section class="form-section">
+                <div class="section-header">
+                    <p class="section-eyebrow">PREVIEW</p>
+                    <h2 class="section-title">최종 프리뷰</h2>
+                    <p class="section-description">종료일과 안내 문구가 카드에 어떻게 표시되는지 미리 확인하세요.</p>
                 </div>
-                <div class="preview-info">
-                    <div class="preview-author">
-                        <div class="author-avatar"></div>
-                        <span class="author-name">최지인 ></span>
+                <div class="form-card">
+                    <div class="product-preview-card">
+                        <div class="preview-image">
+                            <img src="../assets/images/categories/공동배달.png" alt="소금빵"
+                                style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div class="preview-info">
+                            <div class="preview-author">
+                                <div class="author-avatar"></div>
+                                <span class="author-name">최지인 ></span>
+                            </div>
+                            <h3 class="preview-title">소금빵</h3>
+                            <p class="preview-description">소금빵 실수로 너무 많이 사버렸는데 같이 나눠먹어요...</p>
+                        </div>
                     </div>
-                    <h3 class="preview-title">소금빵</h3>
-                    <p class="preview-description">소금빵 실수로 너무 많이 사버렸는데 같이 나눠먹어요...</p>
                 </div>
-            </div>
+            </section>
 
             <!-- 4단계 폼 -->
-            <div class="step-section">
-                <h2 class="section-title">마지막으로, 공구 모집 종료일을 알려주세요 😎</h2>
+            <section class="form-section">
+                <div class="section-header">
+                    <p class="section-eyebrow">STEP 04</p>
+                    <h2 class="section-title">모집 종료 정보를 입력해주세요 😎</h2>
+                    <p class="section-description">종료일을 설정하면 모집 마감 1시간 전에 자동 리마인드가 발송됩니다.</p>
+                </div>
 
-                <form class="create-post-form">
-                    <div class="form-row-display">
-                        <label class="form-label">종료일</label>
-                        <span class="form-value">9월 26일 오후 12시</span>
+                <div class="form-card summary-card">
+                    <div class="summary-row">
+                        <div>
+                            <p class="summary-label">모집 종료일</p>
+                            <p class="summary-value">9월 26일 오후 12시</p>
+                        </div>
+                        <span class="deadline-badge">D-2</span>
                     </div>
+                    <div class="info-banner">
+                        <span class="info-icon">🔔</span>
+                        <p>마감 시간 이후에는 자동으로 모집이 종료되고 참여 신청이 막혀요.</p>
+                    </div>
+                    <div class="checklist">
+                        <div class="check-item">✅ 모집 인원 4명 확인 완료</div>
+                        <div class="check-item">✅ 수령 장소 정보 입력 완료</div>
+                        <div class="check-item">✅ 가격 정보 입력 완료</div>
+                    </div>
+                </div>
 
-                    <button type="submit" class="btn-submit">작성하기</button>
-                </form>
-            </div>
+                <div class="form-card cta-card">
+                    <h3>잠깐! 이런 내용을 한 번 더 체크하면 좋아요</h3>
+                    <ul>
+                        <li>상품 이미지가 흐릿하지 않은지</li>
+                        <li>수령 시간/장소가 명확한지</li>
+                        <li>공지하고 싶은 안내 문구가 있는지</li>
+                    </ul>
+                    <button type="submit" class="btn-submit">작성 완료하기</button>
+                </div>
+            </section>
         </div>
 
         <!-- 하단 네비게이션 -->
@@ -118,9 +147,11 @@
         </nav>
     </div>
 
+    <script src="../js/toast.js"></script>
+    <script src="../js/loading.js"></script>
+    <script src="../js/form-enhancements.js"></script>
     <script src="../js/api.js"></script>
     <script src="../js/nav.js"></script>
-    <script type="module" src="../js/app.js"></script>
     <script src="../js/create-post-step4.js"></script>
 </body>
 

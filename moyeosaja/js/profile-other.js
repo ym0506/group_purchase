@@ -93,17 +93,68 @@ async function loadTabContent(tabName) {
     try {
         if (tabName === 'products') {
             // 판매 물품 목록 불러오기
-            // const products = await window.apiService.getUserProducts(userId);
-            // updateProductList(products);
-            console.log('판매 물품 목록 불러오기');
+            await loadUserProducts(userId);
         } else if (tabName === 'reviews') {
             // 리뷰 목록 불러오기
-            // const reviews = await window.apiService.getUserReviews(userId);
-            // updateReviewList(reviews);
-            console.log('리뷰 목록 불러오기');
+            await loadUserReviews(userId);
         }
     } catch (error) {
         console.error('탭 콘텐츠 불러오기 에러:', error);
+    }
+}
+
+/**
+ * 사용자 판매 물품 목록 로드
+ * @param {string} userId - 사용자 ID
+ */
+async function loadUserProducts(userId) {
+    try {
+        // 모든 게시글을 가져와서 필터링
+        const response = await window.apiService.getPosts({
+            page: 1,
+            limit: 100
+        });
+
+        // 해당 사용자가 작성한 게시글만 필터링
+        const userPosts = response.posts?.filter(post => post.author_id === parseInt(userId)) || [];
+
+        console.log('사용자 판매 물품:', userPosts);
+
+        updateProductList(userPosts);
+    } catch (error) {
+        console.error('판매 물품 목록 불러오기 에러:', error);
+        const listContainer = document.querySelector('.product-list');
+        if (listContainer) {
+            listContainer.innerHTML = '<p class="empty-message">판매 물품을 불러올 수 없습니다.</p>';
+        }
+    }
+}
+
+/**
+ * 사용자 리뷰 목록 로드
+ * @param {string} userId - 사용자 ID
+ */
+async function loadUserReviews(userId) {
+    try {
+        // 백엔드 API 호출
+        const response = await window.apiService.getUserReviews(userId);
+
+        console.log('사용자 리뷰 목록:', response);
+
+        if (response.reviews && response.reviews.length > 0) {
+            updateReviewList(response.reviews);
+        } else {
+            const listContainer = document.querySelector('.review-list');
+            if (listContainer) {
+                listContainer.innerHTML = '<p class="empty-message">받은 리뷰가 없습니다.</p>';
+            }
+        }
+    } catch (error) {
+        console.error('리뷰 목록 불러오기 에러:', error);
+        const listContainer = document.querySelector('.review-list');
+        if (listContainer) {
+            listContainer.innerHTML = '<p class="empty-message">리뷰를 불러올 수 없습니다.</p>';
+        }
     }
 }
 
@@ -123,25 +174,38 @@ async function loadUserProfile() {
     }
 
     try {
-        // 프로필 정보 가져오기
-        // const userProfile = await window.apiService.getUserProfile(userId);
+        // 리뷰 API를 통해 프로필 정보 가져오기 (평균 평점, 리뷰 수)
+        const reviewsResponse = await window.apiService.getUserReviews(userId);
 
-        // 프로필 정보 시뮬레이션
+        // 판매 물품 수 가져오기
+        const postsResponse = await window.apiService.getPosts({
+            page: 1,
+            limit: 100
+        });
+        const userPosts = postsResponse.posts?.filter(post => post.author_id === parseInt(userId)) || [];
+
+        // 프로필 정보 구성
         const userProfile = {
-            name: '최지인',
-            rating: 1.0,
-            avatar: null,
+            name: reviewsResponse.reviews?.[0]?.reviewer_nickname || '사용자',
+            rating: reviewsResponse.average_rating || 0,
+            avatar: null, // 프로필 이미지는 별도 API 필요
             stats: {
-                products: 20,
-                reviews: 18
+                products: userPosts.length,
+                reviews: reviewsResponse.total_reviews || reviewsResponse.reviews?.length || 0
             }
         };
+
+        console.log('프로필 정보:', userProfile);
 
         // UI 업데이트
         updateProfileUI(userProfile);
     } catch (error) {
         console.error('프로필 정보 불러오기 에러:', error);
-        alert('프로필 정보를 불러올 수 없습니다.');
+        if (window.toast) {
+            window.toast.error('프로필 정보를 불러올 수 없습니다.');
+        } else {
+            alert('프로필 정보를 불러올 수 없습니다.');
+        }
     }
 }
 
@@ -188,58 +252,108 @@ function updateProfileUI(profile) {
 
 /**
  * 판매 물품 목록 UI 업데이트
- * @param {Array} products - 상품 목록
+ * @param {Array} products - 상품 목록 (게시글 배열)
  */
 function updateProductList(products) {
     const listContainer = document.querySelector('.product-list');
     if (!listContainer) return;
 
-    if (products.length === 0) {
+    if (!products || products.length === 0) {
         listContainer.innerHTML = '<p class="empty-message">판매 물품이 없습니다.</p>';
         return;
     }
 
-    listContainer.innerHTML = products.map(product => `
-        <div class="product-item">
-            <div class="product-image" style="${product.image ? `background-image: url('${product.image}'); background-size: cover; background-position: center;` : ''}"></div>
-            <div class="product-info">
-                <h3 class="product-name">${product.name}</h3>
-                <p class="product-description">${product.description}</p>
+    listContainer.innerHTML = products.map(product => {
+        const currentCount = product.current_participants || 0;
+        const targetCount = product.target_participants || 0;
+
+        return `
+            <div class="product-item" data-post-id="${product.post_id}">
+                <div class="product-image" style="${product.main_image_url ? `background-image: url('${product.main_image_url}'); background-size: cover; background-position: center;` : ''}"></div>
+                <div class="product-info">
+                    <h3 class="product-name">${product.title || '제목 없음'}</h3>
+                    <p class="product-description">${product.description || product.pickup_location_text || ''}</p>
+                </div>
+                <span class="product-status">${currentCount}/${targetCount}</span>
             </div>
-            <span class="product-status">${product.currentCount}/${product.maxCount}</span>
-        </div>
-    `).join('');
+        `;
+    }).join('');
+
+    // 클릭 이벤트 추가
+    listContainer.querySelectorAll('.product-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const postId = item.getAttribute('data-post-id');
+            if (postId) {
+                sessionStorage.setItem('selectedPostId', postId);
+                window.location.href = './matching.html';
+            }
+        });
+    });
 }
 
 /**
  * 리뷰 목록 UI 업데이트
- * @param {Array} reviews - 리뷰 목록
+ * @param {Array} reviews - 리뷰 목록 (API 응답)
  */
 function updateReviewList(reviews) {
     const listContainer = document.querySelector('.review-list');
     if (!listContainer) return;
 
-    if (reviews.length === 0) {
-        listContainer.innerHTML = '<p class="empty-message">리뷰가 없습니다.</p>';
+    if (!reviews || reviews.length === 0) {
+        listContainer.innerHTML = '<p class="empty-message">받은 리뷰가 없습니다.</p>';
         return;
     }
 
-    listContainer.innerHTML = reviews.map((review, index) => `
-        <div class="review-item">
-            <div class="review-header">
-                <div class="reviewer-info">
-                    <span class="reviewer-name">${review.reviewerName}</span>
-                    <span class="review-divider">|</span>
-                    <span class="product-name-small">${review.productName}</span>
+    listContainer.innerHTML = reviews.map((review, index) => {
+        const reviewerName = review.reviewer_nickname || review.reviewer?.nickname || '익명';
+        const productName = review.post_title || '공구';
+        const rating = review.rating || 0;
+        const content = review.comment || review.content || '';
+
+        return `
+            <div class="review-item">
+                <div class="review-header">
+                    <div class="reviewer-info">
+                        <span class="reviewer-name">${reviewerName}</span>
+                        <span class="review-divider">|</span>
+                        <span class="product-name-small">${productName}</span>
+                    </div>
+                    <div class="rating-stars-small">
+                        ${generateStars(rating)}
+                    </div>
                 </div>
-                <div class="rating-stars-small">
-                    ${generateStars(review.rating)}
-                </div>
+                <p class="review-content">${escapeHtml(content)}</p>
+                ${review.created_at ? `<span class="review-date">${formatDate(review.created_at)}</span>` : ''}
             </div>
-            <p class="review-content">${review.content}</p>
-        </div>
-        ${index < reviews.length - 1 ? '<div class="review-divider"></div>' : ''}
-    `).join('');
+            ${index < reviews.length - 1 ? '<div class="review-divider"></div>' : ''}
+        `;
+    }).join('');
+}
+
+/**
+ * HTML 이스케이프 (XSS 방지)
+ * @param {string} text - 텍스트
+ * @returns {string} 이스케이프된 텍스트
+ */
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+/**
+ * 날짜 포맷팅
+ * @param {string} dateString - 날짜 문자열
+ * @returns {string} 포맷된 날짜
+ */
+function formatDate(dateString) {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('ko-KR', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
 }
 
 /**

@@ -38,8 +38,16 @@ class LoginPage {
      * 이벤트 리스너 등록
      */
     attachEventListeners() {
+        if (!this.form || !this.emailInput || !this.passwordInput) {
+            console.error('필수 요소가 없어 이벤트 리스너를 등록할 수 없습니다.');
+            return;
+        }
+
         // 폼 제출 이벤트
-        this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+        this.form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.handleSubmit(e);
+        });
 
         // 이메일 입력 이벤트
         this.emailInput.addEventListener('input', () => this.handleEmailInput());
@@ -51,11 +59,18 @@ class LoginPage {
         this.passwordInput.addEventListener('focus', () => this.handleInputFocus(this.passwordInput));
         this.passwordInput.addEventListener('blur', () => this.handleInputBlur(this.passwordInput));
 
-        // 회원가입 링크 클릭
-        this.signupLink.addEventListener('click', (e) => this.handleSignupClick(e));
+        // 회원가입 링크 클릭 (기본 동작 허용)
+        if (this.signupLink) {
+            this.signupLink.addEventListener('click', (e) => {
+                // 기본 동작 허용 (페이지 이동)
+                // preventDefault를 호출하지 않음
+            });
+        }
 
         // 계정 찾기 링크 클릭
-        this.findAccountLink.addEventListener('click', (e) => this.handleFindAccountClick(e));
+        if (this.findAccountLink) {
+            this.findAccountLink.addEventListener('click', (e) => this.handleFindAccountClick(e));
+        }
 
         // Enter 키 처리
         this.emailInput.addEventListener('keypress', (e) => {
@@ -64,6 +79,14 @@ class LoginPage {
                 this.passwordInput.focus();
             }
         });
+
+        // 로그인 버튼 직접 클릭 이벤트 (추가 보험)
+        if (this.loginBtn) {
+            this.loginBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.handleSubmit(e);
+            });
+        }
     }
 
     /**
@@ -190,7 +213,11 @@ class LoginPage {
         input.focus();
 
         // 간단한 알림으로 표시 (추후 토스트 메시지로 개선 가능)
-        alert(message);
+        if (window.toast) {
+            window.toast.error(message);
+        } else {
+            alert(message);
+        }
     }
 
     /**
@@ -199,33 +226,80 @@ class LoginPage {
     async performLogin(email, password, autoLogin) {
         try {
             // 실제 백엔드 API 호출
+            console.log('📤 로그인 API 호출 시작:', { email });
             const response = await window.apiService.login(email, password);
+            console.log('📥 로그인 API 응답:', response);
 
-            // 응답 구조: { access_token, user_id }
-            if (response.access_token) {
+            // 응답 구조 확인 (여러 형식 지원)
+            const accessToken = response.access_token || response.accessToken || response.token;
+            const userId = response.user_id || response.userId || response.id;
+            
+            // 응답 구조: { access_token, user_id, email, nickname }
+            if (accessToken) {
+                console.log('✅ 로그인 성공:', response);
+                
                 // 자동 로그인 설정
                 if (autoLogin) {
                     localStorage.setItem('autoLogin', 'true');
                     localStorage.setItem('userEmail', email);
                 }
 
-                // 유저 ID 저장
-                localStorage.setItem('userId', response.user_id);
+                // 유저 ID 저장 (호환성을 위해 둘 다 저장)
+                if (userId) {
+                    localStorage.setItem('userId', userId.toString());
+                    localStorage.setItem('user_id', userId.toString());
+                    console.log('✅ 사용자 ID 저장됨:', userId);
+                } else {
+                    console.warn('⚠️ 응답에 user_id가 없습니다:', response);
+                }
+                
+                // 이메일 및 닉네임 저장
+                const userEmail = response.email || email;
+                const userNickname = response.nickname;
+                
+                if (userEmail) {
+                    localStorage.setItem('userEmail', userEmail);
+                }
+                if (userNickname) {
+                    localStorage.setItem('userNickname', userNickname);
+                }
+                
+                console.log('✅ 로그인 완료 - 사용자 정보 저장됨:', {
+                    userId,
+                    email: userEmail,
+                    nickname: userNickname,
+                    hasToken: !!accessToken
+                });
 
                 return {
                     success: true,
                     user: {
-                        email: email,
-                        userId: response.user_id,
-                        token: response.access_token
+                        email: userEmail,
+                        userId: userId,
+                        nickname: userNickname,
+                        token: accessToken
                     }
                 };
             } else {
-                throw new Error('로그인 응답이 올바르지 않습니다.');
+                console.error('❌ 로그인 응답에 access_token이 없습니다:', response);
+                console.error('❌ 응답 전체:', JSON.stringify(response, null, 2));
+                throw new Error('로그인 응답에 토큰이 없습니다. 서버 응답을 확인해주세요.');
             }
         } catch (error) {
-            console.error('로그인 실패:', error);
-            throw new Error(error.message || '이메일 또는 비밀번호가 올바르지 않습니다.');
+            console.error('❌ 로그인 실패:', error);
+            
+            // 실제 백엔드 오류만 처리 (데모 모드 제거)
+            const errorMessage = error.message || '이메일 또는 비밀번호가 올바르지 않습니다.';
+            
+            // 네트워크 오류인 경우
+            if (error.message.includes('Failed to fetch') || 
+                error.message.includes('NetworkError') ||
+                error.message.includes('네트워크 연결')) {
+                throw new Error('서버에 연결할 수 없습니다. 네트워크 연결을 확인해주세요.');
+            }
+            
+            // 백엔드 에러 응답인 경우
+            throw new Error(errorMessage);
         }
     }
 
@@ -247,7 +321,9 @@ class LoginPage {
         sessionStorage.setItem('userEmail', email);
 
         // 성공 메시지
-        alert('로그인 성공!');
+                    if (window.toast) {
+                        window.toast.success('로그인 성공!');
+                    }
 
         // 홈 페이지로 이동
         setTimeout(() => {
@@ -260,7 +336,9 @@ class LoginPage {
      */
     handleLoginError(error) {
         console.error('로그인 에러:', error);
-        alert(error.message || '로그인 중 오류가 발생했습니다.');
+                    if (window.toast) {
+                        window.toast.error(error.message || '로그인 중 오류가 발생했습니다.');
+                    }
 
         // 비밀번호 필드 초기화
         this.passwordInput.value = '';
@@ -300,8 +378,8 @@ class LoginPage {
      * 회원가입 링크 클릭 처리
      */
     handleSignupClick(e) {
-        // 링크가 직접 이동하므로 별도 처리 불필요
-        // 필요시 여기서 추가 로직 처리 가능
+        // 기본 동작 허용 (페이지 이동)
+        // preventDefault를 호출하지 않아서 링크가 정상 작동함
     }
 
     /**
@@ -309,7 +387,9 @@ class LoginPage {
      */
     handleFindAccountClick(e) {
         e.preventDefault();
-        alert('아이디/비밀번호 찾기 페이지로 이동합니다.');
+        if (window.toast) {
+            window.toast.info('아이디/비밀번호 찾기 페이지로 이동합니다.');
+        }
         // 실제로는 계정 찾기 페이지로 이동
         // window.location.href = './find-account.html';
     }
@@ -336,8 +416,13 @@ class LoginPage {
     }
 }
 
-// DOM 로드 완료 후 초기화
-document.addEventListener('DOMContentLoaded', () => {
+// DOM 로드 완료 후 초기화 (즉시 실행도 지원)
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        new LoginPage();
+    });
+} else {
+    // DOM이 이미 로드된 경우 즉시 실행
     new LoginPage();
-});
+}
 

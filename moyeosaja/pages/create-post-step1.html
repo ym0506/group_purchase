@@ -13,15 +13,11 @@
 
 <body>
     <div class="container create-post-container">
-        <!-- 상태 표시줄 -->
-        <div class="status-bar">
-            <div class="status-time">9:41</div>
-        </div>
-
         <!-- 공구글 작성 콘텐츠 -->
         <div class="create-post-content">
             <!-- 타이틀 -->
             <h1 class="create-post-title">공구글 작성하기</h1>
+            <p class="step-help-text">대표 사진과 기본 정보를 입력해 공구를 소개해주세요.</p>
 
             <!-- 단계 표시 -->
             <div class="step-indicators">
@@ -31,65 +27,102 @@
                 <div class="step-indicator">4</div>
             </div>
 
-            <!-- 이미지 업로드 -->
-            <div class="image-upload-section">
-                <div class="image-upload-box">
-                    <div class="upload-icon">+</div>
-                    <p class="upload-text">이미지 업로드</p>
-                </div>
-            </div>
-
             <!-- 작성 폼 -->
             <form class="create-form">
-                <h2 class="form-title">공구를 위한 글을 작성해주세요 ✏️</h2>
-
-                <!-- 공구명 -->
-                <div class="form-row">
-                    <label class="form-label">공구 명</label>
-                    <input type="text" class="form-input" placeholder="소금빵" value="소금빵">
-                    <button type="button" class="add-btn">+</button>
-                </div>
-
-                <!-- 수량 -->
-                <div class="form-row">
-                    <label class="form-label">수량</label>
-                    <input type="number" class="form-input" value="5">
-                    <button type="button" class="add-btn">+</button>
-                </div>
-
-                <!-- 내용 -->
-                <div class="form-group full">
-                    <label class="form-label">내용</label>
-                    <div class="content-header">
-                        <button type="button" class="ai-summary-btn">ai 요약</button>
-                        <div class="toggle-switch">
-                            <div class="toggle-track"></div>
-                            <div class="toggle-thumb"></div>
+                <!-- 이미지 업로드 -->
+                <section class="form-section">
+                    <div class="section-header">
+                        <p class="section-eyebrow">STEP 01</p>
+                        <h2 class="section-title">대표 이미지를 등록해주세요</h2>
+                        <p class="section-description">공구 품목이 한눈에 들어오도록 가장 잘 나온 이미지를 사용하면 참여율이 높아져요.</p>
+                    </div>
+                    <div class="form-card image-card">
+                        <div class="image-upload-section">
+                            <div class="image-upload-box">
+                                <div class="upload-icon">+</div>
+                                <p class="upload-text">이미지 업로드</p>
+                            </div>
+                        </div>
+                        <div class="upload-guides">
+                            <span class="guide-chip">정사각형 (1:1) 권장</span>
+                            <span class="guide-chip">최대 5MB</span>
+                            <span class="guide-chip">JPG · PNG 지원</span>
                         </div>
                     </div>
-                    <textarea class="form-textarea" placeholder="공구 내용을 입력해주세요">소금빵 실수로 너무 많이 사버렸는데 같이 나눠먹어요</textarea>
-                </div>
+                </section>
 
-                <!-- 인원 선택 -->
-                <div class="form-group">
-                    <h3 class="form-subtitle">공구를 진행할 인원을 정해주세요 👫</h3>
-                    <div class="people-selector">
-                        <input type="number" class="people-input" value="4">
-                        <span class="people-text">명과 구매하고 싶어요</span>
+                <!-- 기본 정보 -->
+                <section class="form-section">
+                    <div class="section-header">
+                        <p class="section-eyebrow">STEP 02</p>
+                        <h2 class="section-title">공구 기본 정보</h2>
+                        <p class="section-description">어떤 상품인지, 몇 개가 필요한지 명확하게 적어주세요.</p>
                     </div>
-                </div>
+                    <div class="form-card">
+                        <div class="form-row">
+                            <label class="form-label">공구 명</label>
+                            <input type="text" class="form-input" placeholder="소금빵" value="소금빵">
+                            <button type="button" class="add-btn" aria-label="공구명 템플릿 추가">+</button>
+                        </div>
+                        <p class="helper-text">검색을 위해 브랜드명/상품명을 함께 적으면 좋아요.</p>
 
-                <!-- 가격 정보 (구분선 제거) -->
-                <div class="price-section">
-                    <div class="price-row">
-                        <span class="price-label">총 금액</span>
-                        <input type="text" class="price-input" value="75,000원">
+                        <div class="form-row">
+                            <label class="form-label">수량</label>
+                            <input type="number" class="form-input" value="5">
+                            <button type="button" class="add-btn" aria-label="수량 옵션 추가">+</button>
+                        </div>
+                        <p class="helper-text">현재 확보된 수량 또는 목표 수량을 입력해주세요.</p>
                     </div>
-                    <div class="price-row">
-                        <span class="price-label">N/1 금액</span>
-                        <span class="price-value">1인당 15,000원</span>
+                </section>
+
+                <!-- 상세 설명 -->
+                <section class="form-section">
+                    <div class="section-header">
+                        <p class="section-eyebrow">STEP 03</p>
+                        <h2 class="section-title">상세 설명</h2>
+                        <p class="section-description">어떤 이유로 공구를 열었는지, 전달 방식 등을 자유롭게 적어주세요.</p>
                     </div>
-                </div>
+                    <div class="form-card">
+                        <div class="form-group full">
+                            <div class="content-header">
+                                <button type="button" class="ai-summary-btn">AI 요약 요청</button>
+                                <div class="toggle-switch" aria-label="AI 요약 자동 적용 토글">
+                                    <div class="toggle-track"></div>
+                                    <div class="toggle-thumb"></div>
+                                </div>
+                            </div>
+                            <textarea class="form-textarea" placeholder="공구 내용을 입력해주세요">소금빵 실수로 너무 많이 사버렸는데 같이 나눠먹어요</textarea>
+                        </div>
+                        <div class="form-group">
+                            <h3 class="form-subtitle">공구를 진행할 인원을 정해주세요 👫</h3>
+                            <div class="people-selector">
+                                <input type="number" class="people-input" value="4">
+                                <span class="people-text">명과 함께 구매하고 싶어요</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 가격 정보 -->
+                <section class="form-section">
+                    <div class="section-header">
+                        <p class="section-eyebrow">STEP 04</p>
+                        <h2 class="section-title">가격 정보를 입력해주세요</h2>
+                        <p class="section-description">총 금액과 1인당 부담 금액을 미리 계산해둘수록 신뢰도가 올라갑니다.</p>
+                    </div>
+                    <div class="form-card">
+                        <div class="price-section">
+                            <div class="price-row">
+                                <span class="price-label">총 금액</span>
+                                <input type="text" class="price-input" value="75,000원">
+                            </div>
+                            <div class="price-row">
+                                <span class="price-label">N/1 금액</span>
+                                <span class="price-value">1인당 15,000원</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
                 <!-- 다음 버튼 -->
                 <button type="button" class="btn-next">다음</button>
@@ -152,8 +185,11 @@
         </nav>
     </div>
 
+    <script src="../js/toast.js"></script>
+    <script src="../js/loading.js"></script>
+    <script src="../js/form-enhancements.js"></script>
+    <script src="../js/api.js"></script>
     <script src="../js/nav.js"></script>
-    <script type="module" src="../js/app.js"></script>
     <script src="../js/create-post.js"></script>
 </body>
 

@@ -84,22 +84,86 @@ function initializeFilterTabs() {
  * 공구 목록 필터링
  * @param {string} status - 필터 상태 (all, waiting, success, closed)
  */
-function filterPosts(status) {
+async function filterPosts(status) {
     console.log('필터링:', status);
 
-    // 실제 구현: 서버에서 해당 상태의 공구 목록 가져오기
-    // 여기서는 시뮬레이션
-    if (status === 'all') {
-        console.log('전체 공구 표시');
-    } else if (status === 'waiting') {
-        console.log('매칭 대기 중 공구 표시');
-    } else if (status === 'success') {
-        console.log('매칭 성공 공구 표시');
-    } else if (status === 'closed') {
-        console.log('종료된 공구 표시');
+    try {
+        // 로딩 상태 표시
+        const itemsContainer = document.querySelector('.items-list, .post-list, .matching-list');
+        if (itemsContainer) {
+            itemsContainer.innerHTML = '<div class="loading">로딩 중...</div>';
+        }
+
+        // API 호출: status에 따라 매칭 목록 가져오기
+        let response;
+        if (status === 'all') {
+            response = await window.apiService.getMyMatching();
+        } else {
+            response = await window.apiService.getMyMatching({ status: status });
+        }
+
+        console.log('필터링 결과:', response);
+
+        // UI 업데이트
+        if (itemsContainer && response.matching) {
+            renderMatchingList(response.matching, itemsContainer);
+        } else {
+            if (itemsContainer) {
+                itemsContainer.innerHTML = '<div class="empty-message">해당 상태의 공구가 없습니다.</div>';
+            }
+        }
+    } catch (error) {
+        console.error('필터링 에러:', error);
+        const itemsContainer = document.querySelector('.items-list, .post-list, .matching-list');
+        if (itemsContainer) {
+            itemsContainer.innerHTML = '<div class="error-message">공구 목록을 불러올 수 없습니다.</div>';
+        }
+    }
+}
+
+/**
+ * 매칭 목록 렌더링
+ * @param {Array} matchingList - 매칭 목록
+ * @param {HTMLElement} container - 컨테이너 요소
+ */
+function renderMatchingList(matchingList, container) {
+    if (!matchingList || matchingList.length === 0) {
+        container.innerHTML = '<div class="empty-message">해당 상태의 공구가 없습니다.</div>';
+        return;
     }
 
-    // TODO: 필터링된 결과를 UI에 업데이트
+    container.innerHTML = matchingList.map(matching => {
+        const statusText = {
+            'waiting': '대기 중',
+            'success': '매칭 성공',
+            'closed': '종료'
+        }[matching.status] || '알 수 없음';
+
+        const pickupDate = matching.pickup_datetime 
+            ? new Date(matching.pickup_datetime).toLocaleDateString('ko-KR')
+            : '날짜 정보 없음';
+
+        return `
+            <div class="matching-item" data-post-id="${matching.post_id}">
+                <div class="item-content">
+                    <h3 class="item-title">${matching.title || '제목 없음'}</h3>
+                    <p class="item-description">
+                        ${pickupDate} | 참여자 ${matching.current_participants || 0}/${matching.target_participants || 0}명
+                    </p>
+                </div>
+                <div class="item-status">${statusText}</div>
+            </div>
+        `;
+    }).join('');
+
+    // 클릭 이벤트 추가
+    container.querySelectorAll('.matching-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const postId = item.getAttribute('data-post-id');
+            sessionStorage.setItem('selectedPostId', postId);
+            window.location.href = './matching.html';
+        });
+    });
 }
 
 /**
@@ -192,35 +256,120 @@ async function loadProfileInfo() {
     try {
         // 로그인 여부 확인
         const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
-        const userId = localStorage.getItem('userId');
+        const accessToken = localStorage.getItem('access_token');
 
-        if (!isLoggedIn || !userId) {
+        if (!isLoggedIn || !accessToken) {
             // 로그인되지 않은 경우 - 로그인 페이지로 리다이렉트 또는 기본 UI 표시
             console.log('로그인되지 않음');
             // window.location.href = './login.html';
             return;
         }
 
-        // 프로필 정보 가져오기
-        // const userProfile = await window.apiService.getUserProfile(userId);
-
-        // 프로필 정보 시뮬레이션
-        const userProfile = {
-            name: '윤영',
-            rating: 5.0,
-            avatar: null,
-            stats: {
-                total: 26,
-                waiting: 5,
-                success: 8,
-                closed: 13
+        // 프로필 정보 가져오기 (실제 API 호출)
+        console.log('📤 프로필 정보 로드 시작...');
+        let userInfo;
+        try {
+            userInfo = await window.apiService.getMyInfo();
+            console.log('✅ 프로필 정보 로드 성공:', userInfo);
+        } catch (error) {
+            // 500 에러 시 localStorage에서 기본 정보 사용 (fallback)
+            if (error.message && error.message.includes('500')) {
+                console.warn('⚠️ getMyInfo 500 에러 - localStorage 데이터 사용 (fallback)');
+                const userId = localStorage.getItem('userId') || localStorage.getItem('user_id');
+                userInfo = {
+                    user_id: userId ? parseInt(userId) : null,
+                    nickname: localStorage.getItem('userNickname') || '사용자',
+                    email: localStorage.getItem('userEmail') || '',
+                    profile_image_url: null
+                };
+                if (window.toast) {
+                    window.toast.warning('프로필 정보를 불러올 수 없습니다. 기본 정보를 표시합니다.');
+                }
+            } else {
+                throw error; // 다른 에러는 재발생
             }
+        }
+        
+        // 매칭 통계 가져오기 (500 에러 발생 시에도 통계는 시도)
+        console.log('📤 매칭 통계 로드 시작...');
+        let stats = { all: 0, waiting: 0, success: 0, closed: 0 };
+        try {
+            stats = await loadMatchingStats();
+            console.log('✅ 매칭 통계 로드 성공:', stats);
+        } catch (error) {
+            console.warn('⚠️ 매칭 통계 로드 실패 - 기본값 사용:', error);
+            // 통계 로드 실패 시 기본값 유지
+        }
+
+        // 프로필 정보 구성
+        const userProfile = {
+            name: userInfo.nickname || '사용자',
+            rating: 5.0, // 리뷰 API에서 가져올 수 있으면 추가
+            avatar: userInfo.profile_image_url || null,
+            stats: stats
         };
 
         // UI 업데이트
         updateProfileUI(userProfile);
     } catch (error) {
-        console.error('프로필 정보 불러오기 에러:', error);
+        console.error('❌ 프로필 정보 불러오기 에러:', error);
+        console.error('❌ 에러 상세:', {
+            message: error.message,
+            stack: error.stack
+        });
+        
+        // 에러 발생 시 사용자에게 명확한 메시지 표시
+        if (error.message && (error.message.includes('인증') || error.message.includes('401'))) {
+            // 인증 에러 시 로그인 페이지로 이동
+            if (window.toast) {
+                window.toast.error('로그인이 필요합니다.');
+            }
+            setTimeout(() => {
+                window.location.href = './login.html';
+            }, 1500);
+        } else if (error.message && error.message.includes('500')) {
+            // 서버 오류인 경우
+            if (window.toast) {
+                window.toast.error('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+            }
+            // 기본 UI는 유지
+        } else {
+            // 기타 오류
+            if (window.toast) {
+                window.toast.error('프로필 정보를 불러오는데 실패했습니다: ' + error.message);
+            }
+        }
+    }
+}
+
+/**
+ * 매칭 통계 불러오기
+ */
+async function loadMatchingStats() {
+    try {
+        // 전체, 대기 중, 성공, 종료 각각 가져오기
+        const [allMatching, waitingMatching, successMatching, closedMatching] = await Promise.all([
+            window.apiService.getMyMatching(), // status 파라미터 없이 전체
+            window.apiService.getMyMatching({ status: 'waiting' }),
+            window.apiService.getMyMatching({ status: 'success' }),
+            window.apiService.getMyMatching({ status: 'closed' })
+        ]);
+
+        return {
+            total: allMatching.matching?.length || 0,
+            waiting: waitingMatching.matching?.length || 0,
+            success: successMatching.matching?.length || 0,
+            closed: closedMatching.matching?.length || 0
+        };
+    } catch (error) {
+        console.error('매칭 통계 로드 에러:', error);
+        // 에러 발생 시 기본값 반환
+        return {
+            total: 0,
+            waiting: 0,
+            success: 0,
+            closed: 0
+        };
     }
 }
 
@@ -263,11 +412,19 @@ function updateProfileUI(profile) {
 
     // 아바타 업데이트 (실제 이미지가 있는 경우)
     if (profile.avatar) {
-        const avatarElement = document.querySelector('.profile-avatar-large');
+        const avatarElement = document.querySelector('.profile-avatar-large, .profile-avatar');
         if (avatarElement) {
             avatarElement.style.backgroundImage = `url('${profile.avatar}')`;
             avatarElement.style.backgroundSize = 'cover';
             avatarElement.style.backgroundPosition = 'center';
+            avatarElement.style.backgroundColor = 'transparent';
+        }
+    } else {
+        // 아바타가 없으면 기본 스타일 유지
+        const avatarElement = document.querySelector('.profile-avatar-large, .profile-avatar');
+        if (avatarElement) {
+            avatarElement.style.backgroundImage = 'none';
+            avatarElement.style.backgroundColor = '';
         }
     }
 }

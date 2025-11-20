@@ -42,12 +42,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
+                // 이미지 URL 가져오기 (sessionStorage에서)
+                const imageUrl = formData.imageUrl || formData.image || null;
+
                 // 백엔드 API 호출: 게시글 작성
                 const postData = {
                     post_type: formData.category || 'group',
-                    title: formData.title || '소금빵',
-                    description: formData.description || '소금빵 실수로 너무 많이 사버렸는데 같이 나눠먹어요',
-                    main_image_url: formData.imageUrl || 'https://example.com/default-image.jpg',
+                    title: formData.name || formData.title || '소금빵',
+                    description: formData.content || formData.description || '소금빵 실수로 너무 많이 사버렸는데 같이 나눠먹어요',
+                    main_image_url: imageUrl || 'https://example.com/default-image.jpg',
                     total_price: parseInt(formData.totalPrice) || 30000,
                     target_participants: parseInt(formData.people) || 4,
                     per_person_price: Math.floor((parseInt(formData.totalPrice) || 30000) / (parseInt(formData.people) || 4)),
@@ -71,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 sessionStorage.setItem('createdPostId', response.post_id);
 
                 // 완료 페이지로 이동
-                window.location.href = 'create-post-complete.html';
+                window.location.href = './create-post-complete.html';
             } catch (error) {
                 console.error('공구글 작성 실패:', error);
                 alert(error.message || '공구글 작성에 실패했습니다.');

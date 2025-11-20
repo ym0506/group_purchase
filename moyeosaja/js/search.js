@@ -111,39 +111,84 @@ function initializeSearchHistory() {
 }
 
 /**
- * 검색 실행
+ * 검색 실행 (백엔드 API 연동)
  */
-function performSearch(query) {
+async function performSearch(query) {
     console.log('검색 실행:', query);
 
     // 검색 기록 숨기기, 검색 결과 표시
     const searchHistory = document.getElementById('searchHistory');
     const searchResults = document.getElementById('searchResults');
+    const itemsList = document.querySelector('.search-results .items-list');
 
     if (searchHistory) searchHistory.style.display = 'none';
     if (searchResults) searchResults.style.display = 'block';
 
-    // 검색 결과 필터링
-    const filteredItems = sampleItems.filter(item =>
-        item.title.includes(query) || item.description.includes(query)
-    );
+    // 로딩 상태 표시
+    if (itemsList) {
+        itemsList.innerHTML = '<div class="loading-results">검색 중...</div>';
+    }
 
-    // 검색 결과 렌더링
-    renderSearchResults(filteredItems);
+    try {
+        // 위치 정보 가져오기
+        const latitude = localStorage.getItem('latitude') || 37.5665;
+        const longitude = localStorage.getItem('longitude') || 126.9780;
 
-    // 검색 기록에 추가 (실제로는 localStorage나 API에 저장)
-    addToSearchHistory(query);
+        // 백엔드 API 호출 (검색어 포함)
+        // query 파라미터가 백엔드에서 지원되는지 확인 필요
+        const response = await window.apiService.getPosts({
+            query: query, // 검색어 (백엔드 지원 시)
+            search: query, // 또는 search 파라미터
+            latitude: parseFloat(latitude),
+            longitude: parseFloat(longitude),
+            distance: 50, // 검색 시 거리는 넓게
+            page: 1,
+            limit: 20
+        });
+
+        console.log('검색 결과:', response);
+
+        // 검색 결과 렌더링
+        if (response.posts && response.posts.length > 0) {
+            renderSearchResults(response.posts);
+            // 검색 기록에 추가
+            addToSearchHistory(query);
+        } else {
+            // 검색 결과가 없으면 빈 결과 표시
+            if (itemsList) {
+                itemsList.innerHTML = '<div class="empty-results">검색 결과가 없습니다.</div>';
+            }
+            if (window.toast) {
+                window.toast.info('검색 결과가 없습니다.');
+            }
+        }
+    } catch (error) {
+        console.error('❌ 검색 오류:', error);
+        
+        // 에러 발생 시 사용자에게 명확한 메시지 표시
+        if (itemsList) {
+            itemsList.innerHTML = '<div class="error-results">검색 중 오류가 발생했습니다.<br>잠시 후 다시 시도해주세요.</div>';
+        }
+        
+        if (window.toast) {
+            window.toast.error('검색 중 오류가 발생했습니다: ' + error.message);
+        }
+        
+        // 샘플 데이터 폴백 제거 - 실제 API만 사용
+        console.warn('⚠️ 검색 API 호출 실패 - 샘플 데이터 폴백 제거됨');
+    }
 }
 
 /**
  * 검색 결과 렌더링
+ * @param {Array} items - 검색 결과 배열 (API 응답 또는 샘플 데이터)
  */
 function renderSearchResults(items) {
     const itemsList = document.querySelector('.search-results .items-list');
 
     if (!itemsList) return;
 
-    if (items.length === 0) {
+    if (!items || items.length === 0) {
         itemsList.innerHTML = `
             <div class="empty-results">
                 <p class="empty-results-text">검색 결과가 없습니다.</p>
@@ -152,16 +197,29 @@ function renderSearchResults(items) {
         return;
     }
 
-    itemsList.innerHTML = items.map((item, index) => `
-        <div class="item" data-item-id="${item.id}" data-product="${item.product}">
-            <div class="item-avatar"></div>
-            <div class="item-content">
-                <div class="item-title">${item.title}</div>
-                <div class="item-description">${item.description}</div>
+    // API 응답인지 샘플 데이터인지 확인
+    const isApiResponse = items[0].post_id !== undefined;
+
+    itemsList.innerHTML = items.map((item) => {
+        const itemId = isApiResponse ? item.post_id : item.id;
+        const title = item.title || item.name || '';
+        const description = item.description || item.pickup_location_text || '';
+        const count = isApiResponse 
+            ? `${item.current_participants || 0}/${item.target_participants || 0}` 
+            : item.count || '0/0';
+        const product = item.title || item.product || '';
+
+        return `
+            <div class="item" data-item-id="${itemId}" data-product="${product}">
+                <div class="item-avatar" style="${item.main_image_url || item.author?.profile_image_url ? `background-image: url('${item.main_image_url || item.author.profile_image_url}'); background-size: cover;` : ''}"></div>
+                <div class="item-content">
+                    <div class="item-title">${title}</div>
+                    <div class="item-description">${description}</div>
+                </div>
+                <div class="item-count">${count}</div>
             </div>
-            <div class="item-count">${item.count}</div>
-        </div>
-    `).join('');
+        `;
+    }).join('');
 
     // 아이템 클릭 이벤트 추가
     initItemClicks();
@@ -179,6 +237,7 @@ function initItemClicks() {
             const itemProduct = this.getAttribute('data-product');
 
             // 선택된 아이템 정보를 sessionStorage에 저장
+            sessionStorage.setItem('selectedPostId', itemId); // post_id로 통일
             sessionStorage.setItem('selectedItemId', itemId);
             sessionStorage.setItem('selectedItemTitle', itemTitle);
             sessionStorage.setItem('selectedItemProduct', itemProduct);

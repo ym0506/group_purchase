@@ -13,15 +13,11 @@
 
 <body>
     <div class="container create-post-container">
-        <!-- 상태 표시줄 -->
-        <div class="status-bar">
-            <div class="status-time">9:41</div>
-        </div>
-
         <!-- 공구글 작성 콘텐츠 -->
         <div class="create-post-content">
             <!-- 타이틀 -->
             <h1 class="create-post-title">공구글 작성하기</h1>
+            <p class="step-help-text">카테고리와 태그를 명확히 하면 검색에 잘 노출되고 참여율이 높아져요.</p>
 
             <!-- 단계 표시 -->
             <div class="step-indicators">
@@ -32,76 +28,96 @@
             </div>
 
             <!-- 상품 카드 미리보기 -->
-            <div class="product-preview-card">
-                <div class="preview-image">
-                    <img src="../assets/images/categories/공동배달.png" alt="소금빵"
-                        style="width: 100%; height: 100%; object-fit: cover;">
+            <section class="form-section">
+                <div class="section-header">
+                    <p class="section-eyebrow">PREVIEW</p>
+                    <h2 class="section-title">나의 공구 미리보기</h2>
+                    <p class="section-description">카테고리나 태그를 수정할 때 카드가 어떻게 변하는지 살펴보세요.</p>
                 </div>
-                <div class="preview-info">
-                    <div class="preview-author">
-                        <div class="author-avatar"></div>
-                        <span class="author-name">최지인 ></span>
-                    </div>
-                    <h3 class="preview-title">소금빵</h3>
-                    <p class="preview-description">소금빵 실수로 너무 많이 사버렸는데 같이 나눠먹어요...</p>
-                </div>
-            </div>
-
-            <!-- 3단계 폼 -->
-            <div class="step-section">
-                <h2 class="section-title">어떤 방식의 공구인가요?</h2>
-                <p class="section-subtitle">카테고리를 선택해주세요</p>
-
-                <form class="create-post-form">
-                    <!-- 카테고리 선택 -->
-                    <div class="category-buttons">
-                        <button type="button" class="btn-category" data-category="공동배달">
-                            <span class="category-icon">🛍️</span>
-                            <span class="category-text">공동배달</span>
-                        </button>
-                        <button type="button" class="btn-category active" data-category="묶음구매">
-                            <span class="category-icon">😀</span>
-                            <span class="category-text">묶음구매</span>
-                        </button>
-                        <button type="button" class="btn-category active" data-category="번개공구">
-                            <span class="category-icon">😀</span>
-                            <span class="category-text">번개공구</span>
-                        </button>
-                        <button type="button" class="btn-category" data-category="정기공구">
-                            <span class="category-icon">🗓️</span>
-                            <span class="category-text">정기공구</span>
-                        </button>
-                    </div>
-
-                    <!-- 태그 입력 -->
-                    <div class="tag-section">
-                        <h3 class="section-title">태그를 추가해주세요!</h3>
-                        <p class="section-subtitle">공구를 쉽고 빠르게 찾을 수 있게 도와줘요</p>
-
-                        <div class="tag-list">
-                            <div class="tag-item">
-                                #빵
-                                <button type="button" class="tag-remove">×</button>
+                <div class="form-card">
+                    <div class="product-preview-card">
+                        <div class="preview-image">
+                            <img src="../assets/images/categories/공동배달.png" alt="소금빵"
+                                style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div class="preview-info">
+                            <div class="preview-author">
+                                <div class="author-avatar"></div>
+                                <span class="author-name">최지인 ></span>
                             </div>
-                            <div class="tag-item">
-                                #소금빵
-                                <button type="button" class="tag-remove">×</button>
-                            </div>
-                            <div class="tag-item">
-                                음식
-                                <button type="button" class="tag-remove">×</button>
-                            </div>
-                            <div class="tag-item">
-                                디저트
-                                <button type="button" class="tag-remove">×</button>
-                            </div>
-                            <button type="button" class="btn-add-tag-circle">+</button>
+                            <h3 class="preview-title">소금빵</h3>
+                            <p class="preview-description">소금빵 실수로 너무 많이 사버렸는데 같이 나눠먹어요...</p>
                         </div>
                     </div>
+                </div>
+            </section>
 
-                    <button type="button" class="btn-next">다음</button>
-                </form>
-            </div>
+            <!-- 3단계 폼 -->
+            <section class="form-section">
+                <div class="section-header">
+                    <p class="section-eyebrow">STEP 03</p>
+                    <h2 class="section-title">어떤 방식의 공구인가요?</h2>
+                    <p class="section-description">공구 유형을 선택하면 추천 태그와 안내 문구가 자동으로 제안돼요.</p>
+                </div>
+
+                <div class="form-card">
+                    <div class="chip-group category-chip-group">
+                        <button type="button" class="chip">
+                            <span class="category-icon">🛍️</span> 공동배달
+                        </button>
+                        <button type="button" class="chip active">
+                            <span class="category-icon">📦</span> 묶음구매
+                        </button>
+                        <button type="button" class="chip">
+                            <span class="category-icon">⚡</span> 번개공구
+                        </button>
+                        <button type="button" class="chip">
+                            <span class="category-icon">🗓️</span> 정기공구
+                        </button>
+                    </div>
+
+                    <div class="info-banner">
+                        <span class="info-icon">💡</span>
+                        <p>카테고리는 언제든 변경할 수 있어요. 현재 공구 목적에 가장 가까운 유형을 선택해 주세요.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="form-section">
+                <div class="section-header">
+                    <p class="section-eyebrow">TAGS</p>
+                    <h2 class="section-title">태그로 공구를 더 잘 보이게 해보세요</h2>
+                    <p class="section-description">최소 2개 이상 태그를 지정하면 검색 노출 확률이 높아집니다.</p>
+                </div>
+
+                <div class="form-card">
+                    <div class="tag-input-row">
+                        <div class="input-stack full">
+                            <label class="input-label" for="tag-input">태그 입력</label>
+                            <input type="text" id="tag-input" class="form-input" placeholder="#ex. 소금빵">
+                        </div>
+                        <button type="button" class="location-button">추가</button>
+                    </div>
+
+                    <div class="tag-pill-list">
+                        <span class="tag-pill">#빵<button type="button" class="tag-remove" aria-label="태그 삭제">×</button></span>
+                        <span class="tag-pill">#소금빵<button type="button" class="tag-remove" aria-label="태그 삭제">×</button></span>
+                        <span class="tag-pill">#디저트<button type="button" class="tag-remove" aria-label="태그 삭제">×</button></span>
+                    </div>
+
+                    <div class="recommended-tags">
+                        <p class="recommended-title">추천 태그</p>
+                        <div class="chip-group">
+                            <button type="button" class="chip">#빵집투어</button>
+                            <button type="button" class="chip">#소량나눔</button>
+                            <button type="button" class="chip">#인기디저트</button>
+                            <button type="button" class="chip">#캠퍼스</button>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" class="btn-next">다음</button>
+            </section>
         </div>
 
         <!-- 하단 네비게이션 -->
@@ -160,9 +176,11 @@
         </nav>
     </div>
 
+    <script src="../js/toast.js"></script>
+    <script src="../js/loading.js"></script>
+    <script src="../js/form-enhancements.js"></script>
     <script src="../js/api.js"></script>
     <script src="../js/nav.js"></script>
-    <script type="module" src="../js/app.js"></script>
     <script src="../js/create-post-step3.js"></script>
 </body>
 

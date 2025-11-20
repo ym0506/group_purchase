@@ -4,36 +4,11 @@
     background: #f1f1f1;
     min-height: 100vh;
     padding: 0;
-}
-
-/* 상태 표시줄 */
-.notifications-container .status-bar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 8px 0;
-    height: 36px;
-    position: absolute;
-    top: 16px;
-    left: 50%;
-    transform: translateX(-50%);
-    max-width: 125px;
-    width: auto;
-    background-color: #dadada;
-    border: 0.25px solid rgba(0, 0, 0, 0.25);
-    border-radius: 48px;
-    z-index: 10;
-}
-
-.notifications-container .status-time {
-    font-size: 13px;
-    font-weight: 600;
-    color: #000000;
-    letter-spacing: 0;
+    padding-bottom: 92px;
 }
 
 .notifications-content {
-    padding: 80px 0 120px;
+    padding: 60px 0 0;
 }
 
 .notifications-title {

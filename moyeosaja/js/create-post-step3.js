@@ -77,8 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 tags: tags
             };
             sessionStorage.setItem('createPostFormData', JSON.stringify(formData));
-            alert('다음 단계로 이동합니다.');
-            window.location.href = 'create-post-step4.html';
+            window.location.href = './create-post-step4.html';
         });
     }
 });

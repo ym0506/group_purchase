@@ -1,0 +1,784 @@
+/**
+ * UI/UX 개선 스타일
+ * 디자인은 유지하면서 사용자 경험을 향상시키는 스타일
+ */
+
+/* ============================================
+   1. 버튼 인터랙션 개선
+   ============================================ */
+
+/* 모든 버튼에 일관된 클릭 피드백 */
+.btn,
+button:not([disabled]) {
+    position: relative;
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    min-height: 44px; /* 최소 터치 영역 */
+    min-width: 44px;
+}
+
+/* 버튼 클릭 시 리플 효과 */
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.4s, height 0.4s;
+    pointer-events: none;
+}
+
+.btn:active::before {
+    width: 300px;
+    height: 300px;
+}
+
+/* 버튼 active 상태 개선 */
+.btn:active {
+    transform: translateY(0) scale(0.98);
+    transition: transform 0.1s ease;
+}
+
+.btn-primary:active {
+    background-color: #1a1a1a;
+}
+
+/* 버튼 disabled 상태 */
+.btn:disabled,
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* ============================================
+   2. 카드 및 아이템 인터랙션 개선
+   ============================================ */
+
+/* 카테고리 카드 클릭 피드백 */
+.category-card {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    will-change: transform;
+}
+
+.category-card:active {
+    transform: translateY(-1px) scale(0.98);
+    transition: transform 0.1s ease;
+}
+
+/* 리스트 아이템 인터랙션 */
+.item,
+.category-item,
+.my-post-item,
+.history-item,
+.review-item {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    min-height: 44px; /* 최소 터치 영역 */
+}
+
+.item:hover,
+.category-item:hover,
+.my-post-item:hover,
+.history-item:hover,
+.review-item:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+    transform: translateX(4px);
+}
+
+.item:active,
+.category-item:active,
+.my-post-item:active,
+.history-item:active,
+.review-item:active {
+    transform: translateX(2px) scale(0.99);
+    background-color: rgba(0, 0, 0, 0.04);
+}
+
+/* 리스트 아이템 등장 애니메이션 */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.item,
+.category-item,
+.my-post-item,
+.history-item {
+    animation: slideInUp 0.3s ease-out backwards;
+}
+
+.item:nth-child(1) { animation-delay: 0.05s; }
+.item:nth-child(2) { animation-delay: 0.1s; }
+.item:nth-child(3) { animation-delay: 0.15s; }
+.item:nth-child(4) { animation-delay: 0.2s; }
+.item:nth-child(5) { animation-delay: 0.25s; }
+
+/* ============================================
+   3. 입력 필드 UX 개선
+   ============================================ */
+
+/* 모든 입력 필드 개선 */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="number"],
+textarea,
+select {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    -webkit-tap-highlight-color: transparent;
+    min-height: 44px; /* 최소 터치 영역 */
+}
+
+/* 포커스 상태 개선 */
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: #297eff;
+    box-shadow: 0 0 0 3px rgba(41, 126, 255, 0.1);
+    transform: translateY(-1px);
+}
+
+/* 에러 상태 개선 */
+input.error,
+textarea.error,
+select.error {
+    border-color: #ff5758;
+    animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+}
+
+/* 입력 필드 placeholder 애니메이션 */
+input::placeholder,
+textarea::placeholder {
+    transition: opacity 0.2s ease;
+}
+
+input:focus::placeholder,
+textarea:focus::placeholder {
+    opacity: 0.5;
+}
+
+/* ============================================
+   4. 네비게이션 아이템 개선
+   ============================================ */
+
+.nav-item {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 44px;
+    min-height: 44px;
+    border-radius: 12px;
+    padding: 4px 8px;
+}
+
+.nav-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.nav-item:active {
+    transform: scale(0.95);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-item.active {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* ============================================
+   5. 스크롤 경험 개선
+   ============================================ */
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* 스크롤바 스타일링 (Webkit 브라우저) */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+    transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a1a1a1;
+}
+
+/* ============================================
+   6. 포커스 링 개선 (접근성)
+   ============================================ */
+
+*:focus-visible {
+    outline: 2px solid #297eff;
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+button:focus-visible,
+a:focus-visible,
+.nav-item:focus-visible {
+    outline: 2px solid #297eff;
+    outline-offset: 2px;
+}
+
+/* 포커스 링이 보기 싫을 때 (마우스 사용자) */
+*:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* ============================================
+   7. 로딩 상태 개선
+   ============================================ */
+
+/* 스켈레톤 로딩 효과 */
+@keyframes skeleton {
+    0% {
+        background-position: -200px 0;
+    }
+    100% {
+        background-position: calc(200px + 100%) 0;
+    }
+}
+
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        #f0f0f0 0px,
+        #f8f8f8 40px,
+        #f0f0f0 80px
+    );
+    background-size: 200px 100%;
+    animation: skeleton 1.5s ease-in-out infinite;
+}
+
+/* ============================================
+   8. 모달 및 오버레이 개선
+   ============================================ */
+
+.modal-overlay {
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    animation: fadeIn 0.2s ease-out;
+}
+
+.modal-content {
+    animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ============================================
+   9. 탭 및 필터 개선
+   ============================================ */
+
+.filter-tab,
+.category-filter-tab,
+.history-filter-tab {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    min-height: 44px;
+    padding: 8px 16px;
+    position: relative;
+}
+
+.filter-tab:active,
+.category-filter-tab:active,
+.history-filter-tab:active {
+    transform: scale(0.95);
+}
+
+.filter-tab.active::after,
+.category-filter-tab.active::after,
+.history-filter-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 2px;
+    background-color: #297eff;
+    border-radius: 1px;
+    animation: slideIn 0.2s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        width: 0;
+    }
+    to {
+        width: 60%;
+    }
+}
+
+/* ============================================
+   10. 이미지 로딩 개선
+   ============================================ */
+
+img {
+    transition: opacity 0.3s ease;
+}
+
+img[loading="lazy"] {
+    opacity: 0;
+}
+
+img[loading="lazy"].loaded {
+    opacity: 1;
+}
+
+/* 이미지 로딩 실패 시 */
+img:not([src]),
+img[src=""],
+img[src*="undefined"] {
+    background: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+img:not([src])::after,
+img[src=""]::after,
+img[src*="undefined"]::after {
+    content: '📷';
+    font-size: 24px;
+    opacity: 0.3;
+}
+
+/* ============================================
+   11. 체크박스 및 라디오 개선
+   ============================================ */
+
+input[type="checkbox"],
+input[type="radio"] {
+    min-width: 44px;
+    min-height: 44px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* ============================================
+   12. 링크 개선
+   ============================================ */
+
+a {
+    transition: all 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+a:hover {
+    opacity: 0.8;
+}
+
+a:active {
+    transform: scale(0.98);
+}
+
+/* ============================================
+   13. 부드러운 페이지 전환
+   ============================================ */
+
+.container {
+    will-change: transform, opacity;
+}
+
+/* 페이지 전환 시 부드러운 페이드 */
+@keyframes pageTransition {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.container {
+    animation: pageTransition 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   14. 터치 디바이스 최적화
+   ============================================ */
+
+@media (hover: none) and (pointer: coarse) {
+    /* 터치 디바이스에서 호버 효과 제거 */
+    .category-card:hover,
+    .item:hover,
+    .btn:hover {
+        transform: none;
+    }
+    
+    /* 터치 피드백 강화 */
+    .category-card:active,
+    .item:active,
+    .btn:active {
+        transform: scale(0.97);
+        opacity: 0.8;
+    }
+}
+
+/* ============================================
+   15. 성능 최적화
+   ============================================ */
+
+/* GPU 가속 활용 */
+.category-card,
+.item,
+.btn,
+.nav-item {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* 리플렉트 방지 */
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   16. 빈 상태 UI 일관성 개선
+   ============================================ */
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 24px;
+    text-align: center;
+    animation: fadeInUp 0.4s ease-out;
+}
+
+.empty-icon {
+    margin-bottom: 20px;
+    opacity: 0.6;
+    animation: float 3s ease-in-out infinite;
+}
+
+.empty-message {
+    font-size: 14px;
+    font-weight: 500;
+    color: #545454;
+    line-height: 1.5;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* ============================================
+   17. 그림자 및 보더 일관성
+   ============================================ */
+
+/* 카드 그림자 일관성 */
+.category-card,
+.item,
+.modal-content,
+.toast {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: box-shadow 0.3s ease;
+}
+
+.category-card:hover,
+.item:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* 구분선 일관성 */
+.divider {
+    height: 1px;
+    background-color: #e5e5e5;
+    margin: 0;
+    border: none;
+}
+
+/* ============================================
+   18. 폼 실시간 검증 피드백
+   ============================================ */
+
+.form-input-group {
+    position: relative;
+}
+
+.form-input-group .error-message {
+    position: absolute;
+    bottom: -18px;
+    left: 0;
+    font-size: 11px;
+    color: #ff5758;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: all 0.2s ease;
+    pointer-events: none;
+}
+
+.form-input-group.error .error-message {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.form-input-group.success .form-input::after {
+    content: '✓';
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #4CAF50;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* ============================================
+   19. 스크롤 동작 개선
+   ============================================ */
+
+/* 부드러운 스크롤 */
+.scroll-container {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+}
+
+/* 스크롤 인디케이터 (선택적) */
+.scroll-container::-webkit-scrollbar {
+    width: 4px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   20. 리스트 아이템 스태거 애니메이션
+   ============================================ */
+
+.items-list .item,
+.category-items-list .category-item,
+.reviews-list .review-item {
+    animation: slideInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+}
+
+.items-list .item:nth-child(1) { animation-delay: 0.05s; }
+.items-list .item:nth-child(2) { animation-delay: 0.1s; }
+.items-list .item:nth-child(3) { animation-delay: 0.15s; }
+.items-list .item:nth-child(4) { animation-delay: 0.2s; }
+.items-list .item:nth-child(5) { animation-delay: 0.25s; }
+.items-list .item:nth-child(6) { animation-delay: 0.3s; }
+.items-list .item:nth-child(7) { animation-delay: 0.35s; }
+.items-list .item:nth-child(8) { animation-delay: 0.4s; }
+
+/* ============================================
+   21. 버튼 로딩 상태 개선
+   ============================================ */
+
+.btn.loading {
+    position: relative;
+    color: transparent !important;
+    pointer-events: none;
+}
+
+.btn.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+.btn-primary.loading::after {
+    border-color: rgba(255, 255, 255, 0.3);
+    border-top-color: #ffffff;
+}
+
+/* ============================================
+   22. 툴팁 및 힌트 개선
+   ============================================ */
+
+.tooltip {
+    position: relative;
+}
+
+.tooltip::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-8px);
+    padding: 6px 12px;
+    background-color: #272727;
+    color: #ffffff;
+    font-size: 11px;
+    border-radius: 6px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 1000;
+}
+
+.tooltip:hover::before {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-4px);
+}
+
+/* ============================================
+   23. 체크박스 커스텀 스타일
+   ============================================ */
+
+input[type="checkbox"] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #c1c1c1;
+    border-radius: 4px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+input[type="checkbox"]:checked {
+    background-color: #297eff;
+    border-color: #297eff;
+}
+
+input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+input[type="checkbox"]:focus {
+    outline: 2px solid #297eff;
+    outline-offset: 2px;
+}
+
+/* ============================================
+   24. 선택 가능한 텍스트 개선
+   ============================================ */
+
+::selection {
+    background-color: rgba(41, 126, 255, 0.2);
+    color: #272727;
+}
+
+::-moz-selection {
+    background-color: rgba(41, 126, 255, 0.2);
+    color: #272727;
+}
+
+/* ============================================
+   25. 페이지 로딩 최적화
+   ============================================ */
+
+/* 초기 로딩 시 페이드 인 */
+body {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* ============================================
+   26. 반응형 터치 영역 확대
+   ============================================ */
+
+@media (max-width: 440px) {
+    /* 모바일에서 터치 영역 확대 */
+    .btn,
+    .nav-item,
+    .item,
+    .category-card {
+        min-height: 48px;
+    }
+    
+    /* 작은 화면에서 애니메이션 최적화 */
+    .item,
+    .category-item {
+        animation-duration: 0.2s;
+    }
+}
+

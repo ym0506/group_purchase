@@ -51,9 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
         initStep1();
     } else if (path.includes('signup-step2')) {
         initStep2();
-    } else if (path.includes('signup-step3')) {
-        initStep3();
     }
+    // signup-step3 (휴대폰 인증) 제거됨
 });
 
 // ========================================
@@ -140,19 +139,106 @@ function initStep2() {
         validatePasswordMatch();
     });
 
-    // 다음 버튼 클릭
-    nextBtn.addEventListener('click', () => {
-        if (validateAll()) {
-            SignupData.set('email', emailInput.value.trim());
-            SignupData.set('emailDomain', emailDropdown.value);
-            SignupData.set('password', passwordInput.value);
-            window.location.href = './signup-step3.html';
+    // 다음 버튼 클릭 (휴대폰 인증 단계 제거 - 바로 회원가입 완료)
+    nextBtn.addEventListener('click', async () => {
+        if (!validateAll()) {
+            return;
+        }
+
+        // 회원가입 데이터 저장
+        SignupData.set('email', emailInput.value.trim());
+        SignupData.set('emailDomain', emailDropdown.value);
+        SignupData.set('password', passwordInput.value);
+
+        // 버튼 로딩 상태
+        nextBtn.disabled = true;
+        const originalText = nextBtn.textContent;
+        nextBtn.textContent = '가입 중...';
+
+        try {
+            // 회원가입 데이터 준비
+            const nickname = SignupData.get('nickname');
+            const email = SignupData.get('email') + SignupData.get('emailDomain');
+            const password = SignupData.get('password');
+            // phone_number는 선택 사항 - 휴대폰 인증 단계 제거됨
+            const phone = null; // 또는 빈 문자열 ''
+
+            console.log('회원가입 시도:', { nickname, email, phone });
+
+            // 실제 백엔드 API 호출 (phone_number는 선택 사항)
+            const response = await window.apiService.signup(
+                email,
+                password,
+                nickname,
+                phone || '' // null이면 빈 문자열로 전송
+            );
+
+            console.log('회원가입 성공:', response);
+
+            // 성공 - 세션 데이터 삭제
+            SignupData.clear();
+
+            // 백엔드 응답 형식이 다를 수 있으므로 여러 형식 확인
+            const accessToken = response.access_token || response.accessToken || response.token;
+            const userId = response.user_id || response.userId || response.id;
+            const userEmail = response.email || email; // 요청한 이메일 사용
+            const userNickname = response.nickname || nickname; // 요청한 닉네임 사용
+
+            // 토큰 및 사용자 정보 저장
+            if (accessToken) {
+                localStorage.setItem('access_token', accessToken);
+                sessionStorage.setItem('isLoggedIn', 'true');
+                window.apiService.setToken(accessToken); // APIService에도 토큰 설정
+                console.log('✅ 토큰 저장됨');
+            } else {
+                console.warn('⚠️ 회원가입 응답에 access_token이 없습니다:', response);
+                console.warn('⚠️ 회원가입은 성공했지만 자동 로그인은 되지 않습니다. 로그인 페이지로 이동합니다.');
+            }
+            
+            // 사용자 ID 저장 (백엔드 응답에 포함된 경우)
+            if (userId) {
+                localStorage.setItem('userId', userId.toString());
+                localStorage.setItem('user_id', userId.toString()); // 호환성을 위해 둘 다 저장
+                console.log('✅ 사용자 ID 저장됨:', userId);
+            }
+            
+            // 이메일 및 닉네임 저장
+            if (userEmail) {
+                localStorage.setItem('userEmail', userEmail);
+            }
+            if (userNickname) {
+                localStorage.setItem('userNickname', userNickname);
+            }
+            
+            console.log('✅ 회원가입 완료');
+            
+            // 토큰이 없으면 로그인 페이지로, 있으면 완료 페이지로 이동
+            if (accessToken) {
+                // 회원가입 완료 페이지로 이동
+                window.location.href = './signup-complete.html';
+            } else {
+                // 토큰이 없으면 로그인 페이지로 안내
+                alert('회원가입이 완료되었습니다.\n로그인 페이지로 이동합니다.');
+                setTimeout(() => {
+                    window.location.href = './login.html';
+                }, 500);
+            }
+        } catch (error) {
+            console.error('회원가입 에러:', error);
+            if (window.toast) {
+                window.toast.error(error.message || '회원가입 중 오류가 발생했습니다.');
+            } else {
+                alert(error.message || '회원가입 중 오류가 발생했습니다.');
+            }
+            nextBtn.disabled = false;
+            nextBtn.textContent = originalText;
         }
     });
 
     // Enter 키 처리
     passwordConfirmInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter' && validateAll()) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
             nextBtn.click();
         }
     });

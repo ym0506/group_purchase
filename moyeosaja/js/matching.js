@@ -220,6 +220,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // 선택된 아이템 정보 불러오기
     loadSelectedItemInfo();
 
+    // 댓글 기능 초기화
+    initComments();
+
     // 매칭하기 버튼 (백엔드 API 연동)
     const matchBtn = document.querySelector('.btn-match');
     if (matchBtn) {
@@ -277,4 +280,227 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+/**
+ * 댓글 기능 초기화
+ */
+function initComments() {
+    const postId = sessionStorage.getItem('selectedPostId');
+    if (!postId) {
+        console.warn('게시글 ID가 없어 댓글을 불러올 수 없습니다.');
+        return;
+    }
+
+    // 댓글 목록 로드
+    loadComments(postId);
+
+    // 댓글 작성 버튼 이벤트
+    const commentSubmitBtn = document.getElementById('btnCommentSubmit');
+    const commentInput = document.getElementById('commentInput');
+
+    if (commentSubmitBtn && commentInput) {
+        commentSubmitBtn.addEventListener('click', async () => {
+            const content = commentInput.value.trim();
+            if (!content) {
+                if (window.toast) {
+                    window.toast.error('댓글을 입력해주세요.');
+                } else {
+                    alert('댓글을 입력해주세요.');
+                }
+                return;
+            }
+
+            await submitComment(postId, content);
+            commentInput.value = '';
+        });
+
+        // Enter 키로 댓글 작성 (Shift+Enter는 줄바꿈)
+        commentInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                commentSubmitBtn.click();
+            }
+        });
+    }
+}
+
+/**
+ * 댓글 목록 로드
+ * @param {string} postId - 게시글 ID
+ */
+async function loadComments(postId) {
+    try {
+        const commentsContainer = document.getElementById('commentsList');
+        if (!commentsContainer) return;
+
+        commentsContainer.innerHTML = '<div class="loading-comments">댓글을 불러오는 중...</div>';
+
+        // 백엔드 API 호출
+        const response = await window.apiService.getComments(postId);
+
+        console.log('댓글 목록 로드 성공:', response);
+
+        // 댓글 목록 렌더링
+        if (response.comments && response.comments.length > 0) {
+            renderComments(response.comments);
+        } else {
+            commentsContainer.innerHTML = '<div class="empty-comments">아직 댓글이 없습니다. 첫 댓글을 작성해보세요!</div>';
+        }
+    } catch (error) {
+        console.error('댓글 목록 로드 실패:', error);
+        const commentsContainer = document.getElementById('commentsList');
+        if (commentsContainer) {
+            commentsContainer.innerHTML = '<div class="error-comments">댓글을 불러올 수 없습니다.</div>';
+        }
+    }
+}
+
+/**
+ * 댓글 목록 렌더링
+ * @param {Array} comments - 댓글 배열
+ */
+function renderComments(comments) {
+    const commentsContainer = document.getElementById('commentsList');
+    if (!commentsContainer) return;
+
+    const currentUserId = localStorage.getItem('user_id') || sessionStorage.getItem('userId');
+
+    commentsContainer.innerHTML = comments.map(comment => {
+        const isOwnComment = comment.user_id === parseInt(currentUserId);
+        const deleteButton = isOwnComment 
+            ? `<button class="btn-delete-comment" data-comment-id="${comment.comment_id}">삭제</button>`
+            : '';
+
+        return `
+            <div class="comment-item" data-comment-id="${comment.comment_id}">
+                <div class="comment-header">
+                    <span class="comment-author">${comment.nickname || '익명'}</span>
+                    <span class="comment-date">${formatCommentDate(comment.created_at)}</span>
+                </div>
+                <div class="comment-content">${escapeHtml(comment.content)}</div>
+                ${deleteButton}
+            </div>
+        `;
+    }).join('');
+
+    // 삭제 버튼 이벤트 추가
+    commentsContainer.querySelectorAll('.btn-delete-comment').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            const commentId = btn.getAttribute('data-comment-id');
+            if (confirm('댓글을 삭제하시겠습니까?')) {
+                await deleteComment(commentId);
+            }
+        });
+    });
+}
+
+/**
+ * 댓글 작성
+ * @param {string} postId - 게시글 ID
+ * @param {string} content - 댓글 내용
+ */
+async function submitComment(postId, content) {
+    try {
+        const commentSubmitBtn = document.getElementById('btnCommentSubmit');
+        if (commentSubmitBtn) {
+            commentSubmitBtn.disabled = true;
+            commentSubmitBtn.textContent = '등록 중...';
+        }
+
+        // 백엔드 API 호출
+        const response = await window.apiService.createComment(postId, content);
+
+        console.log('댓글 작성 성공:', response);
+
+        // 댓글 목록 새로고침
+        await loadComments(postId);
+
+        if (window.toast) {
+            window.toast.success('댓글이 작성되었습니다.');
+        }
+    } catch (error) {
+        console.error('댓글 작성 실패:', error);
+        if (window.toast) {
+            window.toast.error(error.message || '댓글 작성에 실패했습니다.');
+        } else {
+            alert(error.message || '댓글 작성에 실패했습니다.');
+        }
+    } finally {
+        const commentSubmitBtn = document.getElementById('btnCommentSubmit');
+        if (commentSubmitBtn) {
+            commentSubmitBtn.disabled = false;
+            commentSubmitBtn.textContent = '등록';
+        }
+    }
+}
+
+/**
+ * 댓글 삭제
+ * @param {string} commentId - 댓글 ID
+ */
+async function deleteComment(commentId) {
+    try {
+        // 백엔드 API 호출
+        await window.apiService.deleteComment(commentId);
+
+        console.log('댓글 삭제 성공');
+
+        // 댓글 목록 새로고침
+        const postId = sessionStorage.getItem('selectedPostId');
+        if (postId) {
+            await loadComments(postId);
+        }
+
+        if (window.toast) {
+            window.toast.success('댓글이 삭제되었습니다.');
+        }
+    } catch (error) {
+        console.error('댓글 삭제 실패:', error);
+        if (window.toast) {
+            window.toast.error(error.message || '댓글 삭제에 실패했습니다.');
+        } else {
+            alert(error.message || '댓글 삭제에 실패했습니다.');
+        }
+    }
+}
+
+/**
+ * 댓글 날짜 포맷팅
+ * @param {string} dateString - 날짜 문자열
+ * @returns {string} 포맷된 날짜
+ */
+function formatCommentDate(dateString) {
+    if (!dateString) return '';
+    
+    const date = new Date(dateString);
+    const now = new Date();
+    const diff = now - date;
+    
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
+    
+    if (minutes < 1) return '방금 전';
+    if (minutes < 60) return `${minutes}분 전`;
+    if (hours < 24) return `${hours}시간 전`;
+    if (days < 7) return `${days}일 전`;
+    
+    return date.toLocaleDateString('ko-KR', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+}
+
+/**
+ * HTML 이스케이프 (XSS 방지)
+ * @param {string} text - 텍스트
+ * @returns {string} 이스케이프된 텍스트
+ */
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
 

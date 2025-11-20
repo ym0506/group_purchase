@@ -13,11 +13,6 @@
 
 <body>
     <div class="container matching-container">
-        <!-- 상태 표시줄 -->
-        <div class="status-bar">
-            <div class="status-time">9:41</div>
-        </div>
-
         <!-- 매칭 페이지 콘텐츠 -->
         <div class="matching-content">
             <!-- 타이틀 -->
@@ -120,6 +115,21 @@
                 <div class="divider"></div>
             </div>
 
+            <!-- 댓글 섹션 -->
+            <div class="comments-section">
+                <h2 class="comments-title">댓글</h2>
+                <div class="comments-list" id="commentsList">
+                    <!-- 댓글 목록이 여기에 동적으로 추가됩니다 -->
+                    <div class="loading-comments">댓글을 불러오는 중...</div>
+                </div>
+                
+                <!-- 댓글 작성 -->
+                <div class="comment-input-section">
+                    <textarea class="comment-input" id="commentInput" placeholder="댓글을 입력해주세요..." rows="2"></textarea>
+                    <button class="btn-comment-submit" id="btnCommentSubmit">등록</button>
+                </div>
+            </div>
+
             <!-- 비슷한 공구 추천 -->
             <div class="similar-section">
                 <h2 class="similar-title">비슷한 공구를 찾아봤어요! 🔍</h2>
@@ -189,7 +199,6 @@
 
     <script src="../js/api.js"></script>
     <script src="../js/nav.js"></script>
-    <script type="module" src="../js/app.js"></script>
     <script src="../js/matching.js"></script>
 </body>
 

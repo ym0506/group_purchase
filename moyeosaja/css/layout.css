@@ -2,80 +2,65 @@
 
 /* Header Section */
 .header {
-    padding: 14px 24px 0;
+    padding: 60px 24px 0;
     position: relative;
-}
-
-.status-bar {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 20px;
-}
-
-.status-indicator {
-    background-color: #dadada;
-    border: 0.25px solid rgba(0, 0, 0, 0.25);
-    border-radius: 48px;
-    width: 125px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 /* 회원가입/로그인 링크 */
 .auth-links {
     display: flex;
     justify-content: flex-end;
-    gap: 12px;
-    margin-bottom: 16px;
+    gap: 16px;
+    margin-bottom: 20px;
 }
 
 .auth-link {
-    font-size: 10px;
-    font-weight: 400;
-    color: #000000;
+    font-size: 11px;
+    font-weight: 500;
+    color: #545454;
     text-decoration: none;
     letter-spacing: 0;
-    transition: opacity 0.2s ease;
+    padding: 4px 0;
+    transition: color 0.2s ease;
 }
 
 .auth-link:hover {
-    opacity: 0.7;
+    color: #272727;
 }
 
 .greeting {
-    font-size: 15px;
-    font-weight: 500;
+    font-size: 16px;
+    font-weight: 600;
     color: #272727;
-    margin-bottom: 8px;
-    letter-spacing: -0.45px;
+    margin-bottom: 12px;
+    letter-spacing: -0.2px;
 }
 
 .upcoming-event {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
+    gap: 10px;
+    margin-bottom: 28px;
 }
 
 .upcoming-text {
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 500;
-    color: #272727;
-    letter-spacing: -0.36px;
+    color: #545454;
+    letter-spacing: -0.2px;
 }
 
 .d-day-badge {
     background-color: #272727;
     color: #ffffff;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 600;
-    padding: 1px 8px;
-    border-radius: 10px;
-    height: 15px;
+    padding: 4px 10px;
+    border-radius: 12px;
+    height: 20px;
     display: flex;
     align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Content Sections */
@@ -100,13 +85,14 @@
     width: 100%;
     max-width: 440px;
     height: 92px;
-    background-color: #272727;
+    background-color: rgba(39, 39, 39, 0.98);
     display: flex;
     justify-content: space-around;
     align-items: center;
     padding: 15px 0 25px;
     z-index: 1000;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(10px);
 }
 
 .nav-item {
@@ -119,10 +105,13 @@
     color: #fcfcfc;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
+    padding: 8px 12px;
+    border-radius: 12px;
 }
 
 .nav-item:hover {
-    opacity: 0.8;
+    background-color: rgba(255, 255, 255, 0.05);
+    opacity: 1;
 }
 
 .nav-item:active {
@@ -132,6 +121,7 @@
 
 .nav-item.active {
     color: #297eff;
+    background-color: rgba(41, 126, 255, 0.15);
 }
 
 .nav-item.active .nav-label {
@@ -161,10 +151,10 @@
 
 .nav-label {
     font-family: 'Pretendard', sans-serif;
-    font-size: 8px;
+    font-size: 9px;
     color: inherit;
-    font-weight: 500;
-    letter-spacing: 0;
+    font-weight: 600;
+    letter-spacing: 0.2px;
     line-height: 1.2;
     text-align: center;
 }

@@ -31,8 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 meetLocation: document.querySelector('#meetLocation')?.value || ''
             };
             sessionStorage.setItem('createPostFormData', JSON.stringify(formData));
-            alert('다음 단계로 이동합니다.');
-            window.location.href = 'create-post-step3.html';
+            window.location.href = './create-post-step3.html';
         });
     }
 });

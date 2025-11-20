@@ -112,13 +112,18 @@ function createFavoriteItemElement(favorite) {
     item.setAttribute('data-product', favorite.title);
     item.style.cursor = 'pointer';
 
+    // 이미지 URL을 실제 이미지로 표시
+    const imageStyle = favorite.main_image_url 
+        ? `background-image: url('${favorite.main_image_url}'); background-size: cover; background-position: center;`
+        : '';
+    
     item.innerHTML = `
-        <div class="item-avatar"></div>
+        <div class="item-avatar" style="${imageStyle}"></div>
         <div class="item-content">
-            <div class="item-title">${favorite.title}</div>
-            <div class="item-description">${favorite.main_image_url || ''}</div>
+            <div class="item-title">${favorite.title || '제목 없음'}</div>
+            <div class="item-description">${favorite.description || favorite.pickup_location_text || ''}</div>
         </div>
-        <button class="btn-remove-favorite" data-post-id="${favorite.post_id}">❌</button>
+        <button class="btn-remove-favorite" data-post-id="${favorite.post_id}" title="관심 제거">❌</button>
     `;
 
     // 클릭 이벤트: 상세 페이지로 이동

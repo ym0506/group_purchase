@@ -12,6 +12,12 @@ import {
 class App {
     constructor() {
         this.components = {};
+        // 페이지네이션 상태 관리
+        this.currentPage = 1;
+        this.pageLimit = 20; // 페이지당 게시글 수
+        this.hasMore = true; // 더 불러올 게시글이 있는지
+        this.isLoading = false; // 로딩 중인지
+        this.total = 0; // 전체 게시글 수
         this.init();
     }
 
@@ -186,57 +192,115 @@ class App {
         const documentHeight = document.documentElement.scrollHeight;
 
         // 하단 근처에서 더 많은 아이템 로드 (무한 스크롤)
-        if (scrollPosition + windowHeight >= documentHeight - 100) {
+        // 스크롤이 하단 200px 이내에 도달하면 다음 페이지 로드
+        if (scrollPosition + windowHeight >= documentHeight - 200) {
             this.loadMoreItems();
         }
     }
 
     /**
      * 게시글 목록 로드 (백엔드 API 연동)
+     * @param {boolean} reset - true면 첫 페이지부터 다시 로드
      */
-    async loadPosts() {
+    async loadPosts(reset = false) {
+        if (this.isLoading) {
+            console.log('이미 로딩 중입니다.');
+            return;
+        }
+
+        // 첫 페이지 로드 시 초기화
+        if (reset) {
+            this.currentPage = 1;
+            this.hasMore = true;
+            const itemsContainer = Utils.$('.items-list');
+            if (itemsContainer) {
+                itemsContainer.innerHTML = ''; // 기존 게시글 제거
+            }
+        }
+
+        // 더 불러올 게시글이 없으면 중단
+        if (!this.hasMore && !reset) {
+            console.log('더 이상 불러올 게시글이 없습니다.');
+            return;
+        }
+
+        this.isLoading = true;
+
         try {
             // 현재 위치 정보 가져오기 (localStorage에서)
             const latitude = localStorage.getItem('latitude') || 37.5665; // 기본값: 서울
             const longitude = localStorage.getItem('longitude') || 126.9780;
             const distance = 10; // 기본 거리: 10km
 
-            console.log('게시글 목록 로드 시도...');
+            console.log(`게시글 목록 로드 시도... (페이지: ${this.currentPage})`);
 
-            // 백엔드 API 호출
+            // 백엔드 API 호출 (페이지네이션 파라미터 포함)
             const response = await window.apiService.getPosts({
-                type: 'group', // 또는 null (전체)
-                latitude,
-                longitude,
-                distance
+                type: null, // 전체 타입
+                latitude: parseFloat(latitude),
+                longitude: parseFloat(longitude),
+                distance,
+                page: this.currentPage,
+                limit: this.pageLimit
             });
 
             console.log('게시글 목록 로드 성공:', response);
 
+            // 페이지네이션 상태 업데이트
+            if (response.total !== undefined) {
+                this.total = response.total;
+            }
+
             // UI 업데이트 (실제 게시글 렌더링)
             if (response.posts && response.posts.length > 0) {
-                this.renderPosts(response.posts);
+                this.renderPosts(response.posts, !reset); // reset이 false면 append
+                
+                // 더 불러올 게시글이 있는지 확인
+                const loadedCount = this.currentPage * this.pageLimit;
+                this.hasMore = loadedCount < (this.total || response.posts.length * this.currentPage + 1);
+                
+                if (this.hasMore) {
+                    this.currentPage += 1;
+                } else {
+                    console.log('모든 게시글을 불러왔습니다.');
+                    // 로딩 완료 표시 제거
+                    this.hideLoadingIndicator();
+                }
+            } else {
+                // 응답이 없으면 더 이상 불러올 게시글이 없음
+                this.hasMore = false;
+                this.hideLoadingIndicator();
             }
         } catch (error) {
             console.error('게시글 목록 로드 실패:', error);
-            // 에러 시 기본 UI 유지
+            this.hasMore = false;
+            this.hideLoadingIndicator();
+        } finally {
+            this.isLoading = false;
         }
     }
 
     /**
      * 게시글 렌더링
+     * @param {Array} posts - 게시글 배열
+     * @param {boolean} append - true면 기존 목록에 추가, false면 교체
      */
-    renderPosts(posts) {
+    renderPosts(posts, append = false) {
         const itemsContainer = Utils.$('.items-list');
         if (!itemsContainer) return;
 
-        // 기존 아이템은 유지하고 추가로 렌더링 (또는 전체 교체)
-        // 실제 구현에서는 기존 아이템을 지우고 새로 렌더링할 수 있습니다.
+        if (!append) {
+            // 전체 교체
+            itemsContainer.innerHTML = '';
+        }
 
         posts.forEach(post => {
             const itemElement = this.createPostElement(post);
             itemsContainer.appendChild(itemElement);
         });
+
+        // 로딩 인디케이터 추가/업데이트
+        this.updateLoadingIndicator();
     }
 
     /**
@@ -245,22 +309,26 @@ class App {
     createPostElement(post) {
         const item = document.createElement('div');
         item.className = 'item';
-        item.setAttribute('data-item-id', post.post_id);
+        item.setAttribute('data-item-id', post.post_id || post.id);
         item.setAttribute('data-product', post.title);
         item.style.cursor = 'pointer';
 
+        const currentCount = post.current_participants || 0;
+        const targetCount = post.target_participants || 0;
+        const authorAvatar = post.author?.profile_image_url || '';
+
         item.innerHTML = `
-            <div class="item-avatar"></div>
+            <div class="item-avatar" style="${authorAvatar ? `background-image: url('${authorAvatar}'); background-size: cover;` : ''}"></div>
             <div class="item-content">
-                <h3 class="item-title">${post.title}</h3>
-                <p class="item-description">${post.pickup_location_text || ''}</p>
+                <h3 class="item-title">${post.title || '제목 없음'}</h3>
+                <p class="item-description">${post.pickup_location_text || post.description || ''}</p>
             </div>
-            <div class="item-count">${post.current_participants}/${post.target_participants}</div>
+            <div class="item-count">${currentCount}/${targetCount}</div>
         `;
 
         // 클릭 이벤트 추가
         Utils.on(item, 'click', () => {
-            sessionStorage.setItem('selectedPostId', post.post_id);
+            sessionStorage.setItem('selectedPostId', post.post_id || post.id);
             sessionStorage.setItem('selectedItemTitle', post.title);
             window.location.href = './matching.html';
         });
@@ -268,22 +336,66 @@ class App {
         return item;
     }
 
+    /**
+     * 더 많은 아이템 로드 (다음 페이지)
+     */
     async loadMoreItems() {
-        if (this.isLoading) return;
+        if (this.isLoading || !this.hasMore) {
+            return;
+        }
 
-        this.isLoading = true;
+        console.log('더 많은 아이템 로드...');
+        await this.loadPosts(false); // append 모드로 다음 페이지 로드
+    }
 
-        try {
-            // 백엔드 API로 더 많은 아이템 로드
-            // 페이지네이션 또는 무한 스크롤 구현
-            console.log('더 많은 아이템 로드...');
+    /**
+     * 로딩 인디케이터 업데이트
+     */
+    updateLoadingIndicator() {
+        const itemsContainer = Utils.$('.items-list');
+        if (!itemsContainer) return;
 
-            // TODO: 페이지네이션 파라미터 추가
-            await this.loadPosts();
-        } catch (error) {
-            console.error('Error loading more items:', error);
-        } finally {
-            this.isLoading = false;
+        // 기존 로딩 인디케이터 제거
+        const existingIndicator = itemsContainer.querySelector('.loading-indicator');
+        if (existingIndicator) {
+            existingIndicator.remove();
+        }
+
+        // 더 불러올 게시글이 있으면 로딩 인디케이터 추가
+        if (this.hasMore && !this.isLoading) {
+            const indicator = document.createElement('div');
+            indicator.className = 'loading-indicator';
+            indicator.innerHTML = '<div class="loading-spinner"></div><p>더 많은 게시글을 불러오는 중...</p>';
+            indicator.style.textAlign = 'center';
+            indicator.style.padding = '20px';
+            indicator.style.color = '#9e9e9e';
+            indicator.style.fontSize = '12px';
+            itemsContainer.appendChild(indicator);
+        }
+    }
+
+    /**
+     * 로딩 인디케이터 숨기기
+     */
+    hideLoadingIndicator() {
+        const itemsContainer = Utils.$('.items-list');
+        if (!itemsContainer) return;
+
+        const indicator = itemsContainer.querySelector('.loading-indicator');
+        if (indicator) {
+            indicator.remove();
+        }
+
+        // 마지막 페이지 표시
+        if (!this.hasMore && this.currentPage > 1) {
+            const endMessage = document.createElement('div');
+            endMessage.className = 'end-message';
+            endMessage.innerHTML = '<p>모든 게시글을 불러왔습니다.</p>';
+            endMessage.style.textAlign = 'center';
+            endMessage.style.padding = '20px';
+            endMessage.style.color = '#9e9e9e';
+            endMessage.style.fontSize = '12px';
+            itemsContainer.appendChild(endMessage);
         }
     }
 

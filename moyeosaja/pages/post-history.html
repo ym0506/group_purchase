@@ -13,11 +13,6 @@
 
 <body>
     <div class="container post-history-container">
-        <!-- 상태 표시줄 -->
-        <div class="status-bar">
-            <div class="status-indicator"></div>
-        </div>
-
         <!-- 페이지 헤더 -->
         <div class="post-history-header">
             <h1 class="page-title">공구 내역</h1>
@@ -25,10 +20,10 @@
 
         <!-- 필터 탭 -->
         <div class="history-filter-tabs">
-            <button class="history-filter-tab active">전체</button>
-            <button class="history-filter-tab">매칭 대기 중</button>
-            <button class="history-filter-tab">매칭 성공</button>
-            <button class="history-filter-tab">공구 종료</button>
+            <button class="filter-tab history-filter-tab active" data-filter="all">전체</button>
+            <button class="filter-tab history-filter-tab" data-filter="waiting">매칭 대기 중</button>
+            <button class="filter-tab history-filter-tab" data-filter="success">매칭 성공</button>
+            <button class="filter-tab history-filter-tab" data-filter="closed">공구 종료</button>
         </div>
 
         <!-- 정렬 옵션 -->
@@ -215,7 +210,6 @@
     </div>
 
     <script src="../js/nav.js"></script>
-    <script type="module" src="../js/app.js"></script>
     <script src="../js/post-history.js"></script>
 </body>
 

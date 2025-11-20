@@ -154,23 +154,59 @@ async function handleSubmit() {
         return;
     }
 
+    // 제출 버튼 비활성화
+    const submitButton = document.querySelector('.btn-submit');
+    if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = '제출 중...';
+    }
+
     try {
-        // API 호출 (추후 구현)
-        // const response = await window.apiService.submitReview(reviewData);
+        // 게시글 ID 가져오기
+        const postId = reviewData.itemId || sessionStorage.getItem('selectedPostId') || sessionStorage.getItem('reviewPostId');
+        
+        if (!postId) {
+            throw new Error('게시글 정보를 찾을 수 없습니다.');
+        }
 
         console.log('리뷰 제출:', reviewData);
 
+        // 백엔드 API 호출
+        const response = await window.apiService.createReview(
+            postId,
+            reviewData.rating,
+            reviewData.content
+        );
+
+        console.log('리뷰 제출 성공:', response);
+
         // 성공 메시지
-        alert('리뷰가 작성되었습니다. 감사합니다! 😊');
+        if (window.toast) {
+            window.toast.success('리뷰가 작성되었습니다. 감사합니다! 😊');
+        } else {
+            alert('리뷰가 작성되었습니다. 감사합니다! 😊');
+        }
 
         // 리뷰 데이터 초기화
         sessionStorage.removeItem('reviewData');
 
-        // 공구 종료 페이지로 이동
-        window.location.href = './matching-closed.html';
+        // 리뷰 목록 페이지로 이동
+        window.location.href = './review-list.html';
     } catch (error) {
         console.error('리뷰 제출 에러:', error);
-        alert('리뷰 작성에 실패했습니다. 다시 시도해주세요.');
+        
+        if (window.toast) {
+            window.toast.error(error.message || '리뷰 작성에 실패했습니다. 다시 시도해주세요.');
+        } else {
+            alert(error.message || '리뷰 작성에 실패했습니다. 다시 시도해주세요.');
+        }
+    } finally {
+        // 제출 버튼 복구
+        if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.textContent = '작성하기';
+            checkSubmitButtonState();
+        }
     }
 }
 

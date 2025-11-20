@@ -9,15 +9,18 @@
 
 body {
     font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
-    background-color: #f1f1f1;
+    background-color: #fafafa;
     color: #272727;
-    line-height: 1.5;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
 }
 
 .container {
     max-width: 440px;
     margin: 0 auto;
-    background-color: #f1f1f1;
+    background-color: #fafafa;
     min-height: 100vh;
     position: relative;
     overflow-x: hidden;
@@ -140,3 +143,9 @@ body {
         font-size: 9px;
     }
 }
+
+/* 토스트 메시지 및 로딩 스타일 임포트 */
+@import url('./toast.css');
+@import url('./loading.css');
+@import url('./ux-enhancements.css');
+@import url('./design-refinement.css');
