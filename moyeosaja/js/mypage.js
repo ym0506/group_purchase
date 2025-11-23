@@ -187,7 +187,9 @@ function initializeAccountActions() {
  * 로그아웃 처리
  */
 async function handleLogout() {
-    const confirmed = confirm('로그아웃 하시겠습니까?');
+    const confirmed = window.confirmDialog 
+        ? await window.confirmDialog.show('로그아웃 하시겠습니까?', '로그아웃')
+        : confirm('로그아웃 하시겠습니까?');
 
     if (!confirmed) {
         return;
@@ -207,11 +209,22 @@ async function handleLogout() {
         sessionStorage.removeItem('userEmail');
 
         // 로그인 페이지로 이동
-        alert('로그아웃되었습니다.');
-        window.location.href = './login.html';
+        if (window.toast) {
+            window.toast.success('로그아웃되었습니다.');
+            setTimeout(() => {
+                window.location.href = './login.html';
+            }, 1000);
+        } else {
+            alert('로그아웃되었습니다.');
+            window.location.href = './login.html';
+        }
     } catch (error) {
         console.error('로그아웃 에러:', error);
-        alert('로그아웃 중 오류가 발생했습니다.');
+        if (window.toast) {
+            window.toast.error('로그아웃 중 오류가 발생했습니다.');
+        } else {
+            alert('로그아웃 중 오류가 발생했습니다.');
+        }
     }
 }
 
@@ -219,13 +232,17 @@ async function handleLogout() {
  * 탈퇴하기 처리
  */
 async function handleDeleteAccount() {
-    const confirmed = confirm('정말로 회원 탈퇴하시겠습니까?\n\n탈퇴 시 모든 데이터가 삭제되며 복구할 수 없습니다.');
+    const confirmed = window.confirmDialog 
+        ? await window.confirmDialog.show('정말로 회원 탈퇴하시겠습니까?\n\n탈퇴 시 모든 데이터가 삭제되며 복구할 수 없습니다.', '회원 탈퇴')
+        : confirm('정말로 회원 탈퇴하시겠습니까?\n\n탈퇴 시 모든 데이터가 삭제되며 복구할 수 없습니다.');
 
     if (!confirmed) {
         return;
     }
 
-    const doubleConfirm = confirm('한 번 더 확인합니다. 정말로 탈퇴하시겠습니까?');
+    const doubleConfirm = window.confirmDialog 
+        ? await window.confirmDialog.show('한 번 더 확인합니다. 정말로 탈퇴하시겠습니까?', '최종 확인')
+        : confirm('한 번 더 확인합니다. 정말로 탈퇴하시겠습니까?');
 
     if (!doubleConfirm) {
         return;
@@ -241,11 +258,22 @@ async function handleDeleteAccount() {
         sessionStorage.clear();
 
         // 로그인 페이지로 이동
-        alert('회원 탈퇴가 완료되었습니다.');
-        window.location.href = './login.html';
+        if (window.toast) {
+            window.toast.success('회원 탈퇴가 완료되었습니다.');
+            setTimeout(() => {
+                window.location.href = './login.html';
+            }, 1000);
+        } else {
+            alert('회원 탈퇴가 완료되었습니다.');
+            window.location.href = './login.html';
+        }
     } catch (error) {
         console.error('회원 탈퇴 에러:', error);
-        alert('회원 탈퇴 중 오류가 발생했습니다.');
+        if (window.toast) {
+            window.toast.error('회원 탈퇴 중 오류가 발생했습니다.');
+        } else {
+            alert('회원 탈퇴 중 오류가 발생했습니다.');
+        }
     }
 }
 

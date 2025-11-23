@@ -139,17 +139,27 @@ async function handleSubmit() {
 
     // 필수 항목 체크
     if (!reviewData.rating) {
-        alert('별점을 선택해주세요.');
+        if (window.toast) {
+            window.toast.error('별점을 선택해주세요.');
+        } else {
+            alert('별점을 선택해주세요.');
+        }
         return;
     }
 
     if (!reviewData.content || reviewData.content.trim() === '') {
-        alert('한 줄 후기를 작성해주세요.');
+        if (window.toast) {
+            window.toast.error('한 줄 후기를 작성해주세요.');
+        } else {
+            alert('한 줄 후기를 작성해주세요.');
+        }
         return;
     }
 
     // 리뷰 제출 확인
-    const confirmed = confirm('리뷰를 작성하시겠습니까?');
+    const confirmed = window.confirmDialog 
+        ? await window.confirmDialog.show('리뷰를 작성하시겠습니까?', '리뷰 작성')
+        : confirm('리뷰를 작성하시겠습니까?');
     if (!confirmed) {
         return;
     }

@@ -155,9 +155,8 @@ function renderMyPosts(posts) {
             e.stopPropagation();
             const postId = btn.getAttribute('data-post-id');
             if (postId) {
-                // TODO: 게시글 수정 페이지로 이동 (수정 페이지가 있으면)
-                // window.location.href = `./create-post-edit.html?postId=${postId}`;
-                alert('게시글 수정 기능은 준비 중입니다.');
+                // 게시글 수정 페이지로 이동
+                window.location.href = `./edit-post.html?postId=${postId}`;
                 console.log('게시글 수정:', postId);
             }
         });
@@ -169,7 +168,10 @@ function renderMyPosts(posts) {
             e.stopPropagation();
             const postId = btn.getAttribute('data-post-id');
             if (postId) {
-                if (confirm('정말 이 게시글을 삭제하시겠습니까?\n삭제된 게시글은 복구할 수 없습니다.')) {
+                const confirmed = window.confirmDialog 
+                    ? await window.confirmDialog.show('정말 이 게시글을 삭제하시겠습니까?\n삭제된 게시글은 복구할 수 없습니다.', '게시글 삭제')
+                    : confirm('정말 이 게시글을 삭제하시겠습니까?\n삭제된 게시글은 복구할 수 없습니다.');
+                if (confirmed) {
                     await deletePost(postId);
                 }
             }
@@ -193,8 +195,6 @@ async function deletePost(postId) {
         // 성공 메시지
         if (window.toast) {
             window.toast.success('게시글이 삭제되었습니다.');
-        } else {
-            alert('게시글이 삭제되었습니다.');
         }
 
         // 목록 새로고침
@@ -203,8 +203,6 @@ async function deletePost(postId) {
         console.error('게시글 삭제 실패:', error);
         if (window.toast) {
             window.toast.error(error.message || '게시글 삭제에 실패했습니다.');
-        } else {
-            alert(error.message || '게시글 삭제에 실패했습니다.');
         }
     }
 }

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공구글 수정하기 - MOYEO</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/create-post.css">
+</head>
+
+<body>
+    <div class="container create-post-container">
+        <!-- 공구글 작성 콘텐츠 -->
+        <div class="create-post-content">
+            <!-- 타이틀 -->
+            <h1 class="create-post-title">공구글 수정하기</h1>
+            <p class="step-help-text">게시글 정보를 수정하고 저장해주세요.</p>
+
+            <!-- 작성 폼 -->
+            <form class="create-form" id="editPostForm">
+                <!-- 이미지 업로드 -->
+                <section class="form-section">
+                    <div class="section-header">
+                        <p class="section-eyebrow">STEP 01</p>
+                        <h2 class="section-title">대표 이미지를 등록해주세요</h2>
+                        <p class="section-description">공구 품목이 한눈에 들어오도록 가장 잘 나온 이미지를 사용하면 참여율이 높아져요.</p>
+                    </div>
+                    <div class="form-card image-card">
+                        <div class="image-upload-section">
+                            <div class="image-upload-box" id="imageUploadBox">
+                                <div class="upload-icon">+</div>
+                                <p class="upload-text">이미지 업로드</p>
+                            </div>
+                        </div>
+                        <div class="upload-guides">
+                            <span class="guide-chip">정사각형 (1:1) 권장</span>
+                            <span class="guide-chip">최대 5MB</span>
+                            <span class="guide-chip">JPG · PNG 지원</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 기본 정보 -->
+                <section class="form-section">
+                    <div class="section-header">
+                        <p class="section-eyebrow">STEP 02</p>
+                        <h2 class="section-title">공구 기본 정보</h2>
+                        <p class="section-description">어떤 상품인지, 몇 개가 필요한지 명확하게 적어주세요.</p>
+                    </div>
+                    <div class="form-card">
+                        <div class="form-row">
+                            <label class="form-label">공구 명</label>
+                            <input type="text" class="form-input" id="postTitle" placeholder="공구 명을 입력해주세요" required>
+                            <button type="button" class="add-btn" aria-label="공구명 템플릿 추가">+</button>
+                        </div>
+                        <p class="helper-text">검색을 위해 브랜드명/상품명을 함께 적으면 좋아요.</p>
+
+                        <div class="form-row">
+                            <label class="form-label">수량</label>
+                            <input type="number" class="form-input" id="postQuantity" placeholder="수량" min="1" required>
+                            <button type="button" class="add-btn" aria-label="수량 옵션 추가">+</button>
+                        </div>
+                        <p class="helper-text">현재 확보된 수량 또는 목표 수량을 입력해주세요.</p>
+                    </div>
+                </section>
+
+                <!-- 상세 설명 -->
+                <section class="form-section">
+                    <div class="section-header">
+                        <p class="section-eyebrow">STEP 03</p>
+                        <h2 class="section-title">상세 설명</h2>
+                        <p class="section-description">어떤 이유로 공구를 열었는지, 전달 방식 등을 자유롭게 적어주세요.</p>
+                    </div>
+                    <div class="form-card">
+                        <div class="form-group full">
+                            <textarea class="form-textarea" id="postDescription" placeholder="공구 내용을 입력해주세요" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <h3 class="form-subtitle">공구를 진행할 인원을 정해주세요 👫</h3>
+                            <div class="people-selector">
+                                <input type="number" class="people-input" id="postTargetParticipants" placeholder="4" min="2" required>
+                                <span class="people-text">명과 함께 구매하고 싶어요</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 가격 정보 -->
+                <section class="form-section">
+                    <div class="section-header">
+                        <p class="section-eyebrow">STEP 04</p>
+                        <h2 class="section-title">가격 정보를 입력해주세요</h2>
+                        <p class="section-description">총 금액과 1인당 부담 금액을 미리 계산해둘수록 신뢰도가 올라갑니다.</p>
+                    </div>
+                    <div class="form-card">
+                        <div class="price-section">
+                            <div class="price-row">
+                                <span class="price-label">총 금액</span>
+                                <input type="text" class="price-input" id="postTotalPrice" placeholder="75,000원" required>
+                            </div>
+                            <div class="price-row">
+                                <span class="price-label">N/1 금액</span>
+                                <span class="price-value" id="perPersonPrice">1인당 0원</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 수정 버튼 -->
+                <div style="display: flex; gap: 12px; margin-top: 32px;">
+                    <button type="button" class="btn-secondary" id="btnCancel" style="flex: 1;">취소</button>
+                    <button type="submit" class="btn-submit" id="btnSubmit" style="flex: 1;">수정 완료</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- 하단 네비게이션 -->
+        <nav class="bottom-nav">
+            <div class="nav-item" data-page="calendar">
+                <div class="nav-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="4" y="5" width="16" height="16" rx="2" stroke="currentColor" stroke-width="2" />
+                        <path d="M4 9H20" stroke="currentColor" stroke-width="2" />
+                        <path d="M8 3V7" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        <path d="M16 3V7" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                </div>
+                <div class="nav-label">캘린더</div>
+            </div>
+            <div class="nav-item" data-page="create">
+                <div class="nav-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17 3L20 6L10 16L7 17L8 14L18 4L17 3Z" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M15 5L19 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                </div>
+                <div class="nav-label">공구 글 작성하기</div>
+            </div>
+            <div class="nav-item active" data-page="home-main">
+                <div class="nav-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M3 12L5 10M5 10L12 3L19 10M5 10V20C5 20.5523 5.44772 21 6 21H9M19 10L21 12M19 10V20C19 20.5523 18.5523 21 18 21H15M9 21C9.55228 21 10 20.5523 10 20V16C10 15.4477 10.4477 15 11 15H13C13.5523 15 14 15.4477 14 16V20C14 20.5523 14.4477 21 15 21M9 21H15"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </div>
+                <div class="nav-label">홈</div>
+            </div>
+            <div class="nav-item" data-page="favorites">
+                <div class="nav-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12 21.35L10.55 20.03C5.4 15.36 2 12.28 2 8.5C2 5.42 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.09C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.42 22 8.5C22 12.28 18.6 15.36 13.45 20.04L12 21.35Z"
+                            stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+                    </svg>
+                </div>
+                <div class="nav-label">관심있어요</div>
+            </div>
+            <div class="nav-item" data-page="mypage">
+                <div class="nav-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2" />
+                        <path d="M5 20C5 16.6863 7.68629 14 11 14H13C16.3137 14 19 16.6863 19 20" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                </div>
+                <div class="nav-label">마이</div>
+            </div>
+        </nav>
+    </div>
+
+    <script src="../js/toast.js"></script>
+    <script src="../js/confirm-dialog.js"></script>
+    <script src="../js/loading.js"></script>
+    <script src="../js/form-enhancements.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/nav.js"></script>
+    <script src="../js/edit-post.js"></script>
+</body>
+
+</html>
+

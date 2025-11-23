@@ -388,7 +388,10 @@ function renderComments(comments) {
         btn.addEventListener('click', async (e) => {
             e.stopPropagation();
             const commentId = btn.getAttribute('data-comment-id');
-            if (confirm('댓글을 삭제하시겠습니까?')) {
+            const confirmed = window.confirmDialog 
+                ? await window.confirmDialog.show('댓글을 삭제하시겠습니까?', '댓글 삭제')
+                : confirm('댓글을 삭제하시겠습니까?');
+            if (confirmed) {
                 await deleteComment(commentId);
             }
         });

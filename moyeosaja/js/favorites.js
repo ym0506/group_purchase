@@ -143,7 +143,10 @@ function createFavoriteItemElement(favorite) {
     removeBtn.addEventListener('click', async (e) => {
         e.stopPropagation();
 
-        if (confirm('관심 목록에서 삭제하시겠습니까?')) {
+        const confirmed = window.confirmDialog 
+            ? await window.confirmDialog.show('관심 목록에서 삭제하시겠습니까?', '관심 제거')
+            : confirm('관심 목록에서 삭제하시겠습니까?');
+        if (confirmed) {
             await removeFavorite(favorite.post_id, item);
         }
     });
