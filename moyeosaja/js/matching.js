@@ -230,7 +230,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const postId = sessionStorage.getItem('selectedPostId');
 
             if (!postId) {
-                alert('선택된 게시글이 없습니다.');
+                if (window.toast) {
+                    window.toast.error('선택된 게시글이 없습니다.');
+                } else {
+                    alert('선택된 게시글이 없습니다.');
+                }
                 return;
             }
 
@@ -254,7 +258,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 }, 1000);
             } catch (error) {
                 console.error('매칭 실패:', error);
-                alert(error.message || '매칭 신청에 실패했습니다.');
+                if (window.toast) {
+                    window.toast.error(error.message || '매칭 신청에 실패했습니다.');
+                } else {
+                    alert(error.message || '매칭 신청에 실패했습니다.');
+                }
                 matchBtn.disabled = false;
                 matchBtn.textContent = '매칭하기';
             }
@@ -266,7 +274,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (chatBtn) {
         chatBtn.addEventListener('click', () => {
             // 실제로는 채팅 페이지로 이동
-            alert('💬 대화방으로 이동합니다!\n\n참여자들과 소통해보세요.');
+            if (window.toast) {
+                window.toast.info('💬 대화방으로 이동합니다!\n\n참여자들과 소통해보세요.');
+            } else {
+                alert('💬 대화방으로 이동합니다!\n\n참여자들과 소통해보세요.');
+            }
             // window.location.href = './chat.html';
         });
     }
@@ -275,7 +287,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const similarItems = document.querySelectorAll('.similar-item');
     similarItems.forEach(item => {
         item.addEventListener('click', () => {
-            alert('다른 공구 상세 페이지로 이동합니다.');
+            if (window.toast) {
+                window.toast.info('다른 공구 상세 페이지로 이동합니다.');
+            } else {
+                alert('다른 공구 상세 페이지로 이동합니다.');
+            }
             // window.location.href = './matching.html?id=...';
         });
     });
@@ -366,8 +382,9 @@ function renderComments(comments) {
     const currentUserId = localStorage.getItem('user_id') || sessionStorage.getItem('userId');
 
     commentsContainer.innerHTML = comments.map(comment => {
-        const isOwnComment = comment.user_id === parseInt(currentUserId);
-        const deleteButton = isOwnComment 
+        // 타입 불일치 방지를 위해 == 사용
+        const isOwnComment = comment.user_id == currentUserId;
+        const deleteButton = isOwnComment
             ? `<button class="btn-delete-comment" data-comment-id="${comment.comment_id}">삭제</button>`
             : '';
 
@@ -388,7 +405,7 @@ function renderComments(comments) {
         btn.addEventListener('click', async (e) => {
             e.stopPropagation();
             const commentId = btn.getAttribute('data-comment-id');
-            const confirmed = window.confirmDialog 
+            const confirmed = window.confirmDialog
                 ? await window.confirmDialog.show('댓글을 삭제하시겠습니까?', '댓글 삭제')
                 : confirm('댓글을 삭제하시겠습니까?');
             if (confirmed) {
@@ -475,20 +492,20 @@ async function deleteComment(commentId) {
  */
 function formatCommentDate(dateString) {
     if (!dateString) return '';
-    
+
     const date = new Date(dateString);
     const now = new Date();
     const diff = now - date;
-    
+
     const minutes = Math.floor(diff / 60000);
     const hours = Math.floor(diff / 3600000);
     const days = Math.floor(diff / 86400000);
-    
+
     if (minutes < 1) return '방금 전';
     if (minutes < 60) return `${minutes}분 전`;
     if (hours < 24) return `${hours}시간 전`;
     if (days < 7) return `${days}일 전`;
-    
+
     return date.toLocaleDateString('ko-KR', {
         year: 'numeric',
         month: 'long',

@@ -194,14 +194,14 @@ function initStep2() {
                 console.warn('⚠️ 회원가입 응답에 access_token이 없습니다:', response);
                 console.warn('⚠️ 회원가입은 성공했지만 자동 로그인은 되지 않습니다. 로그인 페이지로 이동합니다.');
             }
-            
+
             // 사용자 ID 저장 (백엔드 응답에 포함된 경우)
             if (userId) {
                 localStorage.setItem('userId', userId.toString());
                 localStorage.setItem('user_id', userId.toString()); // 호환성을 위해 둘 다 저장
                 console.log('✅ 사용자 ID 저장됨:', userId);
             }
-            
+
             // 이메일 및 닉네임 저장
             if (userEmail) {
                 localStorage.setItem('userEmail', userEmail);
@@ -209,19 +209,23 @@ function initStep2() {
             if (userNickname) {
                 localStorage.setItem('userNickname', userNickname);
             }
-            
+
             console.log('✅ 회원가입 완료');
-            
+
             // 토큰이 없으면 로그인 페이지로, 있으면 완료 페이지로 이동
             if (accessToken) {
                 // 회원가입 완료 페이지로 이동
                 window.location.href = './signup-complete.html';
             } else {
                 // 토큰이 없으면 로그인 페이지로 안내
-                alert('회원가입이 완료되었습니다.\n로그인 페이지로 이동합니다.');
+                if (window.toast) {
+                    window.toast.success('회원가입이 완료되었습니다.\n로그인 페이지로 이동합니다.');
+                } else {
+                    alert('회원가입이 완료되었습니다.\n로그인 페이지로 이동합니다.');
+                }
                 setTimeout(() => {
                     window.location.href = './login.html';
-                }, 500);
+                }, 1500);
             }
         } catch (error) {
             console.error('회원가입 에러:', error);
@@ -293,7 +297,11 @@ function initStep2() {
         const isPasswordMatchValid = validatePasswordMatch();
 
         if (!isEmailValid || !isPasswordValid || !isPasswordMatchValid) {
-            alert('모든 항목을 올바르게 입력해주세요.');
+            if (window.toast) {
+                window.toast.error('모든 항목을 올바르게 입력해주세요.');
+            } else {
+                alert('모든 항목을 올바르게 입력해주세요.');
+            }
             return false;
         }
 

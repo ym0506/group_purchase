@@ -412,10 +412,20 @@ class APIService {
 
         console.log('📥 로그인 API 응답:', response);
 
-        // 토큰 저장
+        // 토큰 및 유저 정보 저장
         if (response.access_token) {
             this.setToken(response.access_token);
-            console.log('✅ 로그인 토큰 저장됨');
+
+            // 유저 정보 저장 (500 에러 fallback 및 UI 표시용)
+            if (response.user_id) localStorage.setItem('userId', response.user_id);
+            if (response.nickname) localStorage.setItem('nickname', response.nickname);
+            if (response.profile_image_url) localStorage.setItem('profile_image_url', response.profile_image_url);
+            if (email) localStorage.setItem('userEmail', email); // 이메일은 요청 데이터에서
+
+            console.log('✅ 로그인 성공: 토큰 및 유저 정보 저장됨', {
+                userId: response.user_id,
+                nickname: response.nickname
+            });
         } else {
             console.warn('⚠️ 로그인 응답에 access_token이 없습니다');
         }
@@ -475,7 +485,7 @@ class APIService {
             console.error('❌ 내 정보 조회 실패:', error);
             console.error('❌ 에러 스택:', error.stack);
 
-            // 500 에러인 경우 상세 정보 로깅
+            // 500 에러인 경우 상세 정보 로깅 및 폴백 처리
             if (error.message && (error.message.includes('500') || error.message.includes('Internal Server Error'))) {
                 console.error('❌ 서버 오류 상세 정보:', {
                     endpoint: '/api/users/me',
@@ -503,6 +513,23 @@ class APIService {
                     error: '500 Internal Server Error',
                     requestURL: `${this.baseURL}/api/users/me`
                 });
+
+                // 500 에러 시 localStorage 데이터로 폴백
+                const fallbackUser = {
+                    user_id: localStorage.getItem('userId') || 'unknown',
+                    email: localStorage.getItem('userEmail') || 'unknown@example.com',
+                    nickname: localStorage.getItem('userNickname') || '사용자',
+                    profile_image_url: null,
+                    is_fallback: true
+                };
+
+                console.warn('⚠️ 500 에러로 인해 로컬 데이터로 폴백합니다:', fallbackUser);
+
+                if (window.toast) {
+                    window.toast.warning('서버 연결 문제로 일부 정보가 정확하지 않을 수 있습니다.');
+                }
+
+                return fallbackUser;
             }
 
             throw error;

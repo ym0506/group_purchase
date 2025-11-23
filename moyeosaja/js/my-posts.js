@@ -23,7 +23,7 @@ async function loadMyPosts() {
         // 현재 사용자 정보 가져오기 (500 에러 시 fallback)
         let userInfo;
         let currentUserId;
-        
+
         try {
             userInfo = await window.apiService.getMyInfo();
             currentUserId = userInfo.user_id;
@@ -42,7 +42,14 @@ async function loadMyPosts() {
         }
 
         if (!currentUserId) {
-            throw new Error('사용자 정보를 가져올 수 없습니다.');
+            console.warn('사용자 정보를 찾을 수 없습니다. 재로그인이 필요합니다.');
+            if (window.toast) {
+                window.toast.error('로그인 정보가 만료되었습니다. 다시 로그인해주세요.');
+            } else {
+                alert('로그인 정보가 만료되었습니다. 다시 로그인해주세요.');
+            }
+            window.location.href = './login.html';
+            return;
         }
 
         console.log('내 공구글 로드 시작... (userId:', currentUserId, ')');
@@ -56,19 +63,71 @@ async function loadMyPosts() {
         // 백엔드 API 호출
         // TODO: 백엔드에 GET /api/users/me/posts 엔드포인트가 추가되면 사용
         // const response = await window.apiService.getMyPosts();
-        
-        // 현재는 모든 게시글을 가져와서 필터링
-        const response = await window.apiService.getPosts({
-            page: 1,
-            limit: 100 // 모든 게시글 가져오기
-        });
 
-        console.log('게시글 목록 로드 성공:', response);
+        // 모든 게시글 가져오기 (페이지네이션 처리)
+        let allPosts = [];
+        let page = 1;
+        let hasMore = true;
+        const limit = 20; // 한 번에 가져올 개수
 
-        // 내가 작성한 게시글만 필터링
-        const myPosts = response.posts?.filter(post => post.author_id === currentUserId) || [];
+        console.log('게시글 전체 목록 로드 시작...');
 
-        console.log('내 공구글 필터링 결과:', myPosts);
+        while (hasMore) {
+            try {
+                const response = await window.apiService.getPosts({
+                    page: page,
+                    limit: limit
+                });
+
+                const posts = response.posts || [];
+                if (posts.length === 0) {
+                    hasMore = false;
+                } else {
+                    allPosts = [...allPosts, ...posts];
+                    console.log(`페이지 ${page} 로드 완료: ${posts.length}개`);
+
+                    // 가져온 개수가 limit보다 적으면 더 이상 없다고 판단
+                    if (posts.length < limit) {
+                        hasMore = false;
+                    } else {
+                        page++;
+                    }
+                }
+
+                // 무한 루프 방지 (최대 10페이지)
+                if (page > 10) hasMore = false;
+            } catch (err) {
+                console.error(`페이지 ${page} 로드 실패:`, err);
+                hasMore = false;
+            }
+        }
+
+        console.log('총 로드된 게시글 수:', allPosts.length);
+        const response = { posts: allPosts }; // 기존 코드 호환성 유지
+
+        console.log('게시글 목록 로드 성공. 총 게시글 수:', response.posts?.length);
+        console.log('현재 로그인한 사용자 ID:', currentUserId, '타입:', typeof currentUserId);
+
+        // 디버깅: 모든 게시글의 작성자 ID 확인
+        if (response.posts && response.posts.length > 0) {
+            console.log('게시글 작성자 ID 목록:', response.posts.map(p => ({
+                id: p.post_id,
+                title: p.title,
+                author_id: p.author_id,
+                author_id_type: typeof p.author_id
+            })));
+        }
+
+        // 내가 작성한 게시글만 필터링 (타입 불일치 방지를 위해 == 사용)
+        const myPosts = response.posts?.filter(post => {
+            const isMatch = post.author_id == currentUserId;
+            if (post.author_id == currentUserId) {
+                console.log(`✅ 내 글 발견! Post ID: ${post.post_id}, Title: ${post.title}`);
+            }
+            return isMatch;
+        }) || [];
+
+        console.log('내 공구글 필터링 결과 개수:', myPosts.length);
 
         // UI 업데이트
         if (postsList) {
@@ -84,7 +143,7 @@ async function loadMyPosts() {
         if (postsList) {
             postsList.innerHTML = '<div class="error-message">공구글을 불러올 수 없습니다.</div>';
         }
-        
+
         // 인증 에러 시 로그인 페이지로 이동
         if (error.message && error.message.includes('인증')) {
             window.location.href = './login.html';
@@ -139,7 +198,7 @@ function renderMyPosts(posts) {
             if (e.target.closest('.btn-edit-post, .btn-delete-post')) {
                 return;
             }
-            
+
             const item = content.closest('.my-post-item');
             const postId = item?.getAttribute('data-post-id');
             if (postId) {
@@ -168,7 +227,7 @@ function renderMyPosts(posts) {
             e.stopPropagation();
             const postId = btn.getAttribute('data-post-id');
             if (postId) {
-                const confirmed = window.confirmDialog 
+                const confirmed = window.confirmDialog
                     ? await window.confirmDialog.show('정말 이 게시글을 삭제하시겠습니까?\n삭제된 게시글은 복구할 수 없습니다.', '게시글 삭제')
                     : confirm('정말 이 게시글을 삭제하시겠습니까?\n삭제된 게시글은 복구할 수 없습니다.');
                 if (confirmed) {

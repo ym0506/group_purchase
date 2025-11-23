@@ -113,10 +113,10 @@ function createFavoriteItemElement(favorite) {
     item.style.cursor = 'pointer';
 
     // 이미지 URL을 실제 이미지로 표시
-    const imageStyle = favorite.main_image_url 
+    const imageStyle = favorite.main_image_url
         ? `background-image: url('${favorite.main_image_url}'); background-size: cover; background-position: center;`
         : '';
-    
+
     item.innerHTML = `
         <div class="item-avatar" style="${imageStyle}"></div>
         <div class="item-content">
@@ -143,7 +143,7 @@ function createFavoriteItemElement(favorite) {
     removeBtn.addEventListener('click', async (e) => {
         e.stopPropagation();
 
-        const confirmed = window.confirmDialog 
+        const confirmed = window.confirmDialog
             ? await window.confirmDialog.show('관심 목록에서 삭제하시겠습니까?', '관심 제거')
             : confirm('관심 목록에서 삭제하시겠습니까?');
         if (confirmed) {
@@ -188,7 +188,11 @@ async function removeFavorite(postId, itemElement) {
         }, 300);
     } catch (error) {
         console.error('관심 제거 오류:', error);
-        alert('관심 제거에 실패했습니다.');
+        if (window.toast) {
+            window.toast.error('관심 제거에 실패했습니다.');
+        } else {
+            alert('관심 제거에 실패했습니다.');
+        }
     }
 }
 

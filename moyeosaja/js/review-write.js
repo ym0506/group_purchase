@@ -157,7 +157,7 @@ async function handleSubmit() {
     }
 
     // 리뷰 제출 확인
-    const confirmed = window.confirmDialog 
+    const confirmed = window.confirmDialog
         ? await window.confirmDialog.show('리뷰를 작성하시겠습니까?', '리뷰 작성')
         : confirm('리뷰를 작성하시겠습니까?');
     if (!confirmed) {
@@ -174,7 +174,7 @@ async function handleSubmit() {
     try {
         // 게시글 ID 가져오기
         const postId = reviewData.itemId || sessionStorage.getItem('selectedPostId') || sessionStorage.getItem('reviewPostId');
-        
+
         if (!postId) {
             throw new Error('게시글 정보를 찾을 수 없습니다.');
         }
@@ -204,7 +204,7 @@ async function handleSubmit() {
         window.location.href = './review-list.html';
     } catch (error) {
         console.error('리뷰 제출 에러:', error);
-        
+
         if (window.toast) {
             window.toast.error(error.message || '리뷰 작성에 실패했습니다. 다시 시도해주세요.');
         } else {

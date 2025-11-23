@@ -22,11 +22,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 작성하기 버튼
     const submitBtn = document.querySelector('.btn-submit');
-    const form = document.querySelector('.create-post-form');
 
-    if (form) {
-        form.addEventListener('submit', async (e) => {
+    if (submitBtn) {
+        submitBtn.addEventListener('click', async (e) => {
             e.preventDefault();
+
+            // 이전 단계 데이터 복원
+            const savedData = JSON.parse(sessionStorage.getItem('createPostFormData') || '{}');
 
             const formData = {
                 ...savedData,
@@ -36,10 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('공구글 작성 시작:', formData);
 
             // 버튼 로딩 상태
-            if (submitBtn) {
-                submitBtn.disabled = true;
-                submitBtn.textContent = '작성 중...';
-            }
+            submitBtn.disabled = true;
+            submitBtn.textContent = '작성 중...';
 
             try {
                 // 이미지 URL 가져오기 (sessionStorage에서)
@@ -77,13 +77,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.href = './create-post-complete.html';
             } catch (error) {
                 console.error('공구글 작성 실패:', error);
-                alert(error.message || '공구글 작성에 실패했습니다.');
+
+                if (window.toast) {
+                    window.toast.error(error.message || '공구글 작성에 실패했습니다.');
+                } else {
+                    alert(error.message || '공구글 작성에 실패했습니다.');
+                }
 
                 // 버튼 원래 상태로
-                if (submitBtn) {
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = '작성하기';
-                }
+                submitBtn.disabled = false;
+                submitBtn.textContent = '작성 완료하기';
             }
         });
     }

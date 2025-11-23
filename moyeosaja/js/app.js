@@ -47,12 +47,35 @@ class App {
             // 위치 권한 모달 초기화
             this.initLocationModal();
 
+            // 로그인 상태 확인 및 UI 업데이트
+            this.checkLoginState();
+
             // 게시글 목록 로드 (백엔드 API 연동)
             this.loadPosts();
 
             console.log('App initialized successfully');
         } catch (error) {
             console.error('Error initializing app:', error);
+        }
+    }
+
+    checkLoginState() {
+        const authLinks = document.querySelector('.auth-links');
+        const greeting = document.querySelector('.greeting');
+        const accessToken = localStorage.getItem('access_token');
+        const nickname = localStorage.getItem('nickname') || localStorage.getItem('userNickname') || '사용자';
+
+        if (accessToken) {
+            // 로그인 상태
+            if (authLinks) authLinks.style.display = 'none';
+            if (greeting) {
+                greeting.style.display = 'block';
+                greeting.textContent = `${nickname}님, 안녕하세요!`;
+            }
+        } else {
+            // 비로그인 상태
+            if (authLinks) authLinks.style.display = 'flex';
+            if (greeting) greeting.style.display = 'none';
         }
     }
 
@@ -254,11 +277,11 @@ class App {
             // UI 업데이트 (실제 게시글 렌더링)
             if (response.posts && response.posts.length > 0) {
                 this.renderPosts(response.posts, !reset); // reset이 false면 append
-                
+
                 // 더 불러올 게시글이 있는지 확인
                 const loadedCount = this.currentPage * this.pageLimit;
                 this.hasMore = loadedCount < (this.total || response.posts.length * this.currentPage + 1);
-                
+
                 if (this.hasMore) {
                     this.currentPage += 1;
                 } else {

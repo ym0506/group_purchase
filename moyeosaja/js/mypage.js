@@ -27,6 +27,25 @@ function initializePage() {
 
     // 프로필 정보 불러오기
     loadProfileInfo();
+
+    // 로그인 상태 확인 및 UI 업데이트
+    checkLoginState();
+}
+
+/**
+ * 로그인 상태 확인 및 UI 업데이트
+ */
+function checkLoginState() {
+    const authLinks = document.querySelector('.auth-links');
+    const accessToken = localStorage.getItem('access_token');
+
+    if (accessToken) {
+        // 로그인 상태: 링크 숨김
+        if (authLinks) authLinks.style.display = 'none';
+    } else {
+        // 비로그인 상태: 링크 표시
+        if (authLinks) authLinks.style.display = 'flex';
+    }
 }
 
 /**
@@ -139,7 +158,7 @@ function renderMatchingList(matchingList, container) {
             'closed': '종료'
         }[matching.status] || '알 수 없음';
 
-        const pickupDate = matching.pickup_datetime 
+        const pickupDate = matching.pickup_datetime
             ? new Date(matching.pickup_datetime).toLocaleDateString('ko-KR')
             : '날짜 정보 없음';
 
@@ -187,7 +206,7 @@ function initializeAccountActions() {
  * 로그아웃 처리
  */
 async function handleLogout() {
-    const confirmed = window.confirmDialog 
+    const confirmed = window.confirmDialog
         ? await window.confirmDialog.show('로그아웃 하시겠습니까?', '로그아웃')
         : confirm('로그아웃 하시겠습니까?');
 
@@ -232,7 +251,7 @@ async function handleLogout() {
  * 탈퇴하기 처리
  */
 async function handleDeleteAccount() {
-    const confirmed = window.confirmDialog 
+    const confirmed = window.confirmDialog
         ? await window.confirmDialog.show('정말로 회원 탈퇴하시겠습니까?\n\n탈퇴 시 모든 데이터가 삭제되며 복구할 수 없습니다.', '회원 탈퇴')
         : confirm('정말로 회원 탈퇴하시겠습니까?\n\n탈퇴 시 모든 데이터가 삭제되며 복구할 수 없습니다.');
 
@@ -240,7 +259,7 @@ async function handleDeleteAccount() {
         return;
     }
 
-    const doubleConfirm = window.confirmDialog 
+    const doubleConfirm = window.confirmDialog
         ? await window.confirmDialog.show('한 번 더 확인합니다. 정말로 탈퇴하시겠습니까?', '최종 확인')
         : confirm('한 번 더 확인합니다. 정말로 탈퇴하시겠습니까?');
 
@@ -299,25 +318,17 @@ async function loadProfileInfo() {
         try {
             userInfo = await window.apiService.getMyInfo();
             console.log('✅ 프로필 정보 로드 성공:', userInfo);
-        } catch (error) {
-            // 500 에러 시 localStorage에서 기본 정보 사용 (fallback)
-            if (error.message && error.message.includes('500')) {
-                console.warn('⚠️ getMyInfo 500 에러 - localStorage 데이터 사용 (fallback)');
-                const userId = localStorage.getItem('userId') || localStorage.getItem('user_id');
-                userInfo = {
-                    user_id: userId ? parseInt(userId) : null,
-                    nickname: localStorage.getItem('userNickname') || '사용자',
-                    email: localStorage.getItem('userEmail') || '',
-                    profile_image_url: null
-                };
-                if (window.toast) {
-                    window.toast.warning('프로필 정보를 불러올 수 없습니다. 기본 정보를 표시합니다.');
-                }
-            } else {
-                throw error; // 다른 에러는 재발생
+
+            // 폴백 데이터인지 확인
+            if (userInfo.is_fallback) {
+                console.warn('⚠️ 폴백 데이터가 로드되었습니다.');
+                // 폴백 데이터일 경우 추가적인 UI 처리가 필요하다면 여기서 수행
             }
+        } catch (error) {
+            console.error('❌ 프로필 정보 로드 실패:', error);
+            throw error;
         }
-        
+
         // 매칭 통계 가져오기 (500 에러 발생 시에도 통계는 시도)
         console.log('📤 매칭 통계 로드 시작...');
         let stats = { all: 0, waiting: 0, success: 0, closed: 0 };
@@ -345,7 +356,7 @@ async function loadProfileInfo() {
             message: error.message,
             stack: error.stack
         });
-        
+
         // 에러 발생 시 사용자에게 명확한 메시지 표시
         if (error.message && (error.message.includes('인증') || error.message.includes('401'))) {
             // 인증 에러 시 로그인 페이지로 이동
