@@ -251,7 +251,8 @@
     transition: all 0.2s ease;
     margin-top: auto;
     position: fixed;
-    bottom: 60px;
+    bottom: 110px;
+    /* 하단 네비게이션(92px) + 여유(18px) */
     left: 50%;
     transform: translateX(-50%);
     max-width: 367px;

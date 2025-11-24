@@ -48,27 +48,15 @@ function resolveApiBaseUrl() {
 
             // 로컬 개발 환경인 경우 백엔드 직접 연결 (백엔드에서 CORS 허용됨)
             if (host === '127.0.0.1' || host === 'localhost') {
-                const port = window.location.port;
-                // localhost:3000 또는 127.0.0.1:3000에서 실행 중인 경우 백엔드 직접 연결
-                // 백엔드가 localhost:3000을 허용했으므로 직접 연결 가능
-                if (port === '3000') {
-                    console.log('💡 로컬 개발 환경 감지 (포트 3000): 백엔드 직접 연결', DEFAULT_PROD_BASE_URL);
-                    console.log('   백엔드에서 localhost:3000 CORS 허용 완료');
-                    return DEFAULT_PROD_BASE_URL;
-                }
-                // 다른 포트인 경우 경고 및 프록시 서버 사용
-                console.warn('⚠️ 포트 3000이 아닌 다른 포트에서 실행 중입니다:', port);
-                console.warn('   백엔드는 localhost:3000만 허용하므로 프록시 서버를 사용합니다.');
-                console.log('💡 프록시 서버 사용:', DEFAULT_PROXY_BASE_URL);
-                console.log('   프록시 서버가 실행 중이지 않다면 다음 명령어를 실행하세요:');
-                console.log('   npm run proxy');
-                return DEFAULT_PROXY_BASE_URL;
+                // 로컬 개발 환경에서도 프로덕션 백엔드 사용 (CORS 허용됨)
+                console.log('💡 로컬 개발 환경 감지: 프로덕션 백엔드 사용', DEFAULT_PROD_BASE_URL);
+                return DEFAULT_PROD_BASE_URL;
             }
         }
 
-        // 4) 기본값 (프록시 서버 - CORS 문제 방지)
-        console.log('💡 API Base URL 기본값 사용 (프록시):', DEFAULT_PROXY_BASE_URL);
-        return DEFAULT_PROXY_BASE_URL;
+        // 4) 기본값 (프로덕션 백엔드)
+        console.log('💡 API Base URL 기본값 사용 (프로덕션):', DEFAULT_PROD_BASE_URL);
+        return DEFAULT_PROD_BASE_URL;
     } catch (error) {
         console.warn('API BASE URL 결정 중 오류가 발생했습니다. 기본값을 사용합니다.', error);
         return DEFAULT_PROD_BASE_URL;
@@ -442,7 +430,7 @@ class APIService {
     }
 
     /**
-     * 내 정보 조회
+     * 내 정보 조회 (재시도 로직 포함)
      */
     async getMyInfo() {
         // 토큰 확인
@@ -459,7 +447,6 @@ class APIService {
 
         // 토큰 형식 확인
         if (this.accessToken && !this.accessToken.startsWith('Bearer ')) {
-            // Bearer 접두사가 없으면 추가하지 않음 (API 서비스에서 자동 추가)
             console.log('📝 토큰 형식 확인:', {
                 hasBearer: this.accessToken.startsWith('Bearer '),
                 tokenLength: this.accessToken.length,
@@ -474,19 +461,45 @@ class APIService {
             baseURL: this.baseURL
         });
 
-        try {
-            const response = await this.get('/api/users/me', {}, {
-                showErrorToast: true,
-                showLoading: false
-            });
-            console.log('📥 내 정보 조회 성공:', response);
-            return response;
-        } catch (error) {
-            console.error('❌ 내 정보 조회 실패:', error);
-            console.error('❌ 에러 스택:', error.stack);
+        // 재시도 로직
+        const maxRetries = 2;
+        let lastError = null;
 
-            // 500 에러인 경우 상세 정보 로깅 및 폴백 처리
-            if (error.message && (error.message.includes('500') || error.message.includes('Internal Server Error'))) {
+        for (let attempt = 0; attempt <= maxRetries; attempt++) {
+            try {
+                const response = await this.get('/api/users/me', {}, {
+                    showErrorToast: attempt === maxRetries, // 마지막 시도에만 에러 토스트 표시
+                    showLoading: false
+                });
+
+                console.log('📥 내 정보 조회 성공:', response);
+
+                // 성공 시 localStorage에 백업 저장
+                if (response.user_id) localStorage.setItem('userId', response.user_id);
+                if (response.email) localStorage.setItem('userEmail', response.email);
+                if (response.nickname) localStorage.setItem('nickname', response.nickname);
+                if (response.profile_image_url) localStorage.setItem('profile_image_url', response.profile_image_url);
+
+                return response;
+            } catch (error) {
+                lastError = error;
+
+                // 500 에러가 아니면 즉시 throw (재시도 불필요)
+                if (!error.message || (!error.message.includes('500') && !error.message.includes('Internal Server Error'))) {
+                    console.error('❌ 내 정보 조회 실패 (재시도 불가):', error);
+                    throw error;
+                }
+
+                // 마지막 시도가 아니면 재시도
+                if (attempt < maxRetries) {
+                    const waitTime = 1000 * (attempt + 1); // 1초, 2초 대기
+                    console.warn(`⚠️ 500 에러 발생, ${waitTime}ms 후 재시도 (${attempt + 1}/${maxRetries})...`);
+                    await new Promise(resolve => setTimeout(resolve, waitTime));
+                    continue;
+                }
+
+                // 모든 재시도 실패 시 폴백 처리
+                console.error('❌ 모든 재시도 실패, localStorage 폴백 사용');
                 console.error('❌ 서버 오류 상세 정보:', {
                     endpoint: '/api/users/me',
                     baseURL: this.baseURL,
@@ -499,7 +512,8 @@ class APIService {
                     localStorage: {
                         access_token: localStorage.getItem('access_token') ? '있음' : '없음',
                         userId: localStorage.getItem('userId'),
-                        userEmail: localStorage.getItem('userEmail')
+                        userEmail: localStorage.getItem('userEmail'),
+                        nickname: localStorage.getItem('nickname')
                     }
                 });
 
@@ -510,30 +524,28 @@ class APIService {
                         'Authorization': 'Bearer [토큰 있음]',
                         'Content-Type': 'application/json'
                     },
-                    error: '500 Internal Server Error',
+                    error: '500 Internal Server Error (재시도 2회 실패)',
                     requestURL: `${this.baseURL}/api/users/me`
                 });
-
-                // 500 에러 시 localStorage 데이터로 폴백
-                const fallbackUser = {
-                    user_id: localStorage.getItem('userId') || 'unknown',
-                    email: localStorage.getItem('userEmail') || 'unknown@example.com',
-                    nickname: localStorage.getItem('userNickname') || '사용자',
-                    profile_image_url: null,
-                    is_fallback: true
-                };
-
-                console.warn('⚠️ 500 에러로 인해 로컬 데이터로 폴백합니다:', fallbackUser);
-
-                if (window.toast) {
-                    window.toast.warning('서버 연결 문제로 일부 정보가 정확하지 않을 수 있습니다.');
-                }
-
-                return fallbackUser;
             }
-
-            throw error;
         }
+
+        // localStorage 폴백 데이터 생성
+        const fallbackUser = {
+            user_id: localStorage.getItem('userId') || 'unknown',
+            email: localStorage.getItem('userEmail') || 'unknown@example.com',
+            nickname: localStorage.getItem('nickname') || '사용자',
+            profile_image_url: localStorage.getItem('profile_image_url') || null,
+            is_fallback: true
+        };
+
+        console.warn('⚠️ 500 에러로 인해 로컬 데이터로 폴백합니다:', fallbackUser);
+
+        if (window.toast) {
+            window.toast.warning('서버 연결이 불안정합니다. 일부 정보가 최신이 아닐 수 있습니다.');
+        }
+
+        return fallbackUser;
     }
 
     /**

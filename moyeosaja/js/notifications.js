@@ -27,40 +27,95 @@ document.addEventListener('DOMContentLoaded', () => {
     // 수락하기 버튼
     const acceptButtons = document.querySelectorAll('.btn-accept');
     acceptButtons.forEach(button => {
-        button.addEventListener('click', (event) => {
+        button.addEventListener('click', async (event) => {
             const notificationItem = button.closest('.notification-item');
             const userName = notificationItem.querySelector('.user-name').textContent;
 
-            alert(`${userName}님의 공구 요청을 수락했습니다!`);
-
-            // 실제로는 서버에 요청을 보내고, 성공 시 해당 알림을 목록에서 제거하거나 상태 변경
-            // 예: notificationItem.style.opacity = '0.5'; 또는 notificationItem.remove();
-            notificationItem.style.backgroundColor = '#e8f5e9';
-            button.textContent = '수락됨';
+            // 버튼 로딩 상태
             button.disabled = true;
-            button.style.backgroundColor = '#4caf50';
-            notificationItem.querySelector('.btn-reject').disabled = true;
-            notificationItem.querySelector('.btn-reject').style.opacity = '0.5';
+            const originalText = button.textContent;
+            button.textContent = '처리 중...';
+
+            try {
+                // 실제 API 호출 시뮬레이션
+                await new Promise(resolve => setTimeout(resolve, 500));
+
+                // 성공 처리
+                if (window.toast) {
+                    window.toast.success(`${userName}님의 공구 요청을 수락했습니다!`);
+                }
+
+                // UI 업데이트
+                notificationItem.style.backgroundColor = '#e8f5e9';
+                notificationItem.style.transition = 'background-color 0.3s ease';
+                button.textContent = '수락됨';
+                button.style.backgroundColor = '#4caf50';
+                button.style.color = 'white';
+
+                const rejectBtn = notificationItem.querySelector('.btn-reject');
+                if (rejectBtn) {
+                    rejectBtn.disabled = true;
+                    rejectBtn.style.opacity = '0.5';
+                }
+            } catch (error) {
+                console.error('수락 처리 실패:', error);
+                if (window.toast) {
+                    window.toast.error('요청 처리에 실패했습니다.');
+                }
+                button.disabled = false;
+                button.textContent = originalText;
+            }
         });
     });
 
     // 거절하기 버튼
     const rejectButtons = document.querySelectorAll('.btn-reject');
     rejectButtons.forEach(button => {
-        button.addEventListener('click', (event) => {
+        button.addEventListener('click', async (event) => {
             const notificationItem = button.closest('.notification-item');
             const userName = notificationItem.querySelector('.user-name').textContent;
 
-            alert(`${userName}님의 공구 요청을 거절했습니다.`);
+            // 확인 다이얼로그
+            const confirmed = window.confirmDialog
+                ? await window.confirmDialog.show(`${userName}님의 공구 요청을 거절하시겠습니까?`, '요청 거절')
+                : confirm(`${userName}님의 공구 요청을 거절하시겠습니까?`);
 
-            // 실제로는 서버에 요청을 보내고, 성공 시 해당 알림을 목록에서 제거하거나 상태 변경
-            // 예: notificationItem.remove();
-            notificationItem.style.backgroundColor = '#ffebee';
-            button.textContent = '거절됨';
+            if (!confirmed) return;
+
+            // 버튼 로딩 상태
             button.disabled = true;
-            button.style.backgroundColor = '#f44336';
-            notificationItem.querySelector('.btn-accept').disabled = true;
-            notificationItem.querySelector('.btn-accept').style.opacity = '0.5';
+            const originalText = button.textContent;
+            button.textContent = '처리 중...';
+
+            try {
+                // 실제 API 호출 시뮬레이션
+                await new Promise(resolve => setTimeout(resolve, 500));
+
+                // 성공 처리
+                if (window.toast) {
+                    window.toast.info(`${userName}님의 공구 요청을 거절했습니다.`);
+                }
+
+                // UI 업데이트
+                notificationItem.style.backgroundColor = '#ffebee';
+                notificationItem.style.transition = 'background-color 0.3s ease';
+                button.textContent = '거절됨';
+                button.style.backgroundColor = '#f44336';
+                button.style.color = 'white';
+
+                const acceptBtn = notificationItem.querySelector('.btn-accept');
+                if (acceptBtn) {
+                    acceptBtn.disabled = true;
+                    acceptBtn.style.opacity = '0.5';
+                }
+            } catch (error) {
+                console.error('거절 처리 실패:', error);
+                if (window.toast) {
+                    window.toast.error('요청 처리에 실패했습니다.');
+                }
+                button.disabled = false;
+                button.textContent = originalText;
+            }
         });
     });
 });

@@ -21,22 +21,57 @@ document.addEventListener('DOMContentLoaded', () => {
     const nextBtn = document.querySelector('.btn-next');
     if (nextBtn) {
         nextBtn.addEventListener('click', () => {
+            // 필수 입력 필드 가져오기
+            const nameInput = document.querySelector('.form-row:nth-child(1) .form-input');
+            const contentTextarea = document.querySelector('.form-textarea');
+
+            const name = nameInput?.value.trim() || '';
+            const content = contentTextarea?.value.trim() || '';
+
+            // 유효성 검사
+            if (!name) {
+                if (window.toast) {
+                    window.toast.error('공구명을 입력해주세요.');
+                } else {
+                    alert('공구명을 입력해주세요.');
+                }
+                nameInput?.focus();
+                return;
+            }
+
+            if (!content) {
+                if (window.toast) {
+                    window.toast.error('공구 내용을 입력해주세요.');
+                } else {
+                    alert('공구 내용을 입력해주세요.');
+                }
+                contentTextarea?.focus();
+                return;
+            }
+
             // 기존 formData 가져오기 (이미지 URL 포함)
             const existingData = JSON.parse(sessionStorage.getItem('createPostFormData') || '{}');
-            
+
+            console.log('📝 [Step 1] Existing data:', existingData);
+
             // sessionStorage에 데이터 저장
             const formData = {
                 ...existingData, // 기존 데이터 유지 (이미지 URL 등)
-                name: document.querySelector('.form-row:nth-child(1) .form-input')?.value || '',
-                title: document.querySelector('.form-row:nth-child(1) .form-input')?.value || '', // title도 저장
+                name: name,
+                title: name, // title도 저장
                 quantity: document.querySelector('.form-row:nth-child(2) .form-input')?.value || '',
-                content: document.querySelector('.form-textarea')?.value || '',
-                description: document.querySelector('.form-textarea')?.value || '', // description도 저장
+                content: content,
+                description: content, // description도 저장
                 people: document.querySelector('.people-input')?.value || '',
                 price: document.querySelector('.price-input')?.value || ''
             };
 
+            console.log('💾 [Step 1] Saving formData:', formData);
             sessionStorage.setItem('createPostFormData', JSON.stringify(formData));
+
+            // 저장 확인
+            const saved = sessionStorage.getItem('createPostFormData');
+            console.log('✅ [Step 1] Saved to sessionStorage:', saved);
 
             // 다음 단계로 이동
             window.location.href = './create-post-step2.html';
@@ -63,7 +98,7 @@ function initImageUpload() {
     fileInput.accept = 'image/jpeg,image/jpg,image/png,image/webp';
     fileInput.style.display = 'none';
     fileInput.id = 'imageFileInput';
-    
+
     // 업로드 섹션에 추가
     const uploadSection = uploadBox.parentElement;
     if (uploadSection) {
@@ -71,7 +106,7 @@ function initImageUpload() {
     }
 
     // 업로드 박스 클릭 시 파일 선택 창 열기
-        uploadBox.addEventListener('click', () => {
+    uploadBox.addEventListener('click', () => {
         fileInput.click();
     });
 
@@ -149,7 +184,7 @@ async function handleImageUpload(file, uploadBox) {
 
         // 이미지 미리보기
         const imageUrl = await createImagePreview(file);
-        
+
         // 업로드 박스 업데이트
         updateUploadBox(uploadBox, imageUrl);
 
@@ -185,15 +220,15 @@ async function handleImageUpload(file, uploadBox) {
 function createImagePreview(file) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        
+
         reader.onload = (e) => {
             resolve(e.target.result); // base64 데이터 URL
         };
-        
+
         reader.onerror = (error) => {
             reject(error);
         };
-        
+
         reader.readAsDataURL(file);
     });
 }
@@ -206,7 +241,7 @@ function createImagePreview(file) {
 function updateUploadBox(uploadBox, imageUrl) {
     // 기존 내용 제거
     uploadBox.innerHTML = '';
-    
+
     // 이미지 미리보기 추가
     const img = document.createElement('img');
     img.src = imageUrl;
@@ -214,7 +249,7 @@ function updateUploadBox(uploadBox, imageUrl) {
     img.style.height = '100%';
     img.style.objectFit = 'cover';
     img.style.borderRadius = '20px';
-    
+
     // 삭제 버튼 추가
     const deleteBtn = document.createElement('button');
     deleteBtn.type = 'button';
@@ -235,7 +270,7 @@ function updateUploadBox(uploadBox, imageUrl) {
     deleteBtn.style.alignItems = 'center';
     deleteBtn.style.justifyContent = 'center';
     deleteBtn.style.zIndex = '10';
-    
+
     deleteBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         resetUploadBox(uploadBox);
@@ -258,7 +293,7 @@ function resetUploadBox(uploadBox) {
         <p class="upload-text">이미지 업로드</p>
     `;
     uploadBox.style.position = 'static';
-    
+
     // 파일 input 초기화
     const fileInput = document.getElementById('imageFileInput');
     if (fileInput) {
@@ -285,7 +320,7 @@ function initAISummary() {
     // AI 요약 버튼 클릭
     aiBtn.addEventListener('click', async () => {
         const content = textarea.value.trim();
-        
+
         if (!content) {
             if (window.toast) {
                 window.toast.error('먼저 공구 내용을 입력해주세요.');
@@ -322,7 +357,7 @@ async function generateAISummary(content, textarea, aiBtn) {
     try {
         // 실제로는 백엔드 AI API 호출
         // const summary = await window.apiService.generateAISummary(content);
-        
+
         // 현재는 간단한 클라이언트 사이드 요약 로직
         // (실제 프로덕션에서는 백엔드 AI API 사용)
         const summary = await generateSimpleSummary(content);

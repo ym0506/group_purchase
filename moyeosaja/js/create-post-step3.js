@@ -13,12 +13,46 @@ function updateStatusTime() {
     }
 }
 
+// 미리보기 업데이트 함수
+function updatePreview(savedData) {
+    // 사용자 정보 가져오기
+    const userName = localStorage.getItem('nickname') || '사용자';
+
+    // 미리보기 업데이트
+    const authorName = document.querySelector('.author-name');
+    const previewTitle = document.querySelector('.preview-title');
+    const previewDescription = document.querySelector('.preview-description');
+    const previewImage = document.querySelector('.preview-image img');
+
+    if (authorName) {
+        authorName.textContent = `${userName} >`;
+    }
+
+    // Step 1에서 'name' 키로 저장됨
+    if (previewTitle && (savedData.name || savedData.title)) {
+        previewTitle.textContent = savedData.name || savedData.title;
+    }
+
+    // Step 1에서 'content' 키로 저장됨
+    if (previewDescription && (savedData.content || savedData.description)) {
+        previewDescription.textContent = savedData.content || savedData.description;
+    }
+
+    if (previewImage && savedData.imageUrl) {
+        previewImage.src = savedData.imageUrl;
+        previewImage.alt = (savedData.name || savedData.title) || '공구 상품';
+    }
+}
+
 // 페이지 초기화
 document.addEventListener('DOMContentLoaded', () => {
     updateStatusTime();
 
     // 이전 단계 데이터 복원
     const savedData = JSON.parse(sessionStorage.getItem('createPostFormData') || '{}');
+
+    // 미리보기 업데이트
+    updatePreview(savedData);
 
     // 카테고리 버튼
     const categoryButtons = document.querySelectorAll('.btn-category');

@@ -13,12 +13,46 @@ function updateStatusTime() {
     }
 }
 
+// 미리보기 업데이트 함수
+function updatePreview(savedData) {
+    // 사용자 정보 가져오기
+    const userName = localStorage.getItem('nickname') || '사용자';
+
+    // 미리보기 업데이트
+    const authorName = document.querySelector('.author-name');
+    const previewTitle = document.querySelector('.preview-title');
+    const previewDescription = document.querySelector('.preview-description');
+    const previewImage = document.querySelector('.preview-image img');
+
+    if (authorName) {
+        authorName.textContent = `${userName} >`;
+    }
+
+    // Step 1에서 'name' 키로 저장됨
+    if (previewTitle && (savedData.name || savedData.title)) {
+        previewTitle.textContent = savedData.name || savedData.title;
+    }
+
+    // Step 1에서 'content' 키로 저장됨
+    if (previewDescription && (savedData.content || savedData.description)) {
+        previewDescription.textContent = savedData.content || savedData.description;
+    }
+
+    if (previewImage && savedData.imageUrl) {
+        previewImage.src = savedData.imageUrl;
+        previewImage.alt = (savedData.name || savedData.title) || '공구 상품';
+    }
+}
+
 // 페이지 초기화
 document.addEventListener('DOMContentLoaded', () => {
     updateStatusTime();
 
     // 이전 단계 데이터 복원
     const savedData = JSON.parse(sessionStorage.getItem('createPostFormData') || '{}');
+
+    // 미리보기 업데이트
+    updatePreview(savedData);
 
     // 작성하기 버튼
     const submitBtn = document.querySelector('.btn-submit');
@@ -77,6 +111,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.href = './create-post-complete.html';
             } catch (error) {
                 console.error('공구글 작성 실패:', error);
+
+                // 403 에러 (인증 필요) 처리
+                if (error.message && error.message.includes('403')) {
+                    if (window.toast) {
+                        window.toast.error('로그인이 필요합니다. 로그인 페이지로 이동합니다.');
+                    }
+
+                    // 2초 후 로그인 페이지로 이동
+                    setTimeout(() => {
+                        window.location.href = './login.html';
+                    }, 2000);
+                    return;
+                }
 
                 if (window.toast) {
                     window.toast.error(error.message || '공구글 작성에 실패했습니다.');

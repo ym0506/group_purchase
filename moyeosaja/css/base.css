@@ -103,6 +103,7 @@ body {
         opacity: 0;
         transform: translateY(10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -149,3 +150,4 @@ body {
 @import url('./loading.css');
 @import url('./ux-enhancements.css');
 @import url('./design-refinement.css');
+@import url('./premium-design.css');
