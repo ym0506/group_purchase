@@ -151,25 +151,8 @@ class App {
             alert('전체 추천 공구 목록을 불러왔습니다!');
         });
 
-        // 아이템 클릭 이벤트 - 매칭 페이지로 이동
-        Utils.$$('.item').forEach(item => {
-            // 클릭 가능한 스타일 추가
-            item.style.cursor = 'pointer';
-
-            Utils.on(item, 'click', (e) => {
-                const itemId = item.getAttribute('data-item-id');
-                const title = item.querySelector('.item-title')?.textContent;
-                const product = item.getAttribute('data-product');
-
-                // 아이템 정보를 sessionStorage에 저장
-                sessionStorage.setItem('selectedItemId', itemId);
-                sessionStorage.setItem('selectedItemTitle', title);
-                sessionStorage.setItem('selectedItemProduct', product);
-
-                // 매칭 페이지로 이동
-                window.location.href = './matching.html';
-            });
-        });
+        // 아이템 클릭 이벤트는 동적으로 생성된 게시글에만 적용됨 (createPostElement 함수에서 처리)
+        // 하드코딩된 HTML 아이템은 백엔드 데이터 로드 후 제거됨
 
         // 키보드 단축키
         Utils.on(document, 'keydown', (e) => {
@@ -332,7 +315,8 @@ class App {
     createPostElement(post) {
         const item = document.createElement('div');
         item.className = 'item';
-        item.setAttribute('data-item-id', post.post_id || post.id);
+        const postId = post.post_id || post.id;
+        item.setAttribute('data-post-id', postId);
         item.setAttribute('data-product', post.title);
         item.style.cursor = 'pointer';
 
@@ -340,18 +324,30 @@ class App {
         const targetCount = post.target_participants || 0;
         const authorAvatar = post.author?.profile_image_url || '';
 
+        // 배지 표시 로직
+        let badgeHtml = '';
+        if (post.is_new) {
+            badgeHtml = '<div class="badge badge-new">NEW</div>';
+        } else if (post.is_urgent) {
+            badgeHtml = '<div class="badge badge-urgent">마감임박</div>';
+        }
+
         item.innerHTML = `
             <div class="item-avatar" style="${authorAvatar ? `background-image: url('${authorAvatar}'); background-size: cover;` : ''}"></div>
             <div class="item-content">
-                <h3 class="item-title">${post.title || '제목 없음'}</h3>
-                <p class="item-description">${post.pickup_location_text || post.description || ''}</p>
+                <div class="item-header">
+                    <div class="item-title">${post.title || '제목 없음'}</div>
+                    ${badgeHtml}
+                </div>
+                <div class="item-description">${post.pickup_location_text || post.description || ''}</div>
             </div>
             <div class="item-count">${currentCount}/${targetCount}</div>
         `;
 
         // 클릭 이벤트 추가
         Utils.on(item, 'click', () => {
-            sessionStorage.setItem('selectedPostId', post.post_id || post.id);
+            console.log('게시글 클릭:', postId, post.title);
+            sessionStorage.setItem('selectedPostId', postId);
             sessionStorage.setItem('selectedItemTitle', post.title);
             window.location.href = './matching.html';
         });

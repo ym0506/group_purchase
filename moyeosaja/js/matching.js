@@ -42,6 +42,14 @@ async function loadSelectedItemInfo() {
  * 게시글 상세 정보로 UI 업데이트
  */
 function updatePostDetails(post) {
+    // 제품 이미지 표시
+    const productImageElement = document.querySelector('.product-image');
+    if (productImageElement && post.main_image_url) {
+        productImageElement.style.backgroundImage = `url('${post.main_image_url}')`;
+        productImageElement.style.backgroundSize = 'cover';
+        productImageElement.style.backgroundPosition = 'center';
+    }
+
     // 제품명
     const productNameElement = document.querySelector('.product-name');
     if (productNameElement) {
@@ -52,6 +60,14 @@ function updatePostDetails(post) {
     const authorNameElement = document.querySelector('.author-name');
     if (authorNameElement && post.author) {
         authorNameElement.textContent = post.author.nickname;
+    }
+
+    // 작성자 아바타
+    const authorAvatarElement = document.querySelector('.author-avatar');
+    if (authorAvatarElement && post.author?.profile_image_url) {
+        authorAvatarElement.style.backgroundImage = `url('${post.author.profile_image_url}')`;
+        authorAvatarElement.style.backgroundSize = 'cover';
+        authorAvatarElement.style.backgroundPosition = 'center';
     }
 
     // 설명
@@ -227,6 +243,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const matchBtn = document.querySelector('.btn-match');
     if (matchBtn) {
         matchBtn.addEventListener('click', async () => {
+            // 로그인 상태 확인
+            const accessToken = localStorage.getItem('access_token');
+            if (!accessToken) {
+                if (window.toast) {
+                    window.toast.warning('로그인이 필요한 서비스입니다.');
+                } else {
+                    alert('로그인이 필요한 서비스입니다.');
+                }
+
+                // 로그인 페이지로 이동 여부 확인
+                const shouldRedirect = window.confirmDialog
+                    ? await window.confirmDialog.show('로그인 페이지로 이동하시겠습니까?', '로그인 필요')
+                    : confirm('로그인 페이지로 이동하시겠습니까?');
+
+                if (shouldRedirect) {
+                    // 현재 페이지를 저장하여 로그인 후 돌아올 수 있도록
+                    sessionStorage.setItem('returnUrl', window.location.href);
+                    window.location.href = './login.html';
+                }
+                return;
+            }
+
             const postId = sessionStorage.getItem('selectedPostId');
 
             if (!postId) {

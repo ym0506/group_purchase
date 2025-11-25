@@ -42,7 +42,9 @@ function resolveApiBaseUrl() {
             // 배포 환경인 경우 프로덕션 백엔드 사용
             if (host.includes('onrender.com') ||
                 host.includes('vercel.app') ||
-                host.includes('netlify.app')) {
+                host.includes('netlify.app') ||
+                host.includes('web.app') ||
+                host.includes('firebaseapp.com')) {
                 return DEFAULT_PROD_BASE_URL;
             }
 
