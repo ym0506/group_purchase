@@ -239,6 +239,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // 댓글 기능 초기화
     initComments();
 
+    // 관심있어요 버튼 초기화
+    initWishlistButton();
+
     // 매칭하기 버튼 (백엔드 API 연동)
     const matchBtn = document.querySelector('.btn-match');
     if (matchBtn) {
@@ -334,6 +337,120 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+/**
+ * 관심있어요 버튼 초기화
+ */
+function initWishlistButton() {
+    const wishlistBtn = document.getElementById('btnWishlistDetail');
+    if (!wishlistBtn) return;
+
+    const postId = sessionStorage.getItem('selectedPostId');
+    if (!postId) return;
+
+    // 관심 상태 확인 (관심 목록에서 확인)
+    checkWishlistStatus(postId, wishlistBtn);
+
+    // 클릭 이벤트
+    wishlistBtn.addEventListener('click', async () => {
+        await toggleWishlistDetail(postId, wishlistBtn);
+    });
+
+    // 호버 효과
+    wishlistBtn.addEventListener('mouseenter', () => {
+        wishlistBtn.style.transform = 'scale(1.1)';
+    });
+    wishlistBtn.addEventListener('mouseleave', () => {
+        wishlistBtn.style.transform = 'scale(1)';
+    });
+}
+
+/**
+ * 관심 상태 확인
+ */
+async function checkWishlistStatus(postId, buttonElement) {
+    try {
+        const accessToken = localStorage.getItem('access_token');
+        if (!accessToken) return; // 비로그인 상태면 체크 안함
+
+        // 관심 목록 조회
+        const response = await window.apiService.getMyWishlist();
+        if (response.wishlist && response.wishlist.length > 0) {
+            const isWishlisted = response.wishlist.some(item =>
+                String(item.post_id) === String(postId)
+            );
+            if (isWishlisted) {
+                buttonElement.textContent = '❤️';
+                buttonElement.style.borderColor = '#ff6b6b';
+            }
+        }
+    } catch (error) {
+        console.error('관심 상태 확인 실패:', error);
+        // 에러는 무시 (비로그인 등)
+    }
+}
+
+/**
+ * 관심목록 토글 (상세 페이지)
+ */
+async function toggleWishlistDetail(postId, buttonElement) {
+    try {
+        // 로그인 확인
+        const accessToken = localStorage.getItem('access_token');
+        if (!accessToken) {
+            if (window.toast) {
+                window.toast.warning('로그인이 필요한 서비스입니다.');
+            } else {
+                alert('로그인이 필요한 서비스입니다.');
+            }
+            window.location.href = './login.html';
+            return;
+        }
+
+        // 현재 상태 확인
+        const currentIcon = buttonElement.textContent.trim();
+        const isCurrentlyWishlisted = currentIcon === '❤️';
+
+        // 버튼 비활성화 (중복 클릭 방지)
+        buttonElement.disabled = true;
+
+        if (isCurrentlyWishlisted) {
+            // 관심목록에서 제거
+            await window.apiService.removeFromWishlist(postId);
+            buttonElement.textContent = '🤍';
+            buttonElement.style.borderColor = '#e0e0e0';
+            if (window.toast) {
+                window.toast.success('관심목록에서 제거되었습니다.');
+            }
+        } else {
+            // 관심목록에 추가
+            await window.apiService.addToWishlist(postId);
+            buttonElement.textContent = '❤️';
+            buttonElement.style.borderColor = '#ff6b6b';
+            if (window.toast) {
+                window.toast.success('관심목록에 추가되었습니다.');
+            }
+
+            // 애니메이션 효과
+            buttonElement.style.transform = 'scale(1.3)';
+            setTimeout(() => {
+                buttonElement.style.transform = 'scale(1)';
+            }, 200);
+        }
+    } catch (error) {
+        console.error('관심목록 토글 실패:', error);
+        if (window.toast) {
+            window.toast.error('관심목록 처리에 실패했습니다.');
+        } else {
+            alert('관심목록 처리에 실패했습니다.');
+        }
+    } finally {
+        // 버튼 다시 활성화
+        if (buttonElement) {
+            buttonElement.disabled = false;
+        }
+    }
+}
 
 /**
  * 댓글 기능 초기화

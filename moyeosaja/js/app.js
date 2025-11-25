@@ -319,10 +319,13 @@ class App {
         item.setAttribute('data-post-id', postId);
         item.setAttribute('data-product', post.title);
         item.style.cursor = 'pointer';
+        item.style.position = 'relative'; // For absolute positioning of wishlist button
 
         const currentCount = post.current_participants || 0;
         const targetCount = post.target_participants || 0;
-        const authorAvatar = post.author?.profile_image_url || '';
+
+        // 게시글 이미지 우선, 없으면 작성자 아바타 사용
+        const displayImage = post.main_image_url || post.author?.profile_image_url || '';
 
         // 배지 표시 로직
         let badgeHtml = '';
@@ -332,8 +335,12 @@ class App {
             badgeHtml = '<div class="badge badge-urgent">마감임박</div>';
         }
 
+        // 관심 여부 확인 (초기값은 false, 나중에 API로 확인)
+        const isWishlisted = post.is_wishlisted || false;
+        const heartIcon = isWishlisted ? '❤️' : '🤍';
+
         item.innerHTML = `
-            <div class="item-avatar" style="${authorAvatar ? `background-image: url('${authorAvatar}'); background-size: cover;` : ''}"></div>
+            <div class="item-avatar" style="${displayImage ? `background-image: url('${displayImage}'); background-size: cover; background-position: center;` : ''}"></div>
             <div class="item-content">
                 <div class="item-header">
                     <div class="item-title">${post.title || '제목 없음'}</div>
@@ -342,7 +349,27 @@ class App {
                 <div class="item-description">${post.pickup_location_text || post.description || ''}</div>
             </div>
             <div class="item-count">${currentCount}/${targetCount}</div>
+            <button class="btn-wishlist" data-post-id="${postId}" title="관심있어요" style="position: absolute; top: 8px; right: 8px; background: rgba(255,255,255,0.9); border: none; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); z-index: 10; transition: transform 0.2s;">
+                ${heartIcon}
+            </button>
         `;
+
+        // 관심있어요 버튼 이벤트
+        const wishlistBtn = item.querySelector('.btn-wishlist');
+        if (wishlistBtn) {
+            Utils.on(wishlistBtn, 'click', async (e) => {
+                e.stopPropagation(); // 게시글 클릭 이벤트 방지
+                await this.toggleWishlist(postId, wishlistBtn);
+            });
+
+            // 호버 효과
+            Utils.on(wishlistBtn, 'mouseenter', () => {
+                wishlistBtn.style.transform = 'scale(1.1)';
+            });
+            Utils.on(wishlistBtn, 'mouseleave', () => {
+                wishlistBtn.style.transform = 'scale(1)';
+            });
+        }
 
         // 클릭 이벤트 추가
         Utils.on(item, 'click', () => {
@@ -353,6 +380,66 @@ class App {
         });
 
         return item;
+    }
+
+    /**
+     * 관심목록 토글
+     */
+    async toggleWishlist(postId, buttonElement) {
+        try {
+            // 로그인 확인
+            const accessToken = localStorage.getItem('access_token');
+            if (!accessToken) {
+                if (window.toast) {
+                    window.toast.warning('로그인이 필요한 서비스입니다.');
+                } else {
+                    alert('로그인이 필요한 서비스입니다.');
+                }
+                window.location.href = './login.html';
+                return;
+            }
+
+            // 현재 상태 확인
+            const currentIcon = buttonElement.textContent.trim();
+            const isCurrentlyWishlisted = currentIcon === '❤️';
+
+            // 버튼 비활성화 (중복 클릭 방지)
+            buttonElement.disabled = true;
+
+            if (isCurrentlyWishlisted) {
+                // 관심목록에서 제거
+                await window.apiService.removeFromWishlist(postId);
+                buttonElement.textContent = '🤍';
+                if (window.toast) {
+                    window.toast.success('관심목록에서 제거되었습니다.');
+                }
+            } else {
+                // 관심목록에 추가
+                await window.apiService.addToWishlist(postId);
+                buttonElement.textContent = '❤️';
+                if (window.toast) {
+                    window.toast.success('관심목록에 추가되었습니다.');
+                }
+
+                // 애니메이션 효과
+                buttonElement.style.transform = 'scale(1.3)';
+                setTimeout(() => {
+                    buttonElement.style.transform = 'scale(1)';
+                }, 200);
+            }
+        } catch (error) {
+            console.error('관심목록 토글 실패:', error);
+            if (window.toast) {
+                window.toast.error('관심목록 처리에 실패했습니다.');
+            } else {
+                alert('관심목록 처리에 실패했습니다.');
+            }
+        } finally {
+            // 버튼 다시 활성화
+            if (buttonElement) {
+                buttonElement.disabled = false;
+            }
+        }
     }
 
     /**
