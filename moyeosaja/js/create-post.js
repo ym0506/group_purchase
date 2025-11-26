@@ -404,23 +404,18 @@ async function generateAISummary(content, textarea, aiBtn) {
 }
 
 /**
- * 간단한 요약 생성 (임시 구현)
- * 실제로는 백엔드 AI API 호출 필요
+ * AI 텍스트 정제 (백엔드 API 호출)
  * @param {string} content - 원본 내용
- * @returns {Promise<string>} 요약된 내용
+ * @returns {Promise<string>} 정제된 내용
  */
 async function generateSimpleSummary(content) {
-    // 실제로는 백엔드 AI API 호출
-    // return await window.apiService.generateAISummary(content);
-
-    // 임시: 간단한 요약 로직 (프로덕션에서는 AI API 사용)
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            // 간단한 요약 (실제로는 AI API 사용)
-            const sentences = content.split(/[.!?]\s+/);
-            const summary = sentences.slice(0, 2).join('. ') + '.';
-            resolve(summary || content.substring(0, 100) + '...');
-        }, 1000); // AI 처리 시뮬레이션
-    });
+    try {
+        // 백엔드 AI API 호출: POST /api/ai/refine
+        const refinedContent = await window.apiService.refineContent(content);
+        return refinedContent;
+    } catch (error) {
+        console.error('AI 정제 API 호출 실패:', error);
+        // API 실패 시 원본 반환
+        throw new Error('AI 정제에 실패했습니다. 잠시 후 다시 시도해주세요.');
+    }
 }
-

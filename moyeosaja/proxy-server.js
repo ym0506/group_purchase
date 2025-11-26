@@ -43,6 +43,8 @@ const server = http.createServer((req, res) => {
         headers: {
             ...req.headers,
             host: new URL(BACKEND_URL).hostname,
+            // 백엔드에서 허용하는 Origin으로 변경
+            origin: 'https://login-baa7f.web.app',
         },
     };
 
@@ -66,11 +68,16 @@ const server = http.createServer((req, res) => {
         // HTTPS 요청
         const protocol = BACKEND_URL.startsWith('https') ? https : http;
         const proxyReq = protocol.request(targetUrl, options, (proxyRes) => {
-            // 응답 헤더 복사 및 CORS 헤더 추가
+            // 응답 헤더 복사
             const responseHeaders = {
                 ...proxyRes.headers,
-                ...corsHeaders,
             };
+
+            // 로컬 개발을 위해 CORS 헤더 덮어쓰기
+            responseHeaders['access-control-allow-origin'] = '*';
+            responseHeaders['access-control-allow-methods'] = 'GET, POST, PUT, DELETE, PATCH, OPTIONS';
+            responseHeaders['access-control-allow-headers'] = 'Content-Type, Authorization, X-Requested-With';
+            responseHeaders['access-control-max-age'] = '86400';
 
             res.writeHead(proxyRes.statusCode, responseHeaders);
 

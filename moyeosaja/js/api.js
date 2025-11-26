@@ -706,6 +706,30 @@ class APIService {
     async getMyCancellations() {
         return this.get('/api/users/me/cancellations');
     }
+
+    // ==================== AI 기능 API ====================
+
+    /**
+     * AI 텍스트 정제
+     * @param {string} content - 정제하고 싶은 텍스트
+     * @returns {Promise<string>} - AI가 정제한 결과 문자열
+     */
+    async refineContent(content) {
+        const response = await this.post('/api/ai/refine', { content });
+        // 응답이 문자열로 직접 반환됨
+        return response;
+    }
+
+    // ==================== 검색 API ====================
+
+    /**
+     * 공구 검색
+     * @param {string} keyword - 검색어
+     * @returns {Promise<Array>} - 검색 결과 게시글 목록
+     */
+    async searchPosts(keyword) {
+        return this.get('/api/posts/search', { q: keyword });
+    }
 }
 
 // API 서비스 인스턴스 생성 및 export

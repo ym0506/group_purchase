@@ -20,21 +20,95 @@ async function loadSelectedItemInfo() {
         // 백엔드 API 호출
         const post = await window.apiService.getPostDetail(postId);
 
-        console.log('게시글 상세 정보:', post);
+        console.log('백엔드 API 응답:', post);
+
+        // 백엔드 API 명세에 맞게 필드 매핑
+        // API 응답 예시:
+        // {
+        //   "post_id": 2,
+        //   "author": { "user_id": 1, "nickname": "...", "profile_image_url": "...", "rating_score": 4.5 },
+        //   "post_type": "group",
+        //   "title": "...",
+        //   "description": "...",
+        //   "main_image_url": "...",
+        //   "total_price": 30000,
+        //   "target_participants": 10,
+        //   "per_person_price": 3000,
+        //   "pickup_datetime": "2025-11-05T18:00:00",
+        //   "end_date": "2025-11-06T23:59:59",
+        //   "pickup_location_text": "강남역 5번 출구",
+        //   "status": "recruiting"
+        // }
+
+        const completePost = {
+            // ID 매핑 (post_id 또는 id)
+            id: post.post_id || post.id || postId,
+            post_id: post.post_id || post.id || postId,
+
+            // 기본 정보
+            title: post.title || sessionStorage.getItem('selectedItemTitle') || '제목 없음',
+            description: post.description || post.content || '설명이 없습니다.',
+            post_type: post.post_type || post.postType || 'group',
+            status: post.status || 'recruiting',
+
+            // 이미지
+            main_image_url: post.main_image_url || null,
+
+            // 작성자 정보
+            author: {
+                user_id: post.author?.user_id || post.author?.id || null,
+                nickname: post.author?.nickname || '익명',
+                profile_image_url: post.author?.profile_image_url || null,
+                rating_score: post.author?.rating_score || 0
+            },
+
+            // 참여 인원 (current_participants는 API 명세에 없으므로 계산 또는 기본값)
+            target_participants: post.target_participants || 0,
+            current_participants: post.current_participants || 0, // API에서 제공되지 않을 수 있음
+
+            // 날짜/시간
+            pickup_datetime: post.pickup_datetime || null,
+            end_date: post.end_date || null,
+
+            // 장소
+            pickup_location_text: post.pickup_location_text || '정보 없음',
+
+            // 가격
+            total_price: post.total_price || 0,
+            per_person_price: post.per_person_price || 0
+        };
+
+        console.log('매핑된 게시글 정보:', completePost);
 
         // UI 업데이트
-        updatePostDetails(post);
+        updatePostDetails(completePost);
     } catch (error) {
         console.error('게시글 상세 정보 로드 실패:', error);
 
-        // 에러 시 sessionStorage에서 fallback 데이터 사용
-        const itemTitle = sessionStorage.getItem('selectedItemTitle');
-        if (itemTitle) {
-            const productNameElement = document.querySelector('.product-name');
-            if (productNameElement) {
-                productNameElement.textContent = itemTitle;
-            }
-        }
+        // 에러 시 최소한의 정보로 UI 업데이트
+        const fallbackPost = {
+            id: postId,
+            post_id: postId,
+            title: sessionStorage.getItem('selectedItemTitle') || '제목 없음',
+            description: '게시글 정보를 불러올 수 없습니다.',
+            main_image_url: null,
+            author: {
+                user_id: null,
+                nickname: '익명',
+                profile_image_url: null,
+                rating_score: 0
+            },
+            target_participants: 0,
+            current_participants: 0,
+            pickup_datetime: null,
+            pickup_location_text: '정보 없음',
+            total_price: 0,
+            per_person_price: 0,
+            post_type: 'group',
+            status: 'recruiting'
+        };
+
+        updatePostDetails(fallbackPost);
     }
 }
 
@@ -42,6 +116,8 @@ async function loadSelectedItemInfo() {
  * 게시글 상세 정보로 UI 업데이트
  */
 function updatePostDetails(post) {
+    console.log('게시글 상세 정보 업데이트:', post);
+
     // 제품 이미지 표시
     const productImageElement = document.querySelector('.product-image');
     if (productImageElement && post.main_image_url) {
@@ -53,13 +129,13 @@ function updatePostDetails(post) {
     // 제품명
     const productNameElement = document.querySelector('.product-name');
     if (productNameElement) {
-        productNameElement.textContent = post.title;
+        productNameElement.textContent = post.title || '제목 없음';
     }
 
     // 작성자 정보
     const authorNameElement = document.querySelector('.author-name');
     if (authorNameElement && post.author) {
-        authorNameElement.textContent = post.author.nickname;
+        authorNameElement.textContent = post.author.nickname || '익명';
     }
 
     // 작성자 아바타
@@ -76,44 +152,71 @@ function updatePostDetails(post) {
         descriptionElement.textContent = post.description || '설명이 없습니다.';
     }
 
+    // 진행률 업데이트
+    const currentCountElement = document.querySelector('.count-current');
+    const totalCountElement = document.querySelector('.count-total');
+    if (currentCountElement) {
+        currentCountElement.textContent = post.current_participants || 0;
+    }
+    if (totalCountElement) {
+        totalCountElement.textContent = `/${post.target_participants || 0}`;
+    }
+
+    // 공구 정보 섹션 업데이트 (HTML 순서대로)
+    const infoRows = document.querySelectorAll('.purchase-info .info-row');
+    if (infoRows.length >= 5) {
+        // 0: 공구 명
+        const titleValue = infoRows[0].querySelector('.info-value');
+        if (titleValue) {
+            titleValue.textContent = post.title || '제목 없음';
+        }
+
+        // 1: 수량
+        const quantityValue = infoRows[1].querySelector('.info-value');
+        if (quantityValue) {
+            quantityValue.textContent = post.target_participants || '정보 없음';
+        }
+
+        // 2: 날짜
+        const dateValue = infoRows[2].querySelector('.info-value');
+        if (dateValue && post.pickup_datetime) {
+            const pickupDate = new Date(post.pickup_datetime);
+            dateValue.textContent = pickupDate.toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' });
+        }
+
+        // 3: 시간
+        const timeValue = infoRows[3].querySelector('.info-value');
+        if (timeValue && post.pickup_datetime) {
+            const pickupDate = new Date(post.pickup_datetime);
+            timeValue.textContent = pickupDate.toLocaleTimeString('ko-KR', { hour: 'numeric', minute: '2-digit', hour12: true });
+        }
+
+        // 4: 수령장소
+        const locationValue = infoRows[4].querySelector('.info-value');
+        if (locationValue) {
+            locationValue.textContent = post.pickup_location_text || '정보 없음';
+        }
+    }
+
     // 가격 정보
     const priceValueElements = document.querySelectorAll('.price-value');
     if (priceValueElements.length >= 2) {
-        priceValueElements[0].textContent = `${post.total_price?.toLocaleString()}원`;
-        priceValueElements[1].textContent = `${post.per_person_price?.toLocaleString()}원`;
-    }
-
-    // 인원 정보
-    const infoRows = document.querySelectorAll('.info-row');
-    if (infoRows.length >= 3) {
-        const targetElement = infoRows[1].querySelector('.info-value');
-        const currentElement = infoRows[2].querySelector('.info-value');
-
-        if (targetElement) {
-            targetElement.textContent = `${post.target_participants}명`;
+        // 총 금액
+        if (priceValueElements[0]) {
+            const totalPrice = post.total_price || (post.per_person_price * post.target_participants);
+            priceValueElements[0].textContent = `${totalPrice?.toLocaleString() || 0}원`;
         }
-        if (currentElement) {
-            currentElement.textContent = `${post.current_participants}명`;
+        // N/1 금액 (1인당)
+        if (priceValueElements[1]) {
+            const amountElement = priceValueElements[1].querySelector('.amount');
+            if (amountElement) {
+                amountElement.textContent = `${post.per_person_price?.toLocaleString() || 0}원`;
+            } else {
+                // .amount가 없으면 전체 텍스트 업데이트
+                const perPersonPrice = post.per_person_price || (post.total_price / post.target_participants);
+                priceValueElements[1].innerHTML = `<span class="per-person">1인당</span> <span class="amount">${perPersonPrice?.toLocaleString() || 0}원</span>`;
+            }
         }
-    }
-
-    // 픽업 장소 및 시간
-    const pickupLocationElement = document.querySelector('.pickup-location .info-value');
-    const pickupTimeElement = document.querySelector('.pickup-time .info-value');
-
-    if (pickupLocationElement) {
-        pickupLocationElement.textContent = post.pickup_location_text || '정보 없음';
-    }
-    if (pickupTimeElement && post.pickup_datetime) {
-        const pickupDate = new Date(post.pickup_datetime);
-        pickupTimeElement.textContent = pickupDate.toLocaleString('ko-KR');
-    }
-
-    // 모집 종료일
-    const endDateElement = document.querySelector('.end-date .info-value');
-    if (endDateElement && post.end_date) {
-        const endDate = new Date(post.end_date);
-        endDateElement.textContent = endDate.toLocaleString('ko-KR');
     }
 }
 
@@ -242,7 +345,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 관심있어요 버튼 초기화
     initWishlistButton();
 
-    // 매칭하기 버튼 (백엔드 API 연동)
+    // 매칭하기 버튼 (2단계 모달 플로우)
     const matchBtn = document.querySelector('.btn-match');
     if (matchBtn) {
         matchBtn.addEventListener('click', async () => {
@@ -279,34 +382,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // 버튼 로딩 상태
-            matchBtn.disabled = true;
-            matchBtn.textContent = '매칭 중...';
-
-            try {
-                // 백엔드 API 호출: 공구 참여 신청
-                const response = await window.apiService.participateInPost(postId);
-
-                console.log('매칭 성공:', response);
-
-                // 성공 처리
-                matchBtn.textContent = '매칭하기';
-                animateProgress();
-
-                // 모달 표시
-                setTimeout(() => {
-                    createMatchingModal();
-                }, 1000);
-            } catch (error) {
-                console.error('매칭 실패:', error);
-                if (window.toast) {
-                    window.toast.error(error.message || '매칭 신청에 실패했습니다.');
-                } else {
-                    alert(error.message || '매칭 신청에 실패했습니다.');
-                }
-                matchBtn.disabled = false;
-                matchBtn.textContent = '매칭하기';
-            }
+            // 1단계 모달 표시: 매칭 신청 확인
+            showMatchingStep1Modal(postId);
         });
     }
 
@@ -679,3 +756,139 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
+
+/**
+ * 매칭 신청 1단계 모달: 확인 및 정보 입력
+ */
+function showMatchingStep1Modal(postId) {
+    const modal = document.createElement('div');
+    modal.className = 'matching-step-modal';
+    
+    // 게시글 정보 가져오기
+    const postTitle = document.querySelector('.product-name')?.textContent || '공구';
+    
+    modal.innerHTML = `
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close">×</button>
+            <div class="modal-icon">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 24 24'%3E%3Cpath d='M21.75 9h-2.5V6.5c0-.69-.56-1.25-1.25-1.25h-2.5V2.75c0-.41-.34-.75-.75-.75h-5.5c-.41 0-.75.34-.75.75V5.25h-2.5c-.69 0-1.25.56-1.25 1.25V9h-2.5c-.41 0-.75.34-.75.75v11.5c0 .41.34.75.75.75h19.5c.41 0 .75-.34.75-.75V9.75c0-.41-.34-.75-.75-.75z'/%3E%3C/svg%3E" alt="매칭">
+            </div>
+            <h2 class="modal-title">매칭을 신청할까요?</h2>
+            <p class="modal-subtitle">공구 정보를 확인해주세요!</p>
+            
+            <div class="modal-input-group">
+                <label class="modal-input-label">소금빵</label>
+                <input type="text" class="modal-input" id="matchingNote" placeholder="소금빵 실수로 너무 많이 사버렸는데 같이 나눠먹어요" value="${postTitle}">
+            </div>
+            
+            <button class="modal-button modal-button-primary" id="confirmMatching">
+                매칭하기
+            </button>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // 닫기 버튼
+    const closeBtn = modal.querySelector('.modal-close');
+    const overlay = modal.querySelector('.modal-overlay');
+    
+    const closeModal = () => {
+        modal.style.animation = 'fadeOut 0.3s ease';
+        setTimeout(() => {
+            document.body.removeChild(modal);
+        }, 300);
+    };
+    
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', closeModal);
+    
+    // 매칭하기 버튼
+    const confirmBtn = modal.querySelector('#confirmMatching');
+    confirmBtn.addEventListener('click', async () => {
+        const note = modal.querySelector('#matchingNote').value.trim();
+        
+        // 로딩 상태
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = '매칭 중...';
+        
+        try {
+            // 백엔드 API 호출: 공구 참여 신청
+            const response = await window.apiService.participateInPost(postId, { note });
+            
+            console.log('매칭 성공:', response);
+            
+            // 1단계 모달 닫기
+            document.body.removeChild(modal);
+            
+            // 진행률 애니메이션
+            animateProgress();
+            
+            // 2단계 모달 표시
+            setTimeout(() => {
+                showMatchingStep2Modal();
+            }, 500);
+            
+        } catch (error) {
+            console.error('매칭 실패:', error);
+            if (window.toast) {
+                window.toast.error(error.message || '매칭 신청에 실패했습니다.');
+            } else {
+                alert(error.message || '매칭 신청에 실패했습니다.');
+            }
+            confirmBtn.disabled = false;
+            confirmBtn.textContent = '매칭하기';
+        }
+    });
+}
+
+/**
+ * 매칭 신청 2단계 모달: 완료 메시지
+ */
+function showMatchingStep2Modal() {
+    const modal = document.createElement('div');
+    modal.className = 'matching-step-modal';
+    
+    modal.innerHTML = `
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-icon success">
+                <div class="checkmark">
+                    <div class="checkmark-circle">
+                        <div class="checkmark-icon">✓</div>
+                    </div>
+                </div>
+            </div>
+            <h2 class="modal-title">매칭 신청이 완료됐어요!</h2>
+            <p class="modal-message">마이에서 공구 내역을 확인할 수 있어요.</p>
+            
+            <div class="modal-input-group">
+                <label class="modal-input-label">소금빵</label>
+                <input type="text" class="modal-input" value="소금빵 실수로 너무 많이 사버렸는데 같이 나눠먹어요" readonly>
+            </div>
+            
+            <button class="modal-button modal-button-primary" id="closeSuccess">
+                닫기
+            </button>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // 닫기 버튼
+    const closeBtn = modal.querySelector('#closeSuccess');
+    const overlay = modal.querySelector('.modal-overlay');
+    
+    const closeModal = () => {
+        modal.style.animation = 'fadeOut 0.3s ease';
+        setTimeout(() => {
+            document.body.removeChild(modal);
+            // 페이지 새로고침하여 업데이트된 참여 인원 표시
+            location.reload();
+        }, 300);
+    };
+    
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', closeModal);
+}
