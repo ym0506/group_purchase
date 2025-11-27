@@ -12,7 +12,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    animation: fadeIn 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.matching-step-modal.show {
+    opacity: 1;
+    pointer-events: all;
 }
 
 .matching-step-modal .modal-overlay {
@@ -33,8 +40,13 @@
     max-width: 360px;
     width: 90%;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    animation: slideUp 0.3s ease;
+    transform: translateY(30px);
+    transition: transform 0.3s ease;
     text-align: center;
+}
+
+.matching-step-modal.show .modal-content {
+    transform: translateY(0);
 }
 
 .matching-step-modal .modal-close {
@@ -68,14 +80,37 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 50%;
-    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+    position: relative;
 }
 
+/* 1단계: 파란색 봉투 아이콘 */
+.matching-step-modal .modal-icon.envelope-icon {
+    background: #E8F4FD;
+    border-radius: 50%;
+    position: relative;
+}
+
+.matching-step-modal .modal-icon.envelope-icon svg {
+    width: 48px;
+    height: 48px;
+}
+
+.matching-step-modal .modal-icon.envelope-icon .notification-dot {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 12px;
+    height: 12px;
+    background: #FF4444;
+    border-radius: 50%;
+    border: 2px solid white;
+}
+
+/* 2단계: 빨간색 체크마크 아이콘 */
 .matching-step-modal .modal-icon.success {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    box-shadow: 0 8px 24px rgba(245, 87, 108, 0.3);
+    background: #FF4444;
+    border-radius: 50%;
+    box-shadow: 0 8px 24px rgba(255, 68, 68, 0.3);
 }
 
 .matching-step-modal .modal-icon img {
@@ -93,9 +128,10 @@
 
 .matching-step-modal .modal-subtitle {
     font-size: 14px;
-    color: #667eea;
+    color: #666;
     margin: 0 0 24px 0;
-    font-weight: 500;
+    font-weight: 400;
+    line-height: 1.5;
 }
 
 .matching-step-modal .modal-message {
@@ -105,7 +141,36 @@
     margin: 0 0 24px 0;
 }
 
-/* 입력 필드 */
+/* 정보 표시 섹션 */
+.matching-step-modal .modal-info-section {
+    margin: 24px 0;
+    text-align: left;
+    background: #F8F9FA;
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.matching-step-modal .modal-product-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+}
+
+.matching-step-modal .modal-product-description {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 8px;
+}
+
+.matching-step-modal .modal-product-date {
+    font-size: 14px;
+    color: #999;
+    margin-top: 8px;
+}
+
+/* 입력 필드 (기존 호환성 유지) */
 .matching-step-modal .modal-input-group {
     margin: 24px 0;
     text-align: left;
@@ -153,14 +218,15 @@
 }
 
 .matching-step-modal .modal-button-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #4A90E2;
     color: white;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
 }
 
 .matching-step-modal .modal-button-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 6px 16px rgba(74, 144, 226, 0.4);
+    background: #3a7bc8;
 }
 
 .matching-step-modal .modal-button-primary:active {
@@ -217,7 +283,7 @@
     width: 80px;
     height: 80px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background: #FF4444;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -227,6 +293,7 @@
 .matching-step-modal .checkmark-icon {
     font-size: 48px;
     color: white;
+    font-weight: bold;
     animation: checkmarkPop 0.5s ease 0.2s both;
 }
 

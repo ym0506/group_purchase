@@ -760,26 +760,53 @@ function escapeHtml(text) {
 /**
  * 매칭 신청 1단계 모달: 확인 및 정보 입력
  */
-function showMatchingStep1Modal(postId) {
+async function showMatchingStep1Modal(postId) {
     const modal = document.createElement('div');
     modal.className = 'matching-step-modal';
     
-    // 게시글 정보 가져오기
-    const postTitle = document.querySelector('.product-name')?.textContent || '공구';
+    // 게시글 정보 가져오기 (UI에서 또는 API에서)
+    let postTitle = document.querySelector('.product-name')?.textContent || '공구';
+    let postDescription = document.querySelector('.product-description')?.textContent || '';
+    let postDate = '';
+    
+    // 날짜 정보 가져오기
+    const dateElement = document.querySelector('.purchase-info .info-row:nth-child(3) .info-value');
+    if (dateElement) {
+        postDate = dateElement.textContent.trim();
+    }
+    
+    // API에서 상세 정보 가져오기 (선택적)
+    try {
+        const post = await window.apiService.getPostDetail(postId);
+        if (post) {
+            postTitle = post.title || postTitle;
+            postDescription = post.description || postDescription;
+            if (post.pickup_datetime) {
+                const pickupDate = new Date(post.pickup_datetime);
+                postDate = pickupDate.toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' });
+            }
+        }
+    } catch (error) {
+        console.warn('게시글 상세 정보를 가져오지 못했습니다. UI 정보를 사용합니다.', error);
+    }
     
     modal.innerHTML = `
         <div class="modal-overlay"></div>
         <div class="modal-content">
             <button class="modal-close">×</button>
-            <div class="modal-icon">
-                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 24 24'%3E%3Cpath d='M21.75 9h-2.5V6.5c0-.69-.56-1.25-1.25-1.25h-2.5V2.75c0-.41-.34-.75-.75-.75h-5.5c-.41 0-.75.34-.75.75V5.25h-2.5c-.69 0-1.25.56-1.25 1.25V9h-2.5c-.41 0-.75.34-.75.75v11.5c0 .41.34.75.75.75h19.5c.41 0 .75-.34.75-.75V9.75c0-.41-.34-.75-.75-.75z'/%3E%3C/svg%3E" alt="매칭">
+            <div class="modal-icon envelope-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 4H4C2.9 4 2.01 4.9 2.01 6L2 18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4ZM20 8L12 13L4 8V6L12 11L20 6V8Z" fill="#4A90E2"/>
+                </svg>
+                <div class="notification-dot"></div>
             </div>
             <h2 class="modal-title">매칭을 신청할까요?</h2>
-            <p class="modal-subtitle">공구 정보를 확인해주세요!</p>
+            <p class="modal-subtitle">공구 정보를 정확히 확인해주세요!</p>
             
-            <div class="modal-input-group">
-                <label class="modal-input-label">소금빵</label>
-                <input type="text" class="modal-input" id="matchingNote" placeholder="소금빵 실수로 너무 많이 사버렸는데 같이 나눠먹어요" value="${postTitle}">
+            <div class="modal-info-section">
+                <div class="modal-product-name">${escapeHtml(postTitle)}</div>
+                <div class="modal-product-description">${escapeHtml(postDescription)}</div>
+                ${postDate ? `<div class="modal-product-date">${escapeHtml(postDate)}</div>` : ''}
             </div>
             
             <button class="modal-button modal-button-primary" id="confirmMatching">
@@ -790,14 +817,21 @@ function showMatchingStep1Modal(postId) {
     
     document.body.appendChild(modal);
     
+    // 애니메이션을 위한 약간의 지연
+    setTimeout(() => {
+        modal.classList.add('show');
+    }, 10);
+    
     // 닫기 버튼
     const closeBtn = modal.querySelector('.modal-close');
     const overlay = modal.querySelector('.modal-overlay');
     
     const closeModal = () => {
-        modal.style.animation = 'fadeOut 0.3s ease';
+        modal.classList.remove('show');
         setTimeout(() => {
-            document.body.removeChild(modal);
+            if (document.body.contains(modal)) {
+                document.body.removeChild(modal);
+            }
         }, 300);
     };
     
@@ -807,27 +841,25 @@ function showMatchingStep1Modal(postId) {
     // 매칭하기 버튼
     const confirmBtn = modal.querySelector('#confirmMatching');
     confirmBtn.addEventListener('click', async () => {
-        const note = modal.querySelector('#matchingNote').value.trim();
-        
         // 로딩 상태
         confirmBtn.disabled = true;
         confirmBtn.textContent = '매칭 중...';
         
         try {
             // 백엔드 API 호출: 공구 참여 신청
-            const response = await window.apiService.participateInPost(postId, { note });
+            const response = await window.apiService.participateInPost(postId, {});
             
             console.log('매칭 성공:', response);
             
             // 1단계 모달 닫기
-            document.body.removeChild(modal);
+            closeModal();
             
             // 진행률 애니메이션
             animateProgress();
             
             // 2단계 모달 표시
             setTimeout(() => {
-                showMatchingStep2Modal();
+                showMatchingStep2Modal(postTitle, postDescription, postDate);
             }, 500);
             
         } catch (error) {
@@ -846,26 +878,39 @@ function showMatchingStep1Modal(postId) {
 /**
  * 매칭 신청 2단계 모달: 완료 메시지
  */
-function showMatchingStep2Modal() {
+function showMatchingStep2Modal(postTitle = '', postDescription = '', postDate = '') {
     const modal = document.createElement('div');
     modal.className = 'matching-step-modal';
+    
+    // 기본값 설정
+    if (!postTitle) {
+        postTitle = document.querySelector('.product-name')?.textContent || '공구';
+    }
+    if (!postDescription) {
+        postDescription = document.querySelector('.product-description')?.textContent || '';
+    }
+    if (!postDate) {
+        const dateElement = document.querySelector('.purchase-info .info-row:nth-child(3) .info-value');
+        if (dateElement) {
+            postDate = dateElement.textContent.trim();
+        }
+    }
     
     modal.innerHTML = `
         <div class="modal-overlay"></div>
         <div class="modal-content">
             <div class="modal-icon success">
-                <div class="checkmark">
-                    <div class="checkmark-circle">
-                        <div class="checkmark-icon">✓</div>
-                    </div>
+                <div class="checkmark-circle">
+                    <div class="checkmark-icon">✓</div>
                 </div>
             </div>
             <h2 class="modal-title">매칭 신청이 완료됐어요!</h2>
-            <p class="modal-message">마이에서 공구 내역을 확인할 수 있어요.</p>
+            <p class="modal-subtitle">'마이'에서 공구 내역을 확인할 수 있어요.</p>
             
-            <div class="modal-input-group">
-                <label class="modal-input-label">소금빵</label>
-                <input type="text" class="modal-input" value="소금빵 실수로 너무 많이 사버렸는데 같이 나눠먹어요" readonly>
+            <div class="modal-info-section">
+                <div class="modal-product-name">${escapeHtml(postTitle)}</div>
+                <div class="modal-product-description">${escapeHtml(postDescription)}</div>
+                ${postDate ? `<div class="modal-product-date">${escapeHtml(postDate)}</div>` : ''}
             </div>
             
             <button class="modal-button modal-button-primary" id="closeSuccess">
@@ -876,14 +921,21 @@ function showMatchingStep2Modal() {
     
     document.body.appendChild(modal);
     
+    // 애니메이션을 위한 약간의 지연
+    setTimeout(() => {
+        modal.classList.add('show');
+    }, 10);
+    
     // 닫기 버튼
     const closeBtn = modal.querySelector('#closeSuccess');
     const overlay = modal.querySelector('.modal-overlay');
     
     const closeModal = () => {
-        modal.style.animation = 'fadeOut 0.3s ease';
+        modal.classList.remove('show');
         setTimeout(() => {
-            document.body.removeChild(modal);
+            if (document.body.contains(modal)) {
+                document.body.removeChild(modal);
+            }
             // 페이지 새로고침하여 업데이트된 참여 인원 표시
             location.reload();
         }, 300);
