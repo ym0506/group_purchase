@@ -1,6 +1,6 @@
 // Utility functions - 유틸리티 함수들
 
-export const Utils = {
+const Utils = {
     // DOM 요소 선택
     $(selector) {
         return document.querySelector(selector);
@@ -121,3 +121,16 @@ export const Utils = {
         });
     }
 };
+
+// ES6 모듈로 export (app.js, components.js에서 사용)
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { Utils };
+}
+
+// 전역으로도 노출 (일반 스크립트에서 사용)
+if (typeof window !== 'undefined') {
+    window.Utils = Utils;
+}
+
+// ES6 모듈 export (import 문을 사용하는 경우)
+export { Utils };

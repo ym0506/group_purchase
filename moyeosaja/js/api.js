@@ -72,8 +72,8 @@ class APIService {
     constructor() {
         this.baseURL = resolveApiBaseUrl();
         this.accessToken = this.getStoredToken();
-        this.defaultTimeout = 15000; // 15초
-        this.defaultRetries = 1; // 네트워크 오류 시 1회 재시도
+        this.defaultTimeout = 30000; // 30초 (백엔드 서버 응답 시간 고려)
+        this.defaultRetries = 2; // 네트워크 오류 시 2회 재시도
     }
 
     /**
@@ -398,7 +398,15 @@ class APIService {
             data: { email, password: '***' } // 비밀번호는 숨김
         });
 
-        const response = await this.post('/api/users/login', requestData);
+        // 로그인은 더 긴 타임아웃과 재시도 적용
+        const response = await this.request('/api/users/login', {
+            method: 'POST',
+            body: JSON.stringify(requestData),
+            timeout: 30000, // 30초 타임아웃
+            retries: 2, // 2회 재시도
+            showLoading: true,
+            showErrorToast: true,
+        });
 
         console.log('📥 로그인 API 응답:', response);
 
