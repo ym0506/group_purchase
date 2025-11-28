@@ -769,6 +769,12 @@ class APIService {
         });
 
         if (!response.ok) {
+            // 404 에러: 이미지 업로드 API가 없는 경우
+            if (response.status === 404) {
+                console.warn('⚠️ 이미지 업로드 API가 없습니다. base64를 사용합니다.');
+                throw new Error('IMAGE_UPLOAD_API_NOT_FOUND'); // 특별한 에러 코드
+            }
+            
             // 413 에러 특별 처리
             if (response.status === 413) {
                 const errorMessage = '이미지가 너무 큽니다. 더 작은 이미지를 사용해주세요. (최대 크기: 약 1MB 권장)';

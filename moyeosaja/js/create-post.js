@@ -276,18 +276,25 @@ async function handleImageUpload(file, uploadBox) {
                 throw new Error('이미지 업로드 API가 없습니다.');
             }
         } catch (uploadError) {
-            console.warn('이미지 업로드 API 실패, base64 사용:', uploadError);
-            
+            // 404 에러: 이미지 업로드 API가 없는 경우 (정상적인 fallback)
+            if (uploadError.message === 'IMAGE_UPLOAD_API_NOT_FOUND') {
+                console.log('ℹ️ 이미지 업로드 API가 없습니다. base64를 사용합니다.');
+                imageUrl = previewUrl;
+            } 
             // 413 에러인 경우 특별 처리
-            if (uploadError.message && uploadError.message.includes('413')) {
+            else if (uploadError.message && uploadError.message.includes('413')) {
                 console.warn('⚠️ 이미지가 너무 큽니다. 더 작은 이미지로 다시 시도해주세요.');
                 if (window.toast) {
                     window.toast.warning('이미지가 너무 큽니다. 더 작은 이미지를 사용해주세요.');
                 }
+                // 리사이즈 후에도 실패한 경우 base64 사용
+                imageUrl = previewUrl;
             }
-            
-            // API가 없거나 실패한 경우 base64 사용
-            imageUrl = previewUrl;
+            // 기타 에러
+            else {
+                console.warn('이미지 업로드 API 실패, base64 사용:', uploadError);
+                imageUrl = previewUrl;
+            }
             
             // base64 이미지 크기 확인 (5MB 이상이면 경고)
             if (imageUrl.startsWith('data:image')) {
