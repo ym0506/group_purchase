@@ -182,16 +182,30 @@ async function handleImageUpload(file, uploadBox) {
         uploadBox.style.opacity = '0.6';
         uploadBox.style.pointerEvents = 'none';
         
+        // 이미지 리사이즈 (1MB 이상인 경우)
+        let imageFile = file;
+        const sizeInMB = file.size / 1024 / 1024;
+        if (sizeInMB > 1) {
+            console.log('이미지 리사이즈 시작... (원본 크기:', sizeInMB.toFixed(2), 'MB)');
+            try {
+                imageFile = await resizeImage(file, 1920, 1920, 0.8);
+                console.log('이미지 리사이즈 완료 (리사이즈 크기:', (imageFile.size / 1024 / 1024).toFixed(2), 'MB)');
+            } catch (resizeError) {
+                console.warn('이미지 리사이즈 실패, 원본 사용:', resizeError);
+                imageFile = file;
+            }
+        }
+        
         // 먼저 미리보기용 base64 이미지 생성
-        const previewUrl = await createImagePreview(file);
+        const previewUrl = await createImagePreview(imageFile);
         updateUploadBox(uploadBox, previewUrl);
 
         // 실제 이미지 업로드 시도 (백엔드 API가 있는 경우)
         let imageUrl = null;
         try {
             if (window.apiService && window.apiService.uploadImage) {
-                console.log('이미지 업로드 API 호출 시작...');
-                imageUrl = await window.apiService.uploadImage(file);
+                console.log('이미지 업로드 API 호출 시작... (파일 크기:', (imageFile.size / 1024 / 1024).toFixed(2), 'MB)');
+                imageUrl = await window.apiService.uploadImage(imageFile);
                 console.log('이미지 업로드 성공:', imageUrl);
                 
                 // 업로드된 URL로 미리보기 업데이트
@@ -201,6 +215,15 @@ async function handleImageUpload(file, uploadBox) {
             }
         } catch (uploadError) {
             console.warn('이미지 업로드 API 실패, base64 사용:', uploadError);
+            
+            // 413 에러인 경우 특별 처리
+            if (uploadError.message && uploadError.message.includes('413')) {
+                console.warn('⚠️ 이미지가 너무 큽니다. 더 작은 이미지로 다시 시도해주세요.');
+                if (window.toast) {
+                    window.toast.warning('이미지가 너무 큽니다. 더 작은 이미지를 사용해주세요.');
+                }
+            }
+            
             // API가 없거나 실패한 경우 base64 사용
             imageUrl = previewUrl;
             

@@ -754,6 +754,12 @@ class APIService {
         const formData = new FormData();
         formData.append('image', file);
 
+        console.log('📤 이미지 업로드 요청:', {
+            url: `${this.baseURL}/api/upload/image`,
+            fileSize: (file.size / 1024 / 1024).toFixed(2) + 'MB',
+            fileType: file.type
+        });
+
         const response = await fetch(`${this.baseURL}/api/upload/image`, {
             method: 'POST',
             headers: {
@@ -763,11 +769,23 @@ class APIService {
         });
 
         if (!response.ok) {
-            const error = await response.json().catch(() => ({ message: '이미지 업로드에 실패했습니다.' }));
+            // 413 에러 특별 처리
+            if (response.status === 413) {
+                const errorMessage = '이미지가 너무 큽니다. 더 작은 이미지를 사용해주세요. (최대 크기: 약 1MB 권장)';
+                console.error('❌ 이미지 업로드 실패 (413):', errorMessage);
+                throw new Error(errorMessage);
+            }
+            
+            const error = await response.json().catch(() => ({ 
+                message: response.status === 413 
+                    ? '이미지가 너무 큽니다. 더 작은 이미지를 사용해주세요.' 
+                    : '이미지 업로드에 실패했습니다.' 
+            }));
             throw new Error(error.message || '이미지 업로드에 실패했습니다.');
         }
 
         const data = await response.json();
+        console.log('📥 이미지 업로드 성공:', data);
         return data.image_url || data.url || data.imageUrl;
     }
 
