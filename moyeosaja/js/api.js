@@ -152,7 +152,13 @@ class APIService {
             const contentType = response.headers.get('content-type');
             const isJson = contentType && contentType.includes('application/json');
 
-            const data = isJson ? await response.json() : await response.text();
+            let data;
+            try {
+                data = isJson ? await response.json() : await response.text();
+            } catch (parseError) {
+                console.warn('응답 파싱 실패:', parseError);
+                data = await response.text();
+            }
 
             // 500 에러인 경우 응답 본문 상세 로깅
             if (!response.ok && response.status === 500) {
@@ -168,15 +174,37 @@ class APIService {
             if (!response.ok) {
                 // 401 Unauthorized: 토큰 만료 또는 유효하지 않음
                 if (response.status === 401) {
-                    console.error('❌ 인증 오류 (401): 토큰이 만료되었거나 유효하지 않습니다.');
-                    this.removeToken();
-                    if (window.toast) {
-                        window.toast.error('로그인이 만료되었습니다. 다시 로그인해주세요.');
+                    // 로그인/회원가입 API는 인증이 필요 없는 엔드포인트이므로 401은 다른 의미
+                    const isAuthEndpoint = endpoint.includes('/users/login') || 
+                                          endpoint.includes('/users/signup');
+                    
+                    if (isAuthEndpoint) {
+                        // 로그인/회원가입 실패: 이메일/비밀번호 오류 또는 계정 문제
+                        console.error('❌ 로그인/회원가입 실패 (401):', {
+                            endpoint,
+                            message: data.message || data.error || '이메일 또는 비밀번호가 올바르지 않습니다.'
+                        });
+                        
+                        const errorMessage = data.message || 
+                                           data.error || 
+                                           '이메일 또는 비밀번호가 올바르지 않습니다.';
+                        
+                        if (showErrorToast && window.toast) {
+                            window.toast.error(errorMessage);
+                        }
+                        throw new Error(errorMessage);
+                    } else {
+                        // 인증이 필요한 API에서 401: 토큰 만료 또는 유효하지 않음
+                        console.error('❌ 인증 오류 (401): 토큰이 만료되었거나 유효하지 않습니다.');
+                        this.removeToken();
+                        if (window.toast) {
+                            window.toast.error('로그인이 만료되었습니다. 다시 로그인해주세요.');
+                        }
+                        setTimeout(() => {
+                            window.location.href = './login.html';
+                        }, 1500);
+                        throw new Error('인증이 만료되었습니다.');
                     }
-                    setTimeout(() => {
-                        window.location.href = './login.html';
-                    }, 1500);
-                    throw new Error('인증이 만료되었습니다.');
                 }
 
                 // 500 Internal Server Error: 서버 오류
