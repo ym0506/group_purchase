@@ -79,12 +79,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 // 이미지 URL 가져오기 (sessionStorage에서)
                 const imageUrl = formData.imageUrl || formData.image || null;
 
+                console.log('이미지 URL 확인:', {
+                    imageUrl,
+                    hasImageUrl: !!imageUrl,
+                    imageUrlLength: imageUrl ? imageUrl.length : 0,
+                    isBase64: imageUrl ? imageUrl.startsWith('data:image') : false
+                });
+
                 // 백엔드 API 호출: 게시글 작성
                 const postData = {
                     post_type: formData.category || 'group',
                     title: formData.name || formData.title || '소금빵',
                     description: formData.content || formData.description || '소금빵 실수로 너무 많이 사버렸는데 같이 나눠먹어요',
-                    main_image_url: imageUrl || 'https://example.com/default-image.jpg',
+                    main_image_url: imageUrl || null, // 기본 이미지 제거, null로 전송
                     total_price: parseInt(formData.totalPrice) || 30000,
                     target_participants: parseInt(formData.people) || 4,
                     per_person_price: Math.floor((parseInt(formData.totalPrice) || 30000) / (parseInt(formData.people) || 4)),

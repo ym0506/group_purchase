@@ -120,10 +120,18 @@ function updatePostDetails(post) {
 
     // 제품 이미지 표시
     const productImageElement = document.querySelector('.product-image');
-    if (productImageElement && post.main_image_url) {
-        productImageElement.style.backgroundImage = `url('${post.main_image_url}')`;
-        productImageElement.style.backgroundSize = 'cover';
-        productImageElement.style.backgroundPosition = 'center';
+    if (productImageElement) {
+        if (post.main_image_url) {
+            // 이미지 URL이 있는 경우
+            productImageElement.style.backgroundImage = `url('${post.main_image_url}')`;
+            productImageElement.style.backgroundSize = 'cover';
+            productImageElement.style.backgroundPosition = 'center';
+            productImageElement.style.backgroundRepeat = 'no-repeat';
+        } else {
+            // 이미지가 없는 경우 기본 배경색 또는 기본 이미지
+            productImageElement.style.backgroundImage = 'none';
+            productImageElement.style.backgroundColor = '#f0f0f0';
+        }
     }
 
     // 제품명
