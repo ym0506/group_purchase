@@ -215,17 +215,27 @@ async function handleLogout() {
     }
 
     try {
-        // 로그아웃 API 호출 (선택사항)
-        // await window.apiService.logout();
+        // API 서비스의 로그아웃 메서드 호출 (토큰 제거)
+        if (window.apiService) {
+            window.apiService.removeToken();
+        }
 
         // 로컬 스토리지 정리
+        localStorage.removeItem('access_token');
         localStorage.removeItem('userId');
+        localStorage.removeItem('user_id');
         localStorage.removeItem('autoLogin');
         localStorage.removeItem('userEmail');
+        localStorage.removeItem('nickname');
+        localStorage.removeItem('profile_image_url');
+        localStorage.removeItem('api_base_url');
 
         // 세션 스토리지 정리
         sessionStorage.removeItem('isLoggedIn');
         sessionStorage.removeItem('userEmail');
+        sessionStorage.removeItem('selectedPostId');
+        sessionStorage.removeItem('selectedItemId');
+        sessionStorage.removeItem('selectedItemTitle');
 
         // 로그인 페이지로 이동
         if (window.toast) {
@@ -268,9 +278,18 @@ async function handleDeleteAccount() {
     }
 
     try {
-        // 탈퇴 API 호출
-        // const userId = localStorage.getItem('userId');
-        // await window.apiService.deleteAccount(userId);
+        // 탈퇴 API 호출 (백엔드에 API가 있는 경우)
+        // TODO: 백엔드에 DELETE /api/users/me 엔드포인트가 추가되면 활성화
+        // try {
+        //     await window.apiService.delete('/api/users/me');
+        // } catch (apiError) {
+        //     console.warn('탈퇴 API 호출 실패 (프론트엔드에서만 처리):', apiError);
+        // }
+
+        // API 서비스의 토큰 제거
+        if (window.apiService) {
+            window.apiService.removeToken();
+        }
 
         // 로컬 스토리지 정리
         localStorage.clear();
