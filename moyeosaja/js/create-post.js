@@ -181,40 +181,55 @@ async function handleImageUpload(file, uploadBox) {
         // 로딩 상태 표시
         uploadBox.style.opacity = '0.6';
         uploadBox.style.pointerEvents = 'none';
+        
+        // 먼저 미리보기용 base64 이미지 생성
+        const previewUrl = await createImagePreview(file);
+        updateUploadBox(uploadBox, previewUrl);
 
-        // 이미지 미리보기
-        const imageUrl = await createImagePreview(file);
-
-        // 업로드 박스 업데이트
-        updateUploadBox(uploadBox, imageUrl);
+        // 실제 이미지 업로드 시도 (백엔드 API가 있는 경우)
+        let imageUrl = null;
+        try {
+            if (window.apiService && window.apiService.uploadImage) {
+                console.log('이미지 업로드 API 호출 시작...');
+                imageUrl = await window.apiService.uploadImage(file);
+                console.log('이미지 업로드 성공:', imageUrl);
+                
+                // 업로드된 URL로 미리보기 업데이트
+                updateUploadBox(uploadBox, imageUrl);
+            } else {
+                throw new Error('이미지 업로드 API가 없습니다.');
+            }
+        } catch (uploadError) {
+            console.warn('이미지 업로드 API 실패, base64 사용:', uploadError);
+            // API가 없거나 실패한 경우 base64 사용
+            imageUrl = previewUrl;
+            
+            // base64 이미지 크기 확인 (5MB 이상이면 경고)
+            if (imageUrl.startsWith('data:image')) {
+                const base64Length = imageUrl.length;
+                const sizeInMB = (base64Length * 3) / 4 / 1024 / 1024; // base64는 약 33% 더 큼
+                console.log('이미지 크기:', sizeInMB.toFixed(2), 'MB');
+                
+                if (sizeInMB > 5) {
+                    console.warn('⚠️ 이미지가 너무 큽니다. 백엔드에서 처리하지 못할 수 있습니다.');
+                    if (window.toast) {
+                        window.toast.warning('이미지가 너무 큽니다. 더 작은 이미지를 사용해주세요.');
+                    }
+                }
+            }
+        }
 
         // 이미지 URL을 sessionStorage에 저장
         const formData = JSON.parse(sessionStorage.getItem('createPostFormData') || '{}');
         formData.imageUrl = imageUrl;
         formData.imageFile = file.name; // 파일명 저장
-        
-        // base64 이미지 크기 확인 (5MB 이상이면 경고)
-        if (imageUrl.startsWith('data:image')) {
-            const base64Length = imageUrl.length;
-            const sizeInMB = (base64Length * 3) / 4 / 1024 / 1024; // base64는 약 33% 더 큼
-            console.log('이미지 크기:', sizeInMB.toFixed(2), 'MB');
-            
-            if (sizeInMB > 5) {
-                console.warn('⚠️ 이미지가 너무 큽니다. 백엔드에서 처리하지 못할 수 있습니다.');
-                if (window.toast) {
-                    window.toast.warning('이미지가 너무 큽니다. 더 작은 이미지를 사용해주세요.');
-                }
-            }
-        }
+        formData.isBase64 = imageUrl.startsWith('data:image'); // base64 여부 저장
         
         sessionStorage.setItem('createPostFormData', JSON.stringify(formData));
 
         if (window.toast) {
             window.toast.success('이미지가 업로드되었습니다.');
         }
-
-        // 실제 프로덕션에서는 외부 스토리지(AWS S3, Cloudinary 등)에 업로드하여 URL 받아오기
-        // await uploadImageToStorage(file);
     } catch (error) {
         console.error('이미지 업로드 오류:', error);
         if (window.toast) {

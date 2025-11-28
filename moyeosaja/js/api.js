@@ -743,6 +743,34 @@ class APIService {
         return this.get('/api/users/me/cancellations');
     }
 
+    // ==================== 이미지 업로드 API ====================
+
+    /**
+     * 이미지 업로드
+     * @param {File} file - 업로드할 이미지 파일
+     * @returns {Promise<string>} - 업로드된 이미지 URL
+     */
+    async uploadImage(file) {
+        const formData = new FormData();
+        formData.append('image', file);
+
+        const response = await fetch(`${this.baseURL}/api/upload/image`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${this.accessToken}`,
+            },
+            body: formData,
+        });
+
+        if (!response.ok) {
+            const error = await response.json().catch(() => ({ message: '이미지 업로드에 실패했습니다.' }));
+            throw new Error(error.message || '이미지 업로드에 실패했습니다.');
+        }
+
+        const data = await response.json();
+        return data.image_url || data.url || data.imageUrl;
+    }
+
     // ==================== AI 기능 API ====================
 
     /**
