@@ -48,12 +48,24 @@ function updatePreview(savedData) {
         console.warn('⚠️ [Step 2] No description found in savedData');
     }
 
-    if (previewImage && savedData.imageUrl) {
-        previewImage.src = savedData.imageUrl;
-        previewImage.alt = (savedData.name || savedData.title) || '공구 상품';
-        console.log('✅ [Step 2] Image updated:', savedData.imageUrl.substring(0, 50) + '...');
+    if (previewImage) {
+        if (savedData.imageUrl) {
+            previewImage.src = savedData.imageUrl;
+            previewImage.alt = (savedData.name || savedData.title) || '공구 상품';
+            previewImage.style.display = 'block';
+            previewImage.style.width = '100%';
+            previewImage.style.height = '100%';
+            previewImage.style.objectFit = 'cover';
+            console.log('✅ [Step 2] Image updated:', savedData.imageUrl.substring(0, 50) + '...');
+            console.log('✅ [Step 2] Image element:', previewImage);
+            console.log('✅ [Step 2] Image src length:', savedData.imageUrl.length);
+        } else {
+            console.warn('⚠️ [Step 2] No image URL found in savedData');
+            previewImage.style.display = 'none';
+        }
     } else {
-        console.warn('⚠️ [Step 2] No image URL found in savedData');
+        console.error('❌ [Step 2] Preview image element not found!');
+        console.log('Available elements:', document.querySelectorAll('.preview-image'));
     }
 }
 

@@ -51,8 +51,8 @@ async function loadSelectedItemInfo() {
             post_type: post.post_type || post.postType || 'group',
             status: post.status || 'recruiting',
 
-            // 이미지
-            main_image_url: post.main_image_url || null,
+            // 이미지 (여러 필드명 지원)
+            main_image_url: post.main_image_url || post.mainImageUrl || post.image_url || post.imageUrl || null,
 
             // 작성자 정보
             author: {
@@ -117,21 +117,42 @@ async function loadSelectedItemInfo() {
  */
 function updatePostDetails(post) {
     console.log('게시글 상세 정보 업데이트:', post);
+    console.log('이미지 URL:', post.main_image_url);
 
     // 제품 이미지 표시
     const productImageElement = document.querySelector('.product-image');
     if (productImageElement) {
         if (post.main_image_url) {
             // 이미지 URL이 있는 경우
-            productImageElement.style.backgroundImage = `url('${post.main_image_url}')`;
+            const imageUrl = post.main_image_url;
+            console.log('이미지 URL 설정:', imageUrl.substring(0, 100) + '...');
+            
+            // base64 이미지인 경우와 일반 URL인 경우 모두 처리
+            productImageElement.style.backgroundImage = `url('${imageUrl}')`;
             productImageElement.style.backgroundSize = 'cover';
             productImageElement.style.backgroundPosition = 'center';
             productImageElement.style.backgroundRepeat = 'no-repeat';
+            productImageElement.style.backgroundColor = 'transparent';
+            
+            // 이미지 로드 확인
+            const testImg = new Image();
+            testImg.onload = () => {
+                console.log('✅ 이미지 로드 성공');
+            };
+            testImg.onerror = () => {
+                console.error('❌ 이미지 로드 실패:', imageUrl.substring(0, 100));
+                productImageElement.style.backgroundImage = 'none';
+                productImageElement.style.backgroundColor = '#f0f0f0';
+            };
+            testImg.src = imageUrl;
         } else {
             // 이미지가 없는 경우 기본 배경색 또는 기본 이미지
+            console.warn('⚠️ 이미지 URL이 없습니다');
             productImageElement.style.backgroundImage = 'none';
             productImageElement.style.backgroundColor = '#f0f0f0';
         }
+    } else {
+        console.error('❌ .product-image 요소를 찾을 수 없습니다');
     }
 
     // 제품명
