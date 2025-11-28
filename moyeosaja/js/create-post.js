@@ -150,6 +150,68 @@ function initImageUpload() {
 }
 
 /**
+ * 이미지 리사이즈 및 압축
+ * @param {File} file - 원본 이미지 파일
+ * @param {number} maxWidth - 최대 너비 (기본값: 1920)
+ * @param {number} maxHeight - 최대 높이 (기본값: 1920)
+ * @param {number} quality - 품질 (0.0 ~ 1.0, 기본값: 0.8)
+ * @returns {Promise<File>} 리사이즈된 이미지 파일
+ */
+function resizeImage(file, maxWidth = 1920, maxHeight = 1920, quality = 0.8) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+                // 원본 크기
+                let width = img.width;
+                let height = img.height;
+
+                // 비율 유지하면서 리사이즈
+                if (width > maxWidth || height > maxHeight) {
+                    if (width > height) {
+                        height = (height * maxWidth) / width;
+                        width = maxWidth;
+                    } else {
+                        width = (width * maxHeight) / height;
+                        height = maxHeight;
+                    }
+                }
+
+                // Canvas로 리사이즈
+                const canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                // Blob으로 변환
+                canvas.toBlob((blob) => {
+                    if (blob) {
+                        const resizedFile = new File([blob], file.name, {
+                            type: file.type,
+                            lastModified: Date.now()
+                        });
+                        console.log('이미지 리사이즈 완료:', {
+                            원본: (file.size / 1024 / 1024).toFixed(2) + 'MB',
+                            리사이즈: (resizedFile.size / 1024 / 1024).toFixed(2) + 'MB',
+                            압축률: ((1 - resizedFile.size / file.size) * 100).toFixed(1) + '%'
+                        });
+                        resolve(resizedFile);
+                    } else {
+                        reject(new Error('이미지 리사이즈 실패'));
+                    }
+                }, file.type, quality);
+            };
+            img.onerror = reject;
+            img.src = e.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+}
+
+/**
  * 이미지 업로드 처리
  * @param {File} file - 업로드할 이미지 파일
  * @param {HTMLElement} uploadBox - 업로드 박스 요소
