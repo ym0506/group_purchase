@@ -50,15 +50,42 @@ function updatePreview(savedData) {
 
     if (previewImage) {
         if (savedData.imageUrl) {
+            // 이미지 src 설정
             previewImage.src = savedData.imageUrl;
             previewImage.alt = (savedData.name || savedData.title) || '공구 상품';
+            
+            // 이미지 스타일 강제 설정
             previewImage.style.display = 'block';
+            previewImage.style.visibility = 'visible';
+            previewImage.style.opacity = '1';
             previewImage.style.width = '100%';
             previewImage.style.height = '100%';
             previewImage.style.objectFit = 'cover';
+            previewImage.style.position = 'relative';
+            previewImage.style.zIndex = '1';
+            
+            // 부모 요소도 확인
+            const previewImageContainer = previewImage.closest('.preview-image');
+            if (previewImageContainer) {
+                previewImageContainer.style.overflow = 'hidden';
+                previewImageContainer.style.position = 'relative';
+            }
+            
+            // 이미지 로드 이벤트 확인
+            previewImage.onload = () => {
+                console.log('✅ [Step 2] Image loaded successfully');
+                console.log('✅ [Step 2] Image dimensions:', previewImage.naturalWidth, 'x', previewImage.naturalHeight);
+            };
+            previewImage.onerror = (error) => {
+                console.error('❌ [Step 2] Image load error:', error);
+                console.error('❌ [Step 2] Failed image URL:', savedData.imageUrl.substring(0, 100));
+            };
+            
             console.log('✅ [Step 2] Image updated:', savedData.imageUrl.substring(0, 50) + '...');
             console.log('✅ [Step 2] Image element:', previewImage);
+            console.log('✅ [Step 2] Image src:', previewImage.src.substring(0, 100));
             console.log('✅ [Step 2] Image src length:', savedData.imageUrl.length);
+            console.log('✅ [Step 2] Image computed style:', window.getComputedStyle(previewImage).display);
         } else {
             console.warn('⚠️ [Step 2] No image URL found in savedData');
             previewImage.style.display = 'none';
@@ -66,6 +93,7 @@ function updatePreview(savedData) {
     } else {
         console.error('❌ [Step 2] Preview image element not found!');
         console.log('Available elements:', document.querySelectorAll('.preview-image'));
+        console.log('Available img elements:', document.querySelectorAll('.preview-image img'));
     }
 }
 
