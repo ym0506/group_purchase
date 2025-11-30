@@ -258,64 +258,62 @@ async function handleImageUpload(file, uploadBox) {
             }
         }
         
-        // 먼저 미리보기용 base64 이미지 생성
-        const previewUrl = await createImagePreview(imageFile);
-        updateUploadBox(uploadBox, previewUrl);
-
-        // 실제 이미지 업로드 시도 (백엔드 API가 있는 경우)
+        // Firebase Storage에 이미지 업로드 시도 (실패 시 base64 fallback)
         let imageUrl = null;
+        let isFirebaseUrl = false;
+        
         try {
-            if (window.apiService && window.apiService.uploadImage) {
-                console.log('이미지 업로드 API 호출 시작... (파일 크기:', (imageFile.size / 1024 / 1024).toFixed(2), 'MB)');
-                imageUrl = await window.apiService.uploadImage(imageFile);
-                console.log('이미지 업로드 성공:', imageUrl);
+            // Firebase Storage 서비스가 있으면 사용
+            if (window.firebaseStorageService && window.firebaseStorageService.uploadImageWithFallback) {
+                console.log('📤 Firebase Storage 업로드 시도...');
+                imageUrl = await window.firebaseStorageService.uploadImageWithFallback(imageFile, 'posts');
+                isFirebaseUrl = imageUrl.startsWith('https://');
                 
-                // 업로드된 URL로 미리보기 업데이트
-                updateUploadBox(uploadBox, imageUrl);
+                if (isFirebaseUrl) {
+                    console.log('✅ Firebase Storage 업로드 성공:', imageUrl.substring(0, 100) + '...');
+                } else {
+                    console.log('ℹ️ Firebase Storage 업로드 실패, base64 사용');
+                }
             } else {
-                throw new Error('이미지 업로드 API가 없습니다.');
+                // Firebase Storage가 없으면 base64 사용
+                console.log('📸 Firebase Storage 없음, base64 변환 시작...');
+                imageUrl = await createImagePreview(imageFile);
             }
-        } catch (uploadError) {
-            // 404 에러: 이미지 업로드 API가 없는 경우 (정상적인 fallback)
-            if (uploadError.message === 'IMAGE_UPLOAD_API_NOT_FOUND') {
-                console.log('ℹ️ 이미지 업로드 API가 없습니다. base64를 사용합니다.');
-                imageUrl = previewUrl;
-            } 
-            // 413 에러인 경우 특별 처리
-            else if (uploadError.message && uploadError.message.includes('413')) {
-                console.warn('⚠️ 이미지가 너무 큽니다. 더 작은 이미지로 다시 시도해주세요.');
+        } catch (error) {
+            console.warn('⚠️ 이미지 업로드 실패, base64 사용:', error);
+            // 에러 발생 시 base64로 fallback
+            imageUrl = await createImagePreview(imageFile);
+        }
+        
+        // 미리보기 업데이트
+        updateUploadBox(uploadBox, imageUrl);
+        
+        console.log('✅ 이미지 준비 완료:', {
+            파일명: file.name,
+            원본크기: (file.size / 1024 / 1024).toFixed(2) + 'MB',
+            최종크기: imageFile !== file ? (imageFile.size / 1024 / 1024).toFixed(2) + 'MB' : '리사이즈 없음',
+            형식: isFirebaseUrl ? 'Firebase Storage URL' : 'base64 데이터 URL',
+            URL: imageUrl.substring(0, 100) + '...'
+        });
+        
+        // base64 이미지 크기 확인 (5MB 이상이면 경고)
+        if (!isFirebaseUrl && imageUrl.startsWith('data:image')) {
+            const base64Length = imageUrl.length;
+            const sizeInMB = (base64Length * 3) / 4 / 1024 / 1024; // base64는 약 33% 더 큼
+            
+            if (sizeInMB > 5) {
+                console.warn('⚠️ 이미지가 너무 큽니다. 백엔드에서 처리하지 못할 수 있습니다.');
                 if (window.toast) {
                     window.toast.warning('이미지가 너무 큽니다. 더 작은 이미지를 사용해주세요.');
-                }
-                // 리사이즈 후에도 실패한 경우 base64 사용
-                imageUrl = previewUrl;
-            }
-            // 기타 에러
-            else {
-                console.warn('이미지 업로드 API 실패, base64 사용:', uploadError);
-                imageUrl = previewUrl;
-            }
-            
-            // base64 이미지 크기 확인 (5MB 이상이면 경고)
-            if (imageUrl.startsWith('data:image')) {
-                const base64Length = imageUrl.length;
-                const sizeInMB = (base64Length * 3) / 4 / 1024 / 1024; // base64는 약 33% 더 큼
-                console.log('이미지 크기:', sizeInMB.toFixed(2), 'MB');
-                
-                if (sizeInMB > 5) {
-                    console.warn('⚠️ 이미지가 너무 큽니다. 백엔드에서 처리하지 못할 수 있습니다.');
-                    if (window.toast) {
-                        window.toast.warning('이미지가 너무 큽니다. 더 작은 이미지를 사용해주세요.');
-                    }
                 }
             }
         }
 
         // 이미지 URL을 sessionStorage에 저장
         const formData = JSON.parse(sessionStorage.getItem('createPostFormData') || '{}');
-        formData.imageUrl = imageUrl;
+        formData.imageUrl = imageUrl; // Firebase Storage URL 또는 base64 데이터 URL
         formData.imageFile = file.name; // 파일명 저장
-        formData.isBase64 = imageUrl.startsWith('data:image'); // base64 여부 저장
+        formData.isBase64 = !isFirebaseUrl; // Firebase URL인지 base64인지 표시
         
         sessionStorage.setItem('createPostFormData', JSON.stringify(formData));
 

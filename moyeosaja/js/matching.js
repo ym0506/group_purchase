@@ -40,6 +40,30 @@ async function loadSelectedItemInfo() {
         //   "status": "recruiting"
         // }
 
+        // 백엔드 응답 전체 구조 로깅 (디버깅용)
+        console.log('🔍 백엔드 응답 전체 구조:', JSON.stringify(post, null, 2));
+        
+        // 이미지 URL 추출 (백엔드는 imageUrls 배열로 반환)
+        let imageUrl = null;
+        if (post.imageUrls && Array.isArray(post.imageUrls) && post.imageUrls.length > 0) {
+            // imageUrls 배열에서 첫 번째 이미지 사용
+            imageUrl = post.imageUrls[0];
+            console.log('✅ imageUrls 배열에서 이미지 발견:', imageUrl.substring(0, 100) + '...');
+        } else {
+            // 기존 필드명들도 확인 (하위 호환성)
+            imageUrl = post.main_image_url || post.mainImageUrl || post.image_url || post.imageUrl || post.image || post.mainImage || post.thumbnail || post.thumbnailUrl || null;
+        }
+        
+        console.log('🔍 이미지 관련 필드 확인:', {
+            imageUrls: post.imageUrls,
+            imageUrls_length: post.imageUrls ? post.imageUrls.length : 0,
+            main_image_url: post.main_image_url,
+            mainImageUrl: post.mainImageUrl,
+            image_url: post.image_url,
+            imageUrl: post.imageUrl,
+            최종_이미지_URL: imageUrl ? imageUrl.substring(0, 100) + '...' : null
+        });
+
         const completePost = {
             // ID 매핑 (post_id 또는 id)
             id: post.post_id || post.id || postId,
@@ -51,8 +75,8 @@ async function loadSelectedItemInfo() {
             post_type: post.post_type || post.postType || 'group',
             status: post.status || 'recruiting',
 
-            // 이미지 (여러 필드명 지원)
-            main_image_url: post.main_image_url || post.mainImageUrl || post.image_url || post.imageUrl || null,
+            // 이미지 (imageUrls 배열에서 첫 번째 이미지 사용)
+            main_image_url: imageUrl,
 
             // 작성자 정보
             author: {
@@ -271,9 +295,28 @@ function updateStatusTime() {
 function createMatchingModal() {
     const modal = document.createElement('div');
     modal.className = 'matching-modal';
+    
+    // 모달 컨테이너 스타일 직접 적용 (다른 CSS와의 충돌 방지)
+    modal.style.cssText = `
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        z-index: 10000 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+        margin: 0 !important;
+        padding: 0 !important;
+    `;
+    
     modal.innerHTML = `
         <div class="modal-overlay"></div>
-        <div class="modal-content">
+        <div class="modal-content" style="position: relative !important; background: white !important; border-radius: 24px !important; padding: 32px 24px !important; max-width: 360px !important; width: 90% !important; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3) !important; transform: translateY(30px); transition: transform 0.3s ease; text-align: center !important; margin: auto !important; left: auto !important; right: auto !important; top: auto !important; bottom: auto !important;">
             <div class="modal-icon">🎉</div>
             <h2 class="modal-title">매칭 신청 완료!</h2>
             <p class="modal-message">
@@ -299,6 +342,12 @@ function createMatchingModal() {
     // 애니메이션을 위한 약간의 지연
     setTimeout(() => {
         modal.classList.add('show');
+        modal.style.opacity = '1';
+        modal.style.pointerEvents = 'all';
+        const content = modal.querySelector('.modal-content');
+        if (content) {
+            content.style.transform = 'translateY(0)';
+        }
     }, 10);
 }
 

@@ -133,7 +133,8 @@ class APIService {
 
         try {
             // 요청 전 로깅 (디버깅용)
-            if (endpoint.includes('/users/me')) {
+            if (endpoint.includes('/users/me') || endpoint.includes('/api/posts')) {
+                const requestBody = config.body ? JSON.parse(config.body) : null;
                 console.log('📤 API 요청 상세:', {
                     method: config.method || 'GET',
                     url,
@@ -142,7 +143,18 @@ class APIService {
                         'Authorization': config.headers['Authorization'] ? `${config.headers['Authorization'].substring(0, 20)}...` : '없음'
                     },
                     hasToken: !!this.accessToken,
-                    tokenLength: this.accessToken ? this.accessToken.length : 0
+                    tokenLength: this.accessToken ? this.accessToken.length : 0,
+                    body: requestBody ? {
+                        ...requestBody,
+                        imageUrls: requestBody.imageUrls ? 
+                            (requestBody.imageUrls.length > 0 ? 
+                                [`${requestBody.imageUrls[0].substring(0, 100)}... (base64, 길이: ${requestBody.imageUrls[0].length})`] : 
+                                []) : 
+                            undefined,
+                        main_image_url: requestBody.main_image_url ? 
+                            `${requestBody.main_image_url.substring(0, 100)}... (base64, 길이: ${requestBody.main_image_url.length})` : 
+                            undefined
+                    } : null
                 });
             }
 
@@ -565,6 +577,24 @@ class APIService {
                     error: '500 Internal Server Error (재시도 2회 실패)',
                     requestURL: `${this.baseURL}/api/users/me`
                 });
+
+                // 폴백 데이터 반환
+                const fallbackData = {
+                    user_id: localStorage.getItem('userId') || null,
+                    email: localStorage.getItem('userEmail') || null,
+                    nickname: localStorage.getItem('nickname') || '사용자',
+                    profile_image_url: localStorage.getItem('profile_image_url') || null,
+                    rating_score: parseFloat(localStorage.getItem('rating_score')) || 0,
+                    is_fallback: true
+                };
+
+                // 폴백 데이터가 있으면 반환, 없으면 에러 throw
+                if (fallbackData.user_id || fallbackData.email) {
+                    console.warn('⚠️ 폴백 데이터 반환:', fallbackData);
+                    return fallbackData;
+                } else {
+                    throw new Error('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+                }
             }
         }
 

@@ -83,15 +83,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     imageUrl,
                     hasImageUrl: !!imageUrl,
                     imageUrlLength: imageUrl ? imageUrl.length : 0,
-                    isBase64: imageUrl ? imageUrl.startsWith('data:image') : false
+                    isBase64: imageUrl ? imageUrl.startsWith('data:image') : false,
+                    preview: imageUrl ? imageUrl.substring(0, 100) + '...' : null
                 });
 
                 // 백엔드 API 호출: 게시글 작성
+                // 백엔드는 imageUrls 배열 형식으로 저장하므로 배열로 전송
                 const postData = {
                     post_type: formData.category || 'group',
                     title: formData.name || formData.title || '소금빵',
                     description: formData.content || formData.description || '소금빵 실수로 너무 많이 사버렸는데 같이 나눠먹어요',
-                    main_image_url: imageUrl || null, // 기본 이미지 제거, null로 전송
+                    // 백엔드가 imageUrls 배열을 사용하므로 배열로 전송
+                    imageUrls: imageUrl ? [imageUrl] : [], // base64 데이터 URL을 배열로 전송
+                    // 하위 호환성을 위해 main_image_url도 함께 전송
+                    main_image_url: imageUrl || null,
                     total_price: parseInt(formData.totalPrice) || 30000,
                     target_participants: parseInt(formData.people) || 4,
                     per_person_price: Math.floor((parseInt(formData.totalPrice) || 30000) / (parseInt(formData.people) || 4)),
@@ -100,10 +105,42 @@ document.addEventListener('DOMContentLoaded', () => {
                     pickup_location_text: formData.location || '한서대학교 학생회관 앞'
                 };
 
-                console.log('백엔드 전송 데이터:', postData);
+                console.log('📤 백엔드 전송 데이터:', {
+                    ...postData,
+                    main_image_url: postData.main_image_url ? 
+                        (postData.main_image_url.substring(0, 100) + '... (base64 데이터)') : 
+                        null,
+                    main_image_url_length: postData.main_image_url ? postData.main_image_url.length : 0,
+                    imageUrls: postData.imageUrls ? 
+                        (postData.imageUrls.length > 0 ? 
+                            [`${postData.imageUrls[0].substring(0, 100)}... (base64, 길이: ${postData.imageUrls[0].length})`] : 
+                            []) : 
+                        []
+                });
 
                 // 실제 백엔드 API 호출
                 const response = await window.apiService.createPost(postData);
+                
+                console.log('📥 백엔드 응답:', {
+                    ...response,
+                    main_image_url: response.main_image_url ? 
+                        (response.main_image_url.substring(0, 100) + '...') : 
+                        null,
+                    imageUrls: response.imageUrls ? 
+                        (response.imageUrls.length > 0 ? 
+                            [`${response.imageUrls[0].substring(0, 100)}... (길이: ${response.imageUrls[0].length})`] : 
+                            []) : 
+                        [],
+                    imageUrls_length: response.imageUrls ? response.imageUrls.length : 0
+                });
+                
+                // 이미지가 저장되지 않은 경우 경고
+                if (!response.imageUrls || response.imageUrls.length === 0) {
+                    console.warn('⚠️ 백엔드 응답에 이미지가 없습니다. 전송한 이미지:', {
+                        전송_imageUrls: postData.imageUrls,
+                        전송_main_image_url: postData.main_image_url ? '있음' : '없음'
+                    });
+                }
 
                 console.log('공구글 작성 성공:', response);
 
