@@ -83,6 +83,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // AI 요약 기능 초기화
     initAISummary();
+
+    // 가격 자동 계산 기능 초기화
+    initPriceCalculation();
 });
 
 /**
@@ -243,7 +246,7 @@ async function handleImageUpload(file, uploadBox) {
         // 로딩 상태 표시
         uploadBox.style.opacity = '0.6';
         uploadBox.style.pointerEvents = 'none';
-        
+
         // 이미지 리사이즈 (1MB 이상인 경우)
         let imageFile = file;
         const sizeInMB = file.size / 1024 / 1024;
@@ -257,18 +260,18 @@ async function handleImageUpload(file, uploadBox) {
                 imageFile = file;
             }
         }
-        
+
         // Firebase Storage에 이미지 업로드 시도 (실패 시 base64 fallback)
         let imageUrl = null;
         let isFirebaseUrl = false;
-        
+
         try {
             // Firebase Storage 서비스가 있으면 사용
             if (window.firebaseStorageService && window.firebaseStorageService.uploadImageWithFallback) {
                 console.log('📤 Firebase Storage 업로드 시도...');
                 imageUrl = await window.firebaseStorageService.uploadImageWithFallback(imageFile, 'posts');
                 isFirebaseUrl = imageUrl.startsWith('https://');
-                
+
                 if (isFirebaseUrl) {
                     console.log('✅ Firebase Storage 업로드 성공:', imageUrl.substring(0, 100) + '...');
                 } else {
@@ -284,10 +287,10 @@ async function handleImageUpload(file, uploadBox) {
             // 에러 발생 시 base64로 fallback
             imageUrl = await createImagePreview(imageFile);
         }
-        
+
         // 미리보기 업데이트
         updateUploadBox(uploadBox, imageUrl);
-        
+
         console.log('✅ 이미지 준비 완료:', {
             파일명: file.name,
             원본크기: (file.size / 1024 / 1024).toFixed(2) + 'MB',
@@ -295,12 +298,12 @@ async function handleImageUpload(file, uploadBox) {
             형식: isFirebaseUrl ? 'Firebase Storage URL' : 'base64 데이터 URL',
             URL: imageUrl.substring(0, 100) + '...'
         });
-        
+
         // base64 이미지 크기 확인 (5MB 이상이면 경고)
         if (!isFirebaseUrl && imageUrl.startsWith('data:image')) {
             const base64Length = imageUrl.length;
             const sizeInMB = (base64Length * 3) / 4 / 1024 / 1024; // base64는 약 33% 더 큼
-            
+
             if (sizeInMB > 5) {
                 console.warn('⚠️ 이미지가 너무 큽니다. 백엔드에서 처리하지 못할 수 있습니다.');
                 if (window.toast) {
@@ -314,7 +317,7 @@ async function handleImageUpload(file, uploadBox) {
         formData.imageUrl = imageUrl; // Firebase Storage URL 또는 base64 데이터 URL
         formData.imageFile = file.name; // 파일명 저장
         formData.isBase64 = !isFirebaseUrl; // Firebase URL인지 base64인지 표시
-        
+
         sessionStorage.setItem('createPostFormData', JSON.stringify(formData));
 
         if (window.toast) {
@@ -474,31 +477,68 @@ async function generateAISummary(content, textarea, aiBtn) {
     aiBtn.textContent = '요약 중...';
     aiBtn.style.opacity = '0.6';
 
-    try {
-        // 실제로는 백엔드 AI API 호출
-        // const summary = await window.apiService.generateAISummary(content);
+    console.log('🤖 AI 요약 시작:', { contentLength: content.length });
 
-        // 현재는 간단한 클라이언트 사이드 요약 로직
-        // (실제 프로덕션에서는 백엔드 AI API 사용)
-        const summary = await generateSimpleSummary(content);
+    try {
+        // 타임아웃 설정 (20초)
+        // 백엔드 API가 응답하지 않는 경우 너무 오래 기다리지 않도록 설정
+        const timeoutPromise = new Promise((_, reject) => {
+            setTimeout(() => reject(new Error('AI 요약 요청 시간이 초과되었습니다. 백엔드 서버를 확인해주세요.')), 20000);
+        });
+
+        // AI API 호출과 타임아웃 경쟁
+        const summary = await Promise.race([
+            generateSimpleSummary(content),
+            timeoutPromise
+        ]);
+
+        console.log('✅ AI 요약 완료:', { summaryLength: summary.length });
 
         // 토글이 켜져 있으면 자동 적용
         const toggleSwitch = document.querySelector('.toggle-switch');
         const autoApply = toggleSwitch && toggleSwitch.classList.contains('active');
 
+        console.log('🔄 AI 요약 적용:', { autoApply, summaryPreview: summary.substring(0, 50) + '...' });
+
         if (autoApply) {
+            // 자동 적용 모드
+            console.log('✅ 자동 적용 모드: textarea 값 업데이트');
             textarea.value = summary;
-            if (window.toast) {
-                window.toast.success('AI 요약이 적용되었습니다.');
-            }
-        } else {
-            // 모달이나 알림으로 요약 결과 표시
-            const shouldApply = confirm(`AI 요약 결과:\n\n${summary}\n\n이 내용을 적용하시겠습니까?`);
-            if (shouldApply) {
-                textarea.value = summary;
+
+            // textarea 값이 실제로 업데이트되었는지 확인
+            console.log('📝 Textarea 업데이트 확인:', {
+                textareaValue: textarea.value.substring(0, 50) + '...',
+                valueLength: textarea.value.length
+            });
+
+            // 약간의 지연 후 토스트 표시 (DOM 업데이트 보장)
+            setTimeout(() => {
                 if (window.toast) {
                     window.toast.success('AI 요약이 적용되었습니다.');
                 }
+            }, 100);
+        } else {
+            // 수동 확인 모드
+            console.log('❓ 수동 확인 모드: confirm 다이얼로그 표시');
+            const shouldApply = confirm(`AI 요약 결과:\n\n${summary}\n\n이 내용을 적용하시겠습니까?`);
+            if (shouldApply) {
+                console.log('✅ 사용자 승인: textarea 값 업데이트');
+                textarea.value = summary;
+
+                // textarea 값이 실제로 업데이트되었는지 확인
+                console.log('📝 Textarea 업데이트 확인:', {
+                    textareaValue: textarea.value.substring(0, 50) + '...',
+                    valueLength: textarea.value.length
+                });
+
+                // 약간의 지연 후 토스트 표시 (DOM 업데이트 보장)
+                setTimeout(() => {
+                    if (window.toast) {
+                        window.toast.success('AI 요약이 적용되었습니다.');
+                    }
+                }, 100);
+            } else {
+                console.log('❌ 사용자 취소: textarea 업데이트 안 함');
             }
         }
 
@@ -509,14 +549,34 @@ async function generateAISummary(content, textarea, aiBtn) {
         sessionStorage.setItem('createPostFormData', JSON.stringify(formData));
 
     } catch (error) {
-        console.error('AI 요약 오류:', error);
+        console.error('❌ AI 요약 오류:', error);
+
+        // 사용자에게 친절한 에러 메시지 표시
+        let errorMessage = 'AI 요약 생성에 실패했습니다.';
+        if (error.message) {
+            if (error.message.includes('시간이 초과')) {
+                errorMessage = 'AI 요약 요청 시간이 초과되었습니다. 다시 시도해주세요.';
+            } else if (error.message.includes('네트워크')) {
+                errorMessage = '네트워크 연결을 확인해주세요.';
+            } else if (error.message.includes('서버')) {
+                errorMessage = '서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
+            }
+        }
+
         if (window.toast) {
-            window.toast.error('AI 요약 생성에 실패했습니다.');
+            window.toast.error(errorMessage);
         } else {
-            alert('AI 요약 생성에 실패했습니다.');
+            alert(errorMessage);
         }
     } finally {
-        // 버튼 원래 상태로
+        // 버튼 원래 상태로 (항상 실행됨)
+        console.log('🔄 버튼 상태 복원');
+
+        // 로딩 오버레이가 남아있을 수 있으므로 강제로 숨김
+        if (window.loading) {
+            window.loading.hide();
+        }
+
         aiBtn.disabled = false;
         aiBtn.textContent = originalText;
         aiBtn.style.opacity = '1';
@@ -529,13 +589,115 @@ async function generateAISummary(content, textarea, aiBtn) {
  * @returns {Promise<string>} 정제된 내용
  */
 async function generateSimpleSummary(content) {
+    console.log('📤 AI API 호출 시작:', {
+        endpoint: '/api/ai/refine',
+        contentLength: content.length,
+        contentPreview: content.substring(0, 50) + '...'
+    });
+
     try {
         // 백엔드 AI API 호출: POST /api/ai/refine
-        const refinedContent = await window.apiService.refineContent(content);
+        // showLoading: false로 설정하여 API 서비스의 로딩 오버레이 비활성화
+        // (우리가 버튼 상태로 로딩을 표시하고 있음)
+        const response = await window.apiService.request('/api/ai/refine', {
+            method: 'POST',
+            body: JSON.stringify({ content }),
+            showLoading: false,  // 로딩 오버레이 비활성화
+            showErrorToast: false,  // 에러 토스트도 우리가 직접 처리
+            timeout: 30000  // 30초 타임아웃
+        });
+
+        // 응답에서 정제된 내용 추출
+        let refinedContent;
+        if (typeof response === 'object' && response !== null) {
+            refinedContent = response.refined_content || response.content || response.result || JSON.stringify(response);
+        } else if (typeof response === 'string') {
+            refinedContent = response;
+        } else {
+            throw new Error('AI 응답 형식이 올바르지 않습니다.');
+        }
+
+        console.log('📥 AI API 응답 수신:', {
+            type: typeof refinedContent,
+            length: refinedContent?.length || 0,
+            preview: refinedContent?.substring(0, 50) + '...'
+        });
+
+        // 응답 검증
+        if (!refinedContent || typeof refinedContent !== 'string') {
+            console.error('❌ AI API 응답이 올바르지 않습니다:', refinedContent);
+            throw new Error('AI 응답 형식이 올바르지 않습니다.');
+        }
+
         return refinedContent;
     } catch (error) {
-        console.error('AI 정제 API 호출 실패:', error);
-        // API 실패 시 원본 반환
-        throw new Error('AI 정제에 실패했습니다. 잠시 후 다시 시도해주세요.');
+        console.error('❌ AI 정제 API 호출 실패:', {
+            error: error.message,
+            stack: error.stack
+        });
+
+        // 로딩 오버레이가 남아있을 수 있으므로 강제로 숨김
+        if (window.loading) {
+            window.loading.hide();
+        }
+
+        // 에러 메시지 개선
+        if (error.message.includes('네트워크')) {
+            throw new Error('네트워크 연결을 확인해주세요.');
+        } else if (error.message.includes('500') || error.message.includes('서버')) {
+            throw new Error('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+        } else {
+            throw new Error('AI 정제에 실패했습니다. 잠시 후 다시 시도해주세요.');
+        }
     }
+}
+
+/**
+ * 가격 자동 계산 기능 초기화
+ */
+function initPriceCalculation() {
+    const priceInput = document.querySelector('.price-input');
+    const peopleInput = document.querySelector('.people-input');
+    const priceValueElement = document.querySelector('.price-row:nth-child(2) .price-value');
+
+    if (!priceInput || !peopleInput || !priceValueElement) {
+        console.warn('가격 계산 요소를 찾을 수 없습니다.');
+        return;
+    }
+
+    // 가격 계산 함수
+    const calculatePerPersonPrice = () => {
+        // 총 금액에서 숫자만 추출 (쉼표 제거)
+        const totalPriceStr = priceInput.value.replace(/[^0-9]/g, '');
+        const totalPrice = parseInt(totalPriceStr) || 0;
+
+        // 인원 수
+        const people = parseInt(peopleInput.value) || 0;
+
+        // N/1 금액 계산
+        if (totalPrice > 0 && people > 0) {
+            const perPersonPrice = Math.floor(totalPrice / people);
+            priceValueElement.textContent = `1인당 ${perPersonPrice.toLocaleString()}원`;
+        } else {
+            priceValueElement.textContent = '1인당 0원';
+        }
+    };
+
+    // 총 금액 입력 시 자동 계산
+    priceInput.addEventListener('input', (e) => {
+        // 숫자만 입력 허용 (쉼표는 자동 추가)
+        let value = e.target.value.replace(/[^0-9]/g, '');
+        if (value) {
+            // 천 단위 쉼표 추가
+            value = parseInt(value).toLocaleString();
+        }
+        e.target.value = value;
+        calculatePerPersonPrice();
+    });
+
+    // 인원 수 입력 시 자동 계산
+    peopleInput.addEventListener('input', calculatePerPersonPrice);
+
+    // 초기 계산 (페이지 로드 시)
+    calculatePerPersonPrice();
 }

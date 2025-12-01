@@ -981,16 +981,21 @@ async function showMatchingStep1Modal(postId) {
 
             console.log('매칭 성공:', response);
 
-            // 1단계 모달 닫기
-            closeModal();
+            // PENDING 상태도 성공으로 처리
+            if (response && (response.status === 'PENDING' || response.participation_id)) {
+                // 1단계 모달 닫기
+                closeModal();
 
-            // 진행률 애니메이션
-            animateProgress();
+                // 진행률 애니메이션
+                animateProgress();
 
-            // 2단계 모달 표시
-            setTimeout(() => {
-                showMatchingStep2Modal(postTitle, postDescription, postDate);
-            }, 500);
+                // 2단계 모달 표시
+                setTimeout(() => {
+                    showMatchingStep2Modal(postTitle, postDescription, postDate);
+                }, 500);
+            } else {
+                throw new Error('매칭 응답 형식이 올바르지 않습니다.');
+            }
 
         } catch (error) {
             console.error('매칭 실패:', error);

@@ -146,13 +146,13 @@ class APIService {
                     tokenLength: this.accessToken ? this.accessToken.length : 0,
                     body: requestBody ? {
                         ...requestBody,
-                        imageUrls: requestBody.imageUrls ? 
-                            (requestBody.imageUrls.length > 0 ? 
-                                [`${requestBody.imageUrls[0].substring(0, 100)}... (base64, 길이: ${requestBody.imageUrls[0].length})`] : 
-                                []) : 
+                        imageUrls: requestBody.imageUrls ?
+                            (requestBody.imageUrls.length > 0 ?
+                                [`${requestBody.imageUrls[0].substring(0, 100)}... (base64, 길이: ${requestBody.imageUrls[0].length})`] :
+                                []) :
                             undefined,
-                        main_image_url: requestBody.main_image_url ? 
-                            `${requestBody.main_image_url.substring(0, 100)}... (base64, 길이: ${requestBody.main_image_url.length})` : 
+                        main_image_url: requestBody.main_image_url ?
+                            `${requestBody.main_image_url.substring(0, 100)}... (base64, 길이: ${requestBody.main_image_url.length})` :
                             undefined
                     } : null
                 });
@@ -187,20 +187,20 @@ class APIService {
                 // 401 Unauthorized: 토큰 만료 또는 유효하지 않음
                 if (response.status === 401) {
                     // 로그인/회원가입 API는 인증이 필요 없는 엔드포인트이므로 401은 다른 의미
-                    const isAuthEndpoint = endpoint.includes('/users/login') || 
-                                          endpoint.includes('/users/signup');
-                    
+                    const isAuthEndpoint = endpoint.includes('/users/login') ||
+                        endpoint.includes('/users/signup');
+
                     if (isAuthEndpoint) {
                         // 로그인/회원가입 실패: 이메일/비밀번호 오류 또는 계정 문제
                         console.error('❌ 로그인/회원가입 실패 (401):', {
                             endpoint,
                             message: data.message || data.error || '이메일 또는 비밀번호가 올바르지 않습니다.'
                         });
-                        
-                        const errorMessage = data.message || 
-                                           data.error || 
-                                           '이메일 또는 비밀번호가 올바르지 않습니다.';
-                        
+
+                        const errorMessage = data.message ||
+                            data.error ||
+                            '이메일 또는 비밀번호가 올바르지 않습니다.';
+
                         if (showErrorToast && window.toast) {
                             window.toast.error(errorMessage);
                         }
@@ -682,7 +682,7 @@ class APIService {
      * 댓글 목록 조회
      */
     async getComments(postId) {
-        return this.get(`/api/posts/${postId}/comments`);
+        return this.get(`/api/comments/${postId}/list`);
     }
 
     /**
@@ -804,18 +804,18 @@ class APIService {
                 console.warn('⚠️ 이미지 업로드 API가 없습니다. base64를 사용합니다.');
                 throw new Error('IMAGE_UPLOAD_API_NOT_FOUND'); // 특별한 에러 코드
             }
-            
+
             // 413 에러 특별 처리
             if (response.status === 413) {
                 const errorMessage = '이미지가 너무 큽니다. 더 작은 이미지를 사용해주세요. (최대 크기: 약 1MB 권장)';
                 console.error('❌ 이미지 업로드 실패 (413):', errorMessage);
                 throw new Error(errorMessage);
             }
-            
-            const error = await response.json().catch(() => ({ 
-                message: response.status === 413 
-                    ? '이미지가 너무 큽니다. 더 작은 이미지를 사용해주세요.' 
-                    : '이미지 업로드에 실패했습니다.' 
+
+            const error = await response.json().catch(() => ({
+                message: response.status === 413
+                    ? '이미지가 너무 큽니다. 더 작은 이미지를 사용해주세요.'
+                    : '이미지 업로드에 실패했습니다.'
             }));
             throw new Error(error.message || '이미지 업로드에 실패했습니다.');
         }
@@ -834,7 +834,13 @@ class APIService {
      */
     async refineContent(content) {
         const response = await this.post('/api/ai/refine', { content });
-        // 응답이 문자열로 직접 반환됨
+
+        // 응답이 객체인 경우 (예: { refined_content: "..." })
+        if (typeof response === 'object' && response !== null) {
+            return response.refined_content || response.content || response.result || JSON.stringify(response);
+        }
+
+        // 응답이 문자열로 직접 반환되는 경우
         return response;
     }
 
