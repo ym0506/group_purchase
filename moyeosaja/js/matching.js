@@ -42,7 +42,7 @@ async function loadSelectedItemInfo() {
 
         // 백엔드 응답 전체 구조 로깅 (디버깅용)
         console.log('🔍 백엔드 응답 전체 구조:', JSON.stringify(post, null, 2));
-        
+
         // 이미지 URL 추출 (백엔드는 imageUrls 배열로 반환)
         let imageUrl = null;
         if (post.imageUrls && Array.isArray(post.imageUrls) && post.imageUrls.length > 0) {
@@ -53,7 +53,7 @@ async function loadSelectedItemInfo() {
             // 기존 필드명들도 확인 (하위 호환성)
             imageUrl = post.main_image_url || post.mainImageUrl || post.image_url || post.imageUrl || post.image || post.mainImage || post.thumbnail || post.thumbnailUrl || null;
         }
-        
+
         console.log('🔍 이미지 관련 필드 확인:', {
             imageUrls: post.imageUrls,
             imageUrls_length: post.imageUrls ? post.imageUrls.length : 0,
@@ -86,20 +86,20 @@ async function loadSelectedItemInfo() {
                 rating_score: post.author?.rating_score || 0
             },
 
-            // 참여 인원 (current_participants는 API 명세에 없으므로 계산 또는 기본값)
-            target_participants: post.target_participants || 0,
-            current_participants: post.current_participants || 0, // API에서 제공되지 않을 수 있음
+            // 참여 인원 (백엔드에서 제공하지 않으면 기본값 사용)
+            target_participants: post.target_participants || post.targetParticipants || 4,
+            current_participants: post.current_participants || post.currentParticipants || 0,
 
-            // 날짜/시간
-            pickup_datetime: post.pickup_datetime || null,
-            end_date: post.end_date || null,
+            // 날짜/시간 (백엔드에서 제공하지 않으면 기본값 사용)
+            pickup_datetime: post.pickup_datetime || post.pickupDatetime || new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+            end_date: post.end_date || post.endDate || new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString(),
 
-            // 장소
-            pickup_location_text: post.pickup_location_text || '정보 없음',
+            // 장소 (백엔드에서 제공하지 않으면 기본값 사용)
+            pickup_location_text: post.pickup_location_text || post.pickupLocationText || '장소 미정',
 
-            // 가격
-            total_price: post.total_price || 0,
-            per_person_price: post.per_person_price || 0
+            // 가격 (백엔드에서 제공하지 않으면 기본값 사용)
+            total_price: post.total_price || post.totalPrice || 0,
+            per_person_price: post.per_person_price || post.perPersonPrice || 0
         };
 
         console.log('매핑된 게시글 정보:', completePost);
@@ -150,14 +150,14 @@ function updatePostDetails(post) {
             // 이미지 URL이 있는 경우
             const imageUrl = post.main_image_url;
             console.log('이미지 URL 설정:', imageUrl.substring(0, 100) + '...');
-            
+
             // base64 이미지인 경우와 일반 URL인 경우 모두 처리
             productImageElement.style.backgroundImage = `url('${imageUrl}')`;
             productImageElement.style.backgroundSize = 'cover';
             productImageElement.style.backgroundPosition = 'center';
             productImageElement.style.backgroundRepeat = 'no-repeat';
             productImageElement.style.backgroundColor = 'transparent';
-            
+
             // 이미지 로드 확인
             const testImg = new Image();
             testImg.onload = () => {
@@ -208,11 +208,55 @@ function updatePostDetails(post) {
     // 진행률 업데이트
     const currentCountElement = document.querySelector('.count-current');
     const totalCountElement = document.querySelector('.count-total');
+    const progressTextElement = document.querySelector('.progress-text');
+    const progressFillElement = document.querySelector('.progress-fill');
+
     if (currentCountElement) {
         currentCountElement.textContent = post.current_participants || 0;
     }
     if (totalCountElement) {
         totalCountElement.textContent = `/${post.target_participants || 0}`;
+    }
+
+    // 진행률 계산 및 메시지 업데이트
+    if (progressTextElement && progressFillElement) {
+        const current = post.current_participants || 0;
+        const target = post.target_participants || 4;
+        const percentage = target > 0 ? (current / target) * 100 : 0;
+
+        // 진행률 바 업데이트
+        progressFillElement.style.width = `${percentage}%`;
+
+        // 진행률에 따른 메시지
+        if (percentage >= 100) {
+            progressTextElement.textContent = '🎉 모집 완료!';
+        } else if (percentage >= 75) {
+            progressTextElement.textContent = '거의 다 왔어요!';
+        } else if (percentage >= 50) {
+            progressTextElement.textContent = '절반 이상 모였어요!';
+        } else if (percentage >= 25) {
+            progressTextElement.textContent = '모집 중입니다';
+        } else {
+            progressTextElement.textContent = '참여자를 기다리고 있어요';
+        }
+
+        // 참여자 아바타 업데이트
+        const participantAvatars = document.querySelectorAll('.participant-avatar');
+        if (participantAvatars.length > 0) {
+            participantAvatars.forEach((avatar, index) => {
+                if (index < current) {
+                    // 참여 중인 슬롯
+                    avatar.classList.remove('empty');
+                    avatar.classList.add('filled');
+                    avatar.innerHTML = ''; // ? 제거
+                } else {
+                    // 빈 슬롯
+                    avatar.classList.remove('filled');
+                    avatar.classList.add('empty');
+                    avatar.innerHTML = '<span class="empty-text">?</span>';
+                }
+            });
+        }
     }
 
     // 공구 정보 섹션 업데이트 (HTML 순서대로)
@@ -227,27 +271,35 @@ function updatePostDetails(post) {
         // 1: 수량
         const quantityValue = infoRows[1].querySelector('.info-value');
         if (quantityValue) {
-            quantityValue.textContent = post.target_participants || '정보 없음';
+            quantityValue.textContent = post.target_participants || '미정';
         }
 
         // 2: 날짜
         const dateValue = infoRows[2].querySelector('.info-value');
-        if (dateValue && post.pickup_datetime) {
-            const pickupDate = new Date(post.pickup_datetime);
-            dateValue.textContent = pickupDate.toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' });
+        if (dateValue) {
+            if (post.pickup_datetime) {
+                const pickupDate = new Date(post.pickup_datetime);
+                dateValue.textContent = pickupDate.toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' });
+            } else {
+                dateValue.textContent = '날짜 미정';
+            }
         }
 
         // 3: 시간
         const timeValue = infoRows[3].querySelector('.info-value');
-        if (timeValue && post.pickup_datetime) {
-            const pickupDate = new Date(post.pickup_datetime);
-            timeValue.textContent = pickupDate.toLocaleTimeString('ko-KR', { hour: 'numeric', minute: '2-digit', hour12: true });
+        if (timeValue) {
+            if (post.pickup_datetime) {
+                const pickupDate = new Date(post.pickup_datetime);
+                timeValue.textContent = pickupDate.toLocaleTimeString('ko-KR', { hour: 'numeric', minute: '2-digit', hour12: true });
+            } else {
+                timeValue.textContent = '시간 미정';
+            }
         }
 
         // 4: 수령장소
         const locationValue = infoRows[4].querySelector('.info-value');
         if (locationValue) {
-            locationValue.textContent = post.pickup_location_text || '정보 없음';
+            locationValue.textContent = post.pickup_location_text || '장소 미정';
         }
     }
 
@@ -295,7 +347,7 @@ function updateStatusTime() {
 function createMatchingModal() {
     const modal = document.createElement('div');
     modal.className = 'matching-modal';
-    
+
     // 모달 컨테이너 스타일 직접 적용 (다른 CSS와의 충돌 방지)
     modal.style.cssText = `
         position: fixed !important;
@@ -313,7 +365,7 @@ function createMatchingModal() {
         margin: 0 !important;
         padding: 0 !important;
     `;
-    
+
     modal.innerHTML = `
         <div class="modal-overlay"></div>
         <div class="modal-content" style="position: relative !important; background: white !important; border-radius: 24px !important; padding: 32px 24px !important; max-width: 360px !important; width: 90% !important; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3) !important; transform: translateY(30px); transition: transform 0.3s ease; text-align: center !important; margin: auto !important; left: auto !important; right: auto !important; top: auto !important; bottom: auto !important;">
@@ -841,18 +893,18 @@ function escapeHtml(text) {
 async function showMatchingStep1Modal(postId) {
     const modal = document.createElement('div');
     modal.className = 'matching-step-modal';
-    
+
     // 게시글 정보 가져오기 (UI에서 또는 API에서)
     let postTitle = document.querySelector('.product-name')?.textContent || '공구';
     let postDescription = document.querySelector('.product-description')?.textContent || '';
     let postDate = '';
-    
+
     // 날짜 정보 가져오기
     const dateElement = document.querySelector('.purchase-info .info-row:nth-child(3) .info-value');
     if (dateElement) {
         postDate = dateElement.textContent.trim();
     }
-    
+
     // API에서 상세 정보 가져오기 (선택적)
     try {
         const post = await window.apiService.getPostDetail(postId);
@@ -867,7 +919,7 @@ async function showMatchingStep1Modal(postId) {
     } catch (error) {
         console.warn('게시글 상세 정보를 가져오지 못했습니다. UI 정보를 사용합니다.', error);
     }
-    
+
     modal.innerHTML = `
         <div class="modal-overlay"></div>
         <div class="modal-content">
@@ -892,18 +944,18 @@ async function showMatchingStep1Modal(postId) {
             </button>
         </div>
     `;
-    
+
     document.body.appendChild(modal);
-    
+
     // 애니메이션을 위한 약간의 지연
     setTimeout(() => {
         modal.classList.add('show');
     }, 10);
-    
+
     // 닫기 버튼
     const closeBtn = modal.querySelector('.modal-close');
     const overlay = modal.querySelector('.modal-overlay');
-    
+
     const closeModal = () => {
         modal.classList.remove('show');
         setTimeout(() => {
@@ -912,34 +964,34 @@ async function showMatchingStep1Modal(postId) {
             }
         }, 300);
     };
-    
+
     closeBtn.addEventListener('click', closeModal);
     overlay.addEventListener('click', closeModal);
-    
+
     // 매칭하기 버튼
     const confirmBtn = modal.querySelector('#confirmMatching');
     confirmBtn.addEventListener('click', async () => {
         // 로딩 상태
         confirmBtn.disabled = true;
         confirmBtn.textContent = '매칭 중...';
-        
+
         try {
             // 백엔드 API 호출: 공구 참여 신청
             const response = await window.apiService.participateInPost(postId, {});
-            
+
             console.log('매칭 성공:', response);
-            
+
             // 1단계 모달 닫기
             closeModal();
-            
+
             // 진행률 애니메이션
             animateProgress();
-            
+
             // 2단계 모달 표시
             setTimeout(() => {
                 showMatchingStep2Modal(postTitle, postDescription, postDate);
             }, 500);
-            
+
         } catch (error) {
             console.error('매칭 실패:', error);
             if (window.toast) {
@@ -959,7 +1011,7 @@ async function showMatchingStep1Modal(postId) {
 function showMatchingStep2Modal(postTitle = '', postDescription = '', postDate = '') {
     const modal = document.createElement('div');
     modal.className = 'matching-step-modal';
-    
+
     // 기본값 설정
     if (!postTitle) {
         postTitle = document.querySelector('.product-name')?.textContent || '공구';
@@ -973,7 +1025,7 @@ function showMatchingStep2Modal(postTitle = '', postDescription = '', postDate =
             postDate = dateElement.textContent.trim();
         }
     }
-    
+
     modal.innerHTML = `
         <div class="modal-overlay"></div>
         <div class="modal-content">
@@ -996,18 +1048,18 @@ function showMatchingStep2Modal(postTitle = '', postDescription = '', postDate =
             </button>
         </div>
     `;
-    
+
     document.body.appendChild(modal);
-    
+
     // 애니메이션을 위한 약간의 지연
     setTimeout(() => {
         modal.classList.add('show');
     }, 10);
-    
+
     // 닫기 버튼
     const closeBtn = modal.querySelector('#closeSuccess');
     const overlay = modal.querySelector('.modal-overlay');
-    
+
     const closeModal = () => {
         modal.classList.remove('show');
         setTimeout(() => {
@@ -1018,7 +1070,7 @@ function showMatchingStep2Modal(postTitle = '', postDescription = '', postDate =
             location.reload();
         }, 300);
     };
-    
+
     closeBtn.addEventListener('click', closeModal);
     overlay.addEventListener('click', closeModal);
 }

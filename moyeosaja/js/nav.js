@@ -26,7 +26,7 @@
     function navigateToPage(navItem) {
         try {
             const dataPage = navItem.getAttribute('data-page');
-            
+
             if (!dataPage) {
                 console.error('[Nav] No data-page attribute');
                 showError('페이지를 찾을 수 없습니다.');
@@ -34,7 +34,7 @@
             }
 
             const route = pageRoutes[dataPage];
-            
+
             if (!route) {
                 console.error('[Nav] Route not found for:', dataPage);
                 showError('페이지 경로를 찾을 수 없습니다.');
@@ -63,7 +63,7 @@
     function addClickFeedback(navItem) {
         navItem.style.transform = 'scale(0.95)';
         navItem.style.opacity = '0.7';
-        
+
         setTimeout(() => {
             navItem.style.transform = '';
             navItem.style.opacity = '';
@@ -131,10 +131,10 @@
         }
 
         const navItems = document.querySelectorAll('.nav-item');
-        
+
         navItems.forEach(item => {
             const dataPage = item.getAttribute('data-page');
-            
+
             if (dataPage === activeDataPage) {
                 item.classList.add('active');
                 item.setAttribute('aria-current', 'page');
@@ -147,8 +147,8 @@
 
     // 네비게이션 초기화
     function initNavigation() {
-        const navItems = document.querySelectorAll('.nav-item');
-        
+        const navItems = document.querySelectorAll('.bottom-nav .nav-item');
+
         if (navItems.length === 0) {
             console.warn('[Nav] No navigation items found');
             return;
@@ -157,7 +157,7 @@
         // 활성 상태 설정
         setActiveNavItem();
 
-        // 이벤트 리스너 추가
+        // 이벤트 리스너 추가 (bottom-nav 안의 .nav-item에만 적용)
         navItems.forEach(item => {
             // 클릭 이벤트
             item.addEventListener('click', function (e) {
@@ -182,19 +182,19 @@
             if (!item.hasAttribute('tabindex')) {
                 item.setAttribute('tabindex', '0');
             }
-            
+
             // 스타일
             item.style.cursor = 'pointer';
             item.style.transition = 'all 0.2s ease';
-            
+
             // 호버 효과
-            item.addEventListener('mouseenter', function() {
+            item.addEventListener('mouseenter', function () {
                 if (!this.classList.contains('active')) {
                     this.style.opacity = '0.8';
                 }
             });
-            
-            item.addEventListener('mouseleave', function() {
+
+            item.addEventListener('mouseleave', function () {
                 this.style.opacity = '1';
             });
         });

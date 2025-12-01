@@ -28,11 +28,11 @@ function initFirebaseStorage() {
         // Firebase CLI로 확인한 정보:
         // - Project Number: 296899354710
         // - App ID: 1:296899354710:web:fcf0d584b294b8a9505bf7
-        
+
         // apiKey는 Firebase Console에서만 가져올 수 있으므로
         // localStorage에서 설정 정보를 확인하거나 기본값 사용
         let firebaseConfig = null;
-        
+
         // localStorage에서 Firebase 설정 정보 확인
         if (typeof window !== 'undefined' && window.localStorage) {
             const storedConfig = localStorage.getItem('firebase_config');
@@ -45,28 +45,19 @@ function initFirebaseStorage() {
                 }
             }
         }
-        
-        // 설정이 없으면 기본값 사용 (apiKey는 Firebase Console에서 가져와야 함)
+
+        // 설정이 없으면 기본값 사용
         if (!firebaseConfig) {
             firebaseConfig = {
-                apiKey: localStorage.getItem('firebase_api_key') || "AIzaSyDummyKey", // localStorage 또는 Firebase Console에서 가져오기
+                apiKey: localStorage.getItem('firebase_api_key') || "AIzaSyCPE45MtrHjzX4Mrj7OScNuyE_JJVOx6Qg", // Firebase Console에서 가져온 실제 API Key
                 authDomain: "login-baa7f.firebaseapp.com",
                 projectId: "login-baa7f",
                 storageBucket: "login-baa7f.appspot.com",
                 messagingSenderId: "296899354710", // Project Number
                 appId: "1:296899354710:web:fcf0d584b294b8a9505bf7"
             };
-            
-            // apiKey가 더미 키인 경우 경고
-            if (firebaseConfig.apiKey === "AIzaSyDummyKey") {
-                console.warn('⚠️ Firebase apiKey가 설정되지 않았습니다.');
-                console.warn('💡 Firebase Console에서 apiKey를 가져와서 설정하세요:');
-                console.warn('   1. https://console.firebase.google.com/project/login-baa7f/settings/general 접속');
-                console.warn('   2. "내 앱" 섹션에서 웹 앱의 설정 정보 확인');
-                console.warn('   3. apiKey를 복사하여 브라우저 콘솔에서 다음 명령어 실행:');
-                console.warn('      localStorage.setItem("firebase_api_key", "실제_API_KEY")');
-                return false;
-            }
+
+            console.log('✅ Firebase 설정 로드 완료');
         }
 
         // 이미 초기화되어 있는지 확인
@@ -80,7 +71,7 @@ function initFirebaseStorage() {
 
         firebaseStorage = firebase.storage();
         storageRef = firebaseStorage.ref();
-        
+
         console.log('✅ Firebase Storage 초기화 완료');
         return true;
     } catch (error) {
@@ -163,7 +154,7 @@ async function uploadImageWithFallback(file, folder = 'posts') {
         return firebaseUrl;
     } catch (error) {
         console.warn('⚠️ Firebase Storage 업로드 실패, base64 사용:', error);
-        
+
         // Firebase Storage 업로드 실패 시 base64로 fallback
         return new Promise((resolve, reject) => {
             const reader = new FileReader();

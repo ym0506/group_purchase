@@ -45,24 +45,29 @@
             <div class="progress-section">
                 <!-- 진행률 -->
                 <div class="matching-progress">
-                    <p class="progress-text">거의 다 왔어요!</p>
-                    <div class="progress-count"><span class="count-current">3</span><span class="count-total">/4</span>
+                    <p class="progress-text">참여자를 기다리고 있어요</p>
+                    <div class="progress-count"><span class="count-current">0</span><span class="count-total">/4</span>
                     </div>
                 </div>
 
                 <!-- 프로그레스 바 -->
                 <div class="progress-bar-container">
-                    <div class="progress-bar-segment" style="width: 25%;"></div>
-                    <div class="progress-bar-segment" style="width: 24%;"></div>
-                    <div class="progress-bar-segment" style="width: 25%;"></div>
-                    <div class="progress-bar-empty" style="width: 26%;"></div>
+                    <div class="progress-fill"
+                        style="width: 0%; background: linear-gradient(90deg, #FF6B6B 0%, #FF8E53 100%); height: 100%; border-radius: 12px; transition: width 0.3s ease;">
+                    </div>
                 </div>
 
                 <!-- 참여자 프로필 -->
                 <div class="participants">
-                    <div class="participant-avatar filled"></div>
-                    <div class="participant-avatar filled"></div>
-                    <div class="participant-avatar filled"></div>
+                    <div class="participant-avatar empty">
+                        <span class="empty-text">?</span>
+                    </div>
+                    <div class="participant-avatar empty">
+                        <span class="empty-text">?</span>
+                    </div>
+                    <div class="participant-avatar empty">
+                        <span class="empty-text">?</span>
+                    </div>
                     <div class="participant-avatar empty">
                         <span class="empty-text">?</span>
                     </div>
